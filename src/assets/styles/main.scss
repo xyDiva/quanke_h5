@@ -1,0 +1,374 @@
+/* Document
+   ========================================================================== */
+
+html {
+  font-family: sans-serif; /* 1 */
+  line-height: 1.15; /* 2 */
+  -ms-text-size-adjust: 100%; /* 3 */
+  -webkit-text-size-adjust: 100%; /* 3 */
+  font-size: calc(100vw / 3.75);
+}
+
+/* Sections
+   ========================================================================== */
+
+/**
+ * Remove the margin in all browsers (opinionated).
+ */
+
+body {
+  margin: 0;
+  background-color: #f9f9f9;
+}
+
+p, ul, h1, h2 {
+  margin: 0;
+  padding: 0;
+}
+
+div, section, textarea {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+/**
+ * Add the correct display in IE 9-.
+ */
+
+article,
+aside,
+footer,
+header,
+nav,
+section {
+  display: block;
+}
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+
+i {
+  font-style: normal;
+}
+
+/* Text-level semantics
+   ========================================================================== */
+
+/**
+ * 1. Remove the gray background on active links in IE 10.
+ * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+ */
+
+a {
+  text-decoration: none;
+  background-color: transparent; /* 1 */
+  -webkit-text-decoration-skip: objects; /* 2 */
+}
+
+/**
+ * Remove the border on images inside links in IE 10-.
+ */
+
+img {
+  border-style: none;
+  vertical-align: bottom;
+}
+
+/* Forms
+   ========================================================================== */
+
+/**
+ * 1. Change the font styles in all browsers (opinionated).
+ * 2. Remove the margin in Firefox and Safari.
+ */
+
+button,
+input,
+select,
+textarea {
+  font-family: sans-serif; /* 1 */
+  font-size: 100%; /* 1 */
+  line-height: 1.15; /* 1 */
+  margin: 0; /* 2 */
+  padding:0;
+  outline: none;
+  border: none;
+  -webkit-appearance: none;
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+
+button,
+input { /* 1 */
+  overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+
+button,
+select { /* 1 */
+  text-transform: none;
+}
+
+/**
+ * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+ *    controls in Android 4.
+ * 2. Correct the inability to style clickable types in iOS and Safari.
+ */
+
+button,
+html [type="button"], /* 1 */
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button; /* 2 */
+}
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+html, body, #app {
+  height: 100%;
+}
+
+/* 项目全局样式--header
+   ========================================================================== */
+header {
+  height: 0.88rem;
+  background-color: #ea5513;
+
+  display: flex;
+  h1 {
+    flex: 1;
+    color: white;
+    text-align: center;
+    font-size: 0.36rem;
+    line-height: 0.88rem;
+  }
+  .search {
+    flex: 1;
+    position: relative;
+    height: 0.6rem;
+    margin: 0.14rem 1rem;
+    input {
+      display: block;
+      width: 100%;
+      height: 0.6rem;
+      border-radius: 6px;
+      border:none;
+      text-align: center;
+      font-size: 0.24rem;
+      &::-webkit-input-placeholder {
+        color: #979797;
+      }
+    }
+    button {
+      position: absolute;
+      width: 0.6rem;
+      height: 0.6rem;
+      right: 0;
+      top: 0;
+      background: url("./assets/images/ico-search.png") center / 0.36rem no-repeat;
+    }
+  }
+  a {
+    display: block;
+    position: absolute;
+    width: 0.88rem;
+    height: 0.88rem;
+    top: 0;
+    &.left {
+      left: 0;
+    }
+    &.right {
+      right: 0;
+    }
+  }
+  i.ico {
+    display: block;
+    width: 0.88rem;
+    height: 0.88rem;
+    &.back {
+      background: url("./assets/images/ico-back.png") center / 35% no-repeat;
+    }
+    &.logo {
+      background: url("./assets/images/ico-logo.png") center / 50% no-repeat;
+    }
+    &.sign {
+      background: url("./assets/images/ico-sign1.png") center / 50% no-repeat;
+    }
+    &.share {
+      background: url("./assets/images/ico-share.png") center / 50% no-repeat;
+    }
+  }
+}
+
+/* 项目全局样式--wrap footer
+   ========================================================================== */
+.wrap-footer {
+  height: 1.08rem;
+}
+
+/* 项目全局样式--form
+   ========================================================================== */
+.btn {
+  display: block;
+  width: 100%;
+  height: 0.88rem;
+  color: white;
+  font-size: 0.24rem;
+  background-color: #ea5513;
+  border: none;
+  border-radius: 10px;
+  &:disabled {
+    color: #ffa286;
+  }
+}
+
+/* 项目全局样式--item--产品列表
+   ========================================================================== */
+.pro-item {
+  position: relative;
+  margin-top: 0.05rem;
+  font-size: 0.28rem;
+  a {
+    display: flex;
+    width: 100%;
+    img {
+      width: 100%;
+    }
+  }
+  .left {
+    width: 2.4rem;
+    height: 2.4rem;
+    background: palegoldenrod;
+  }
+  .right {
+    flex: 1;
+    -webkit-flex: 1;
+    padding: 0.25rem 0.45rem 0 0.35rem;
+  }
+  .col:nth-child(2) {
+    display:flex;
+    justify-content: space-between;
+    margin: 0.2rem 0;
+  }
+  .title {
+    color: black;
+    font-size: 0.26rem;
+  }
+  .price {
+    color: #ea5513;
+    font-size: 0.36rem;
+    i {
+      font-size: 0.24rem;
+      vertical-align: baseline;
+    }
+  }
+  .tags {
+    padding-top:0.05rem;
+    .tag {
+      display: inline-block;
+      width: 0.64rem;
+      line-height: 0.3rem;
+      margin-left:0.05rem;
+      background-color: #ea5513;
+      border-radius: 4px;
+      color: white;
+      font-size: 0.18rem;
+      text-align: center;
+      vertical-align: text-top;
+      &.coupon {
+        width:0.8rem;
+        background: transparent url("./assets/images/bg-coupon.png") center / cover no-repeat;
+        color: #ea5513;
+        border-radius:0;
+      }
+    }
+    }
+  .original-price {
+    margin-right: 0.5rem;
+    font-size: 0.24rem;
+    color: #979797;
+  }
+  .sold {
+    font-size: 0.24rem;
+    color: #979797;
+  }
+}
+
+/* 项目全局样式--no-data
+   ========================================================================== */
+.no-data {
+  padding: 1rem 0;
+  text-align: center;
+  font-size: 0.28rem;
+}
+
+/* 项目全局样式--footer
+   ========================================================================== */
+footer {
+  background-color: white;
+}
+
+/* 项目全局样式--toast
+   ========================================================================== */
+.mint-toast-text {
+  font-size: 0.24rem !important;
+}
+
+/* 项目全局样式--swipe
+   ========================================================================== */
+.banner .mint-swipe-indicator {
+  width: 0.15rem;
+  height: 0.15rem;
+  background-color: rgba(255, 255, 255, 0.6);
+  opacity: 1;
+  &.is-active {
+    background-color: #ea5513;
+  }
+}
+
+
+/* 项目全局样式--loadMore
+   ========================================================================== */
+.mint-loadmore-bottom {
+  font-size:0.35rem;
+  span {
+    display: inline-block;
+    -webkit-transition: .2s linear;
+    transition: .2s linear;
+    vertical-align: middle;
+    &.is-rotate {
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+}

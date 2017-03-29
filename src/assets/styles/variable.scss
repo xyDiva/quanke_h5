@@ -1,0 +1,10 @@
+$scale:1/2;
+
+.flex {
+	display: -webkit-flex;
+	display: flex;
+}
+
+@mixin pd($pd:0.34rem*$scale){
+	padding:$pd;
+}

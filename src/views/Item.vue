@@ -1,0 +1,415 @@
+<style lang='scss' rel="stylesheet/scss" scoped>
+  .page-item {
+    padding-bottom: 1rem;
+    .banner {
+      height: 6.24rem;
+      margin-bottom: 0.05rem;
+      img {
+        width: 100%;
+      }
+    }
+    .dl {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 1rem;
+      span {
+        font-size: 0;
+        line-height: 0;
+        &:nth-child(1) {
+          img {
+            height: 0.35rem;
+          }
+        }
+      }
+    }
+    .pro-item {
+      position: relative;
+      padding: 0.25rem 0.3rem;
+      .col:nth-child(3) {
+        display: flex;
+        justify-content: space-between;
+      }
+      .guide {
+        margin: 0.65rem 0 0.32rem;
+      }
+      .flex {
+        display: flex;
+        font-size: 0.24rem;
+        color: #979797;
+        .key {
+          width: 1.25rem;
+        }
+        .value {
+          flex: 1;
+        }
+      }
+      h1 {
+        color: black;
+        margin-right: 0.8rem;
+        font-size: 0.36rem;
+        textarea {
+          width: 100%;
+        }
+      }
+      .copy {
+        position: absolute;
+        width: 1rem;
+        padding: 0.8rem 0 0.2rem;
+        right: 0;
+        top: 0;
+        font-size: 0.18rem;
+        text-align: center;
+        background: url("../assets/images/ico-link.png") center 0.3rem / 0.4rem no-repeat;
+      }
+    }
+    .first-page {
+      position:relative;
+      background-color: white;
+    }
+    .tip {
+      line-height:0.6rem;
+      text-align:center;
+      font-size: 0.24rem;
+    }
+    .item-imgs {
+      margin-top:0.2rem;
+      img {
+        width:100%;
+      }
+    }
+    .wrap-bottom {
+      position: fixed;
+      width: 100%;
+      height: 0.98rem;
+      bottom: 0;
+      background-color: #ea5513;
+
+      display: flex;
+    }
+    .btn-order {
+      flex:1;
+      height: 0.98rem;
+      color: white;
+      font-size: 0.24rem;
+      background-color: #ea5513;
+    }
+    .btn-back {
+      width: 1rem;
+      height: 0.98rem;
+      border-right: white 1px dashed;
+      background: url(../assets/images/ico-index-white.png) center / 0.4rem no-repeat;
+    }
+    .popup {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(0,0,0,0.6);
+      .box {
+        position: relative;
+        width: 5.5rem;
+        margin:3rem auto 0;
+        padding: 0.15rem;
+        background-color: #ea5514;
+        border-radius: 0.1rem;
+        .close {
+          position: absolute;
+          width: 0.52rem;
+          height:0.52rem;
+          right: 0.2rem;
+          top: 0.22rem;
+          background: url(../assets/images/ico-close.png) center / contain no-repeat;
+        }
+        .content {
+          width: 100%;
+          padding: 0.45rem 0.28rem;
+          margin: 0.8rem 0 0.2rem;
+          background-color: white;
+          font-size: 0.24rem;
+          line-height: 0.35rem;
+          color: #333;
+        }
+        p {
+          line-height: 0.4rem;
+          padding-left: 0.29rem;
+          font-size: 0.24rem;
+          color: white;
+        }
+      }
+      &.popup-tao-code {
+        .tip-copy {
+          position: absolute;
+          left: 0.15rem;
+          top: 0;
+        }
+        .btn {
+          border: white 1px solid;
+        }
+        p {
+          margin-top: 0.32rem;
+        }
+      }
+      &.popup-no-coupon {
+        p {
+          font-size: 0.18rem;
+          margin-top: 1.3rem;
+        }
+        .qrcode {
+          position: absolute;
+          width: 1.9rem;
+          right: 0.4rem;
+          top: 3.4rem;
+          img {
+            width: 100%
+          }
+        }
+      }
+    }
+    image[lazy=loading] {
+      width: 40px;
+      height: 300px;
+      margin: auto;
+    }
+  }
+</style>
+
+<template>
+  <div class="page-item">
+    <div class="dl" v-if="shared">
+      <span><img src="../assets/images/logo.png"></span>
+      <span><img src="../assets/images/ew-03.png"></span>
+      <span><a href="/r/system/apk"><img src="../assets/images/d-02.png"></a></span>
+    </div>
+    <div class="first-page">
+      <mt-swipe :auto="4000":show-indicators="false" class="banner" :style="{height:bannerHeight+'px'}">
+        <mt-swipe-item><img :src="item.pic"></mt-swipe-item>
+      </mt-swipe>
+      <div class="pro-item">
+        <div class="col">
+          <h1>{{item.title}}</h1>
+          <button class="copy" :data-clipboard-text="item.goodsUrl">复制</button>
+        </div>
+        <div class="col">
+          <div class="price"><i>&yen;</i>{{item.priceA||0}}<i>.{{item.priceB||00}}</i></div>
+          <div class="tags">
+            <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon" v-if="item.coupon">{{item.coupon}}元券</span>
+          </div>
+        </div>
+        <div class="col">
+          <span class="original-price">原价：<del>{{item.price||0.00}}</del></span>
+          <span class="sold">已售：{{item.biz30day||0}}</span>
+        </div>
+        <div class="flex guide">
+          <div class="key">购买方式：</div>
+          <div class="value">①.先领取优惠券 ②.查看券后价格 ③.下单</div>
+        </div>
+        <div class="flex reason">
+          <div class="key">推荐理由：</div>
+          <div class="value">{{item.desc}}</div>
+        </div>
+      </div>
+      <div class="tip">继续拖动，查看图文详情</div>
+    </div>
+    <div class="item-imgs">
+      <ul>
+        <li v-for="item in detailImgs"><img v-lazy="item"></li>
+      </ul>
+    </div>
+    <div class="wrap-bottom">
+      <router-link to="/index" v-if="shared">
+        <button class="btn-back"></button>
+      </router-link>
+      <button class="btn-order" @click="popupVisible=true">领券下单</button>
+    </div>
+
+    <!-- 弹出窗口 分享落地页 优惠券已领完 -->
+    <div class="popup popup-no-coupon" v-if="popupVisible&&noCoupon">
+      <div class="box">
+        <div class="content">
+        客官您来晚了！<br>
+        券已经被领完了！<br>
+        下载券客APP，<br>
+        再也不会错过优惠！
+        </div>
+        <p>关注券客商城<br>第一时间获得最新优惠信息</p>
+        <div class="qrcode"><img src="../assets/images/qrcode-gzh.png"></div>
+      </div>
+    </div>
+
+    <!-- 弹出窗口 复制淘口令 -->
+    <div class="popup popup-tao-code" v-if="popupVisible&&!noCoupon">
+      <div class="box">
+        <div class="close" @click="popupVisible=false"></div>
+        <p class="tip-copy">复制以下口令</p>
+        <div class="content" id="content" v-if="system=='ios'">{{item.goodsUrl}}</div>
+        <textarea class="content" v-if="system=='android'">{{item.goodsUrl}}</textarea>
+        <button class="btn copy" v-if="clipboardSupported" :data-clipboard-text="item.goodsUrl">一键复制</button>
+        <p>购买方式：<br>①复制淘口令&nbsp;②打开淘宝领券&nbsp;③下单购买</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import Vue from 'vue'
+  import {Toast, Swipe, SwipeItem} from 'mint-ui'
+  import api from '../assets/scripts/api'
+  import common from '../assets/scripts/common'
+  import footer from '../components/Footer'
+
+  var wx = require('weixin-js-sdk');
+  var Clipboard = require('clipboard');
+
+  Vue.component(Swipe.name, Swipe);
+  Vue.component(SwipeItem.name, SwipeItem);
+
+  export default {
+    data(){
+      return {
+        bannerHeight:document.body.clientWidth,
+        item: {},
+        detailImgs:[],
+
+        system:'',
+        popupVisible:false,
+        clipboardSupported:true,
+
+        shared:false,
+        noCoupon:false
+      }
+    },
+    mounted(){
+      document.title = '详情';
+
+      const id = this.$route.params.id;
+      api.goods.getById(id).then((r)=>{
+        if(r.success){
+          // 券已领完 value为空
+          if(!r.value) {
+            this.noCoupon = true;
+            this.popupVisible = true;
+          }
+
+          this.item = common.convertGoods([r.value])[0];
+          this.getGoodImgs(this.item.thirdId);
+          document.title = this.item.title;
+
+          // wx init
+          this.wxInit();
+        }
+        else {
+          Toast(r.message);
+        }
+      });
+      //判断系统
+      this.system = common.getSystem();
+
+      // 分享出去的页面
+      let params = common.getUrlParams();
+      if(params.shared) {
+        this.shared = true;
+      }
+
+      // 复制
+      this.copyInit();
+    },
+    methods: {
+      getGoodImgs(thirdId){
+        api.goods.getGoodImgs(thirdId).then((r)=>{
+          if(r.success){
+            this.detailImgs = r.list || [];
+          }
+        });
+      },
+      copyInit(){
+        this.clipboardInit();
+        if(this.system=='ios') {
+          document.addEventListener("selectionchange", function (e) {
+            let content = document.getElementById('content');
+            if(content){
+              window.getSelection().selectAllChildren(content);
+            }
+          });
+        }
+      },
+      clipboardInit(){
+        this.clipboardSupported = Clipboard.isSupported();
+        let clipboard = new Clipboard('.copy');
+        clipboard.on('success', function() {
+            Toast('复制成功');
+        });
+        clipboard.on('error', function() {
+            Toast('复制失败');
+        });
+      },
+      getWXParams(callback){
+        let host = location.href;
+        let urlParams = common.getUrlParams(),
+            from = urlParams.from;
+
+        if(from&&(from == 'singlemessage' || from == 'groupmessage' || from == 'timeline')){
+          host = encodeURIComponent(host);
+        }
+
+        api.wx.getWXParams(host).then((r)=>{
+          if(r.success){
+            callback(r.value);
+          }
+          else {
+            Toast(r.message);
+          }
+        })
+      },
+      wxInit(){
+        this.getWXParams(params=>{
+          wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: params.appId, // 必填，公众号的唯一标识
+            timestamp: params.timestamp, // 必填，生成签名的时间戳
+            nonceStr: params.noncestr, // 必填，生成签名的随机串
+            signature: params.signature,// 必填，签名，见附录1
+            jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          });
+          wx.ready(()=>{
+            let link = 'http://qk.notepasses.com/quanke/h5/#/item/'+ this.item.id +'?shared=true';
+
+            // 分享到朋友圈
+            wx.onMenuShareTimeline({
+              title: this.item.title, // 分享标题
+              link: link, // 分享链接
+              imgUrl: this.item.pic, // 分享图标
+              success: function () {
+                // 用户确认分享后执行的回调函数
+                console.log('分享到朋友圈成功');
+              },
+              cancel: function () {
+                // 用户取消分享后执行的回调函数
+                console.log('取消分享到朋友圈');
+              }
+            });
+            // 分享给好友
+            wx.onMenuShareAppMessage({
+              title: this.item.title, // 分享标题
+              desc: this.item.goodsUrl, // 分享描述
+              link: link, // 分享链接
+              imgUrl: this.item.pic, // 分享图标
+              success: function () {
+                // 用户确认分享后执行的回调函数
+                console.log('分享给好友成功');
+              },
+              cancel: function () {
+                // 用户取消分享后执行的回调函数
+                console.log('取消分享给好友');
+              }
+            });
+          });
+        })
+      }
+    },
+    components: {
+      'my-footer': footer
+    }
+  }
+</script>
