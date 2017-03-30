@@ -65,6 +65,8 @@ a {
   text-decoration: none;
   background-color: transparent; /* 1 */
   -webkit-text-decoration-skip: objects; /* 2 */
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+
 }
 
 /**

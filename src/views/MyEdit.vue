@@ -48,9 +48,6 @@
         return this.$store.state.user
       }
     },
-    mounted(){
-      document.title = '修改资料';
-    },
     methods: {
       save(){
         api.user.editUserInfo(this.user).then((r) => {

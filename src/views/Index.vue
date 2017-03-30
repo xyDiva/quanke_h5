@@ -127,7 +127,6 @@
   import Vue from 'vue'
   import {Toast, Swipe, SwipeItem, Loadmore, Spinner} from 'mint-ui'
   import api from '../assets/scripts/api'
-  import common from '../assets/scripts/common'
   import footer from '../components/Footer'
 
   Vue.component(Swipe.name, Swipe);
@@ -149,13 +148,21 @@
         bottomStatus:'',
 
         nodata:false,
-        
+
         topBtnVisible: false
       }
     },
-    created(){
-      document.title = '券客';
+    activated(){
+      // scroll event
+      window.addEventListener('scroll', this.scrollFn);
 
+      let scrollTop = this.$store.state.indexScrollTop;
+      document.body.scrollTop = scrollTop;
+    },
+    deactivated(){
+      window.removeEventListener('scroll', this.scrollFn);
+    },
+    created(){
       // get banner
       api.banner.query().then((r) => {
         if (r.success) {
@@ -174,11 +181,14 @@
       // get goods
       this.getList();
 
-      // scroll event
-      window.addEventListener('scroll', this.scrollFn);
-    },
-    descroyed(){
-      window.removeEventListener('scroll', this.scrollFn);
+      // 微信分享
+      let link = location.protocol + '//' + location.host + location.pathname;
+      this.$com.wxInit({
+        title: '券客—先领券，再淘宝',
+        link: link + '#/index',
+        imgUrl: link + 'static/img/logo-share.jpg',
+        desc: '专业买手每日推荐淘宝、天猫百万信誉商家最新折扣'
+      });
     },
     methods: {
       getList(){
@@ -190,7 +200,7 @@
           if (r.success) {
             this.start += r.list.length;
             this.total = r.total;
-            this.list = this.list.concat(common.convertGoods(r.list||[]));
+            this.list = this.list.concat(this.$com.convertGoods(r.list||[]));
           }
           else {
             Toast({
@@ -208,7 +218,9 @@
         document.body.scrollTop = 0;
       },
       scrollFn(){
-        this.topBtnVisible = document.body.scrollTop > 600;
+        let scrollTop = document.body.scrollTop;
+        this.topBtnVisible = scrollTop > 600;
+        this.$store.dispatch('setIndexScrollTop',scrollTop);
       },
       handleBottomChange(status) {
         this.bottomStatus = status;

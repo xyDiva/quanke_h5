@@ -48,7 +48,6 @@
   import Vue from 'vue'
   import {Toast, Swipe, SwipeItem, Loadmore, Spinner} from 'mint-ui'
   import api from '../assets/scripts/api'
-  import common from '../assets/scripts/common'
   import footer from '../components/Footer'
 
   Vue.component(Swipe.name, Swipe);
@@ -73,16 +72,52 @@
       }
     },
     mounted(){
-      document.title = '搜索';
       if(this.cid) {
         this.headerVisible = false;
         this.getList();
+        this.setTitle();
       }
       else {
         document.getElementById('searchIpt').focus();
       }
     },
     methods: {
+      setTitle(){
+        let title = '';
+        switch(Number(this.cid)){
+          case 1:
+            title = '女装';
+            break;
+          case 2:
+            title = '男装';
+            break;
+          case 3:
+            title = '母婴';
+            break;
+          case 4:
+            title = '百货';
+            break;
+          case 5:
+            title = '文体';
+            break;
+          case 6:
+            title = '内衣';
+            break;
+          case 7:
+            title = '美妆';
+            break;
+          case 8:
+            title = '家居';
+            break;
+          case 9:
+            title = '配饰';
+            break;
+          case 10:
+            title = '其他';
+            break;
+        }
+        this.$com.setTitle(title);
+      },
       getList(){
         let params = {
           categoryId:this.cid,
@@ -95,7 +130,7 @@
             this.nodata = !r.list.length;
             this.start += r.list.length;
             this.total = r.total;
-            this.list = this.list.concat(common.convertGoods(r.list||[]));
+            this.list = this.list.concat(this.$com.convertGoods(r.list||[]));
           }
           else {
             Toast({

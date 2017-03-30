@@ -38,11 +38,3 @@
     </div>
   </div>
 </template>
-
-<script>
-  export default {
-    mounted(){
-      document.title = '联系客服';
-    }
-  }
-</script>

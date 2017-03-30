@@ -45,7 +45,6 @@
   import Vue from 'vue'
   import {Toast,Loadmore, Spinner} from 'mint-ui'
   import api from '../assets/scripts/api'
-  import common from '../assets/scripts/common'
   import footer from '../components/Footer'
 
   Vue.component(Loadmore.name, Loadmore);
@@ -65,8 +64,16 @@
       }
     },
     mounted(){
-      document.title = '秒杀中心';
       this.getList();
+
+      // 微信分享
+      let link = location.protocol + '//' + location.host + location.pathname;
+      this.$com.wxInit({
+        title: '券客—先领券，再淘宝',
+        link: link + '#/seckill',
+        imgUrl: link + 'static/img/logo-share.jpg',
+        desc: '每日定时直播秒杀，会员超低价格抢购产品'
+      });
     },
     methods: {
       getList(){
@@ -80,7 +87,7 @@
             this.nodata = !r.list.length;
             this.start += r.list.length;
             this.total = r.total;
-            this.list = this.list.concat(common.convertGoods(r.list||[]));
+            this.list = this.list.concat(this.$com.convertGoods(r.list||[]));
           }
           else {
             Toast(r.message);

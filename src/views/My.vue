@@ -100,8 +100,6 @@
 <script>
   import {Toast} from 'mint-ui'
   import api from '../assets/scripts/api'
-  import common from '../assets/scripts/common'
-
   import footer from '../components/Footer'
 
   export default {
@@ -111,8 +109,6 @@
       }
     },
     mounted(){
-      document.title = '我的';
-      
       api.user.getUserInfo().then((r) => {
         if (r.success) {
           this.user = r.value;

@@ -44,7 +44,6 @@
 <script>
   import {Toast} from 'mint-ui'
   import api from '../assets/scripts/api'
-  import common from '../assets/scripts/common'
   import footer from '../components/Footer'
 
   export default {
@@ -59,7 +58,6 @@
       }
     },
     mounted(){
-      document.title = '积分商城';
       this.getList();
     },
     methods: {
@@ -73,7 +71,7 @@
           if (r.success) {
             this.start += r.list.length;
             this.total = r.total;
-            this.list = this.list.concat(common.convertGoods(r.list||[]));
+            this.list = this.list.concat(this.$com.convertGoods(r.list||[]));
           }
           else {
             Toast(r.message);

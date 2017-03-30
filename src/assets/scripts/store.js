@@ -6,7 +6,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     user: {},
-    msg: {}
+    msg: {},
+    indexScrollTop:0
   },
   mutations: {
     setUser(state,user){
@@ -14,6 +15,9 @@ const store = new Vuex.Store({
     },
     setMsg (state, msg) {
       state.msg = msg;
+    },
+    setIndexScrollTop (state,scrollTop) {
+      state.indexScrollTop = scrollTop;
     }
   },
   actions: {
@@ -22,6 +26,9 @@ const store = new Vuex.Store({
     },
     setMsg(context, msg){
       context.commit('setMsg', msg);
+    },
+    setIndexScrollTop(context,scrollTop){
+      context.commit('setIndexScrollTop',scrollTop);
     }
   }
 });

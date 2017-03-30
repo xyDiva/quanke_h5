@@ -87,7 +87,6 @@
       }
     },
     mounted(){
-      document.title = '通知中心';
       this.getList();
     },
     methods: {
@@ -102,7 +101,6 @@
         })
       },
       setMsg(item){
-        console.log('dispatch')
         this.$store.dispatch('setMsg', item);
       }
     },

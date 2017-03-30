@@ -40,9 +40,6 @@
         return this.$store.state.msg
       }
     },
-    mounted(){
-      document.title = '通知详情';
-    },
     filters: {
       convertTime(timestamp){
         var date = new Date(timestamp);

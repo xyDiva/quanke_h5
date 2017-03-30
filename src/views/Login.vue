@@ -49,7 +49,6 @@
 <script>
   import {Toast} from 'mint-ui'
   import api from '../assets/scripts/api'
-  import common from '../assets/scripts/common'
 
   export default {
     data(){
@@ -60,9 +59,6 @@
         text: '发送验证码',
         getCodeBtnDisabled:false
       }
-    },
-    mounted(){
-      document.title = '登录';
     },
     methods: {
       getCode(){

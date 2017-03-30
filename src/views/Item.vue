@@ -64,18 +64,18 @@
       }
     }
     .first-page {
-      position:relative;
+      position: relative;
       background-color: white;
     }
     .tip {
-      line-height:0.6rem;
-      text-align:center;
+      line-height: 0.6rem;
+      text-align: center;
       font-size: 0.24rem;
     }
     .item-imgs {
-      margin-top:0.2rem;
+      margin-top: 0.2rem;
       img {
-        width:100%;
+        width: 100%;
       }
     }
     .wrap-bottom {
@@ -88,7 +88,7 @@
       display: flex;
     }
     .btn-order {
-      flex:1;
+      flex: 1;
       height: 0.98rem;
       color: white;
       font-size: 0.24rem;
@@ -106,18 +106,18 @@
       height: 100%;
       top: 0;
       left: 0;
-      background-color: rgba(0,0,0,0.6);
+      background-color: rgba(0, 0, 0, 0.6);
       .box {
         position: relative;
         width: 5.5rem;
-        margin:3rem auto 0;
+        margin: 3rem auto 0;
         padding: 0.15rem;
         background-color: #ea5514;
         border-radius: 0.1rem;
         .close {
           position: absolute;
           width: 0.52rem;
-          height:0.52rem;
+          height: 0.52rem;
           right: 0.2rem;
           top: 0.22rem;
           background: url(../assets/images/ico-close.png) center / contain no-repeat;
@@ -183,7 +183,7 @@
       <span><a href="/r/system/apk"><img src="../assets/images/d-02.png"></a></span>
     </div>
     <div class="first-page">
-      <mt-swipe :auto="4000":show-indicators="false" class="banner" :style="{height:bannerHeight+'px'}">
+      <mt-swipe :auto="4000" :show-indicators="false" class="banner" :style="{height:bannerHeight+'px'}">
         <mt-swipe-item><img :src="item.pic"></mt-swipe-item>
       </mt-swipe>
       <div class="pro-item">
@@ -228,10 +228,10 @@
     <div class="popup popup-no-coupon" v-if="popupVisible&&noCoupon">
       <div class="box">
         <div class="content">
-        客官您来晚了！<br>
-        券已经被领完了！<br>
-        下载券客APP，<br>
-        再也不会错过优惠！
+          客官您来晚了！<br>
+          券已经被领完了！<br>
+          下载券客APP，<br>
+          再也不会错过优惠！
         </div>
         <p>关注券客商城<br>第一时间获得最新优惠信息</p>
         <div class="qrcode"><img src="../assets/images/qrcode-gzh.png"></div>
@@ -256,10 +256,8 @@
   import Vue from 'vue'
   import {Toast, Swipe, SwipeItem} from 'mint-ui'
   import api from '../assets/scripts/api'
-  import common from '../assets/scripts/common'
   import footer from '../components/Footer'
 
-  var wx = require('weixin-js-sdk');
   var Clipboard = require('clipboard');
 
   Vue.component(Swipe.name, Swipe);
@@ -268,67 +266,64 @@
   export default {
     data(){
       return {
-        bannerHeight:document.body.clientWidth,
+        bannerHeight: document.body.clientWidth,
         item: {},
-        detailImgs:[],
+        detailImgs: [],
 
-        system:'',
-        popupVisible:false,
-        clipboardSupported:true,
+        system: '',
+        popupVisible: false,
+        clipboardSupported: true,
 
-        shared:false,
-        noCoupon:false
+        shared: this.$route.query.shared,
+        noCoupon: false
       }
     },
     mounted(){
-      document.title = '详情';
-
       const id = this.$route.params.id;
-      api.goods.getById(id).then((r)=>{
-        if(r.success){
+      api.goods.getById(id).then((r) => {
+        if (r.success) {
           // 券已领完 value为空
-          if(!r.value) {
+          if (!r.value) {
             this.noCoupon = true;
             this.popupVisible = true;
           }
 
-          this.item = common.convertGoods([r.value])[0];
+          this.item = this.$com.convertGoods([r.value])[0];
           this.getGoodImgs(this.item.thirdId);
-          document.title = this.item.title;
 
           // wx init
-          this.wxInit();
+          let link = location.protocol + '//' + location.host + location.pathname + '#/item/' + this.item.id + '?shared=true';
+          this.$com.wxInit({
+            title: this.item.title,
+            link: link,
+            imgUrl: this.item.pic,
+            desc: this.item.goodsUrl
+          });
         }
         else {
           Toast(r.message);
         }
       });
       //判断系统
-      this.system = common.getSystem();
-
-      // 分享出去的页面
-      let params = common.getUrlParams();
-      if(params.shared) {
-        this.shared = true;
-      }
+      this.system = this.$com.getSystem();
 
       // 复制
       this.copyInit();
     },
     methods: {
       getGoodImgs(thirdId){
-        api.goods.getGoodImgs(thirdId).then((r)=>{
-          if(r.success){
+        api.goods.getGoodImgs(thirdId).then((r) => {
+          if (r.success) {
             this.detailImgs = r.list || [];
           }
         });
       },
       copyInit(){
         this.clipboardInit();
-        if(this.system=='ios') {
+        if (this.system == 'ios') {
           document.addEventListener("selectionchange", function (e) {
             let content = document.getElementById('content');
-            if(content){
+            if (content) {
               window.getSelection().selectAllChildren(content);
             }
           });
@@ -337,75 +332,12 @@
       clipboardInit(){
         this.clipboardSupported = Clipboard.isSupported();
         let clipboard = new Clipboard('.copy');
-        clipboard.on('success', function() {
-            Toast('复制成功');
+        clipboard.on('success', function () {
+          Toast('复制成功');
         });
-        clipboard.on('error', function() {
-            Toast('复制失败');
+        clipboard.on('error', function () {
+          Toast('复制失败');
         });
-      },
-      getWXParams(callback){
-        let host = location.href;
-        let urlParams = common.getUrlParams(),
-            from = urlParams.from;
-
-        if(from&&(from == 'singlemessage' || from == 'groupmessage' || from == 'timeline')){
-          host = encodeURIComponent(host);
-        }
-
-        api.wx.getWXParams(host).then((r)=>{
-          if(r.success){
-            callback(r.value);
-          }
-          else {
-            Toast(r.message);
-          }
-        })
-      },
-      wxInit(){
-        this.getWXParams(params=>{
-          wx.config({
-            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: params.appId, // 必填，公众号的唯一标识
-            timestamp: params.timestamp, // 必填，生成签名的时间戳
-            nonceStr: params.noncestr, // 必填，生成签名的随机串
-            signature: params.signature,// 必填，签名，见附录1
-            jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-          });
-          wx.ready(()=>{
-            let link = 'http://qk.notepasses.com/quanke/h5/#/item/'+ this.item.id +'?shared=true';
-
-            // 分享到朋友圈
-            wx.onMenuShareTimeline({
-              title: this.item.title, // 分享标题
-              link: link, // 分享链接
-              imgUrl: this.item.pic, // 分享图标
-              success: function () {
-                // 用户确认分享后执行的回调函数
-                console.log('分享到朋友圈成功');
-              },
-              cancel: function () {
-                // 用户取消分享后执行的回调函数
-                console.log('取消分享到朋友圈');
-              }
-            });
-            // 分享给好友
-            wx.onMenuShareAppMessage({
-              title: this.item.title, // 分享标题
-              desc: this.item.goodsUrl, // 分享描述
-              link: link, // 分享链接
-              imgUrl: this.item.pic, // 分享图标
-              success: function () {
-                // 用户确认分享后执行的回调函数
-                console.log('分享给好友成功');
-              },
-              cancel: function () {
-                // 用户取消分享后执行的回调函数
-                console.log('取消分享给好友');
-              }
-            });
-          });
-        })
       }
     },
     components: {
