@@ -15,39 +15,11 @@ var port = process.env.PORT || config.dev.port
 var proxyTable = config.dev.proxyTable;
 
 proxyTable = {
-  '/user': {
-    target: 'http://120.26.125.112:8088',
+  '/ar': {
+    target: 'http://qk.notepasses.com',
     changeOrigin: true,
     pathRewrite: {
-      '^/user': '/user'
-    }
-  },
-  '/goods': {
-    target: 'http://120.26.125.112:8088',
-    changeOrigin: true,
-    pathRewrite: {
-      '^/goods': '/goods'
-    }
-  },
-  '/notify': {
-    target: 'http://120.26.125.112:8088',
-    changeOrigin: true,
-    pathRewrite: {
-      '^/notify': '/notify'
-    }
-  },
-  '/banner': {
-    target: 'http://120.26.125.112:8088',
-    changeOrigin: true,
-    pathRewrite: {
-      '^/banner': '/banner'
-    }
-  },
-  '/wx': {
-    target: 'http://120.26.125.112:8088',
-    changeOrigin: true,
-    pathRewrite: {
-      '^/wx': '/wx'
+      '^/ar': '/ar'
     }
   }
 };

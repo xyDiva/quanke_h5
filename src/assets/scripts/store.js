@@ -7,7 +7,9 @@ const store = new Vuex.Store({
   state: {
     user: {},
     msg: {},
-    indexScrollTop:0
+    indexScrollTop:0,
+    searchScrollTop:0,
+    seckillScrollTop:0
   },
   mutations: {
     setUser(state,user){
@@ -16,8 +18,14 @@ const store = new Vuex.Store({
     setMsg (state, msg) {
       state.msg = msg;
     },
-    setIndexScrollTop (state,scrollTop) {
-      state.indexScrollTop = scrollTop;
+    setIndexScrollTop (state, indexScrollTop) {
+      state.indexScrollTop = indexScrollTop;
+    },
+    setSearchScrollTop (state, searchScrollTop) {
+      state.searchScrollTop = searchScrollTop;
+    },
+    setSeckillScrollTop (state, seckillScrollTop) {
+      state.seckillScrollTop = seckillScrollTop;
     }
   },
   actions: {
@@ -27,8 +35,14 @@ const store = new Vuex.Store({
     setMsg(context, msg){
       context.commit('setMsg', msg);
     },
-    setIndexScrollTop(context,scrollTop){
-      context.commit('setIndexScrollTop',scrollTop);
+    setIndexScrollTop (context, indexScrollTop) {
+      context.commit('setIndexScrollTop',indexScrollTop);
+    },
+    setSearchScrollTop (context, searchScrollTop) {
+      context.commit('setSearchScrollTop',searchScrollTop);
+    },
+    setSeckillScrollTop (context, seckillScrollTop) {
+      context.commit('setSeckillScrollTop',seckillScrollTop);
     }
   }
 });

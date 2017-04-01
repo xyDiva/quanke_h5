@@ -59,7 +59,7 @@
     data(){
       return {
         headerVisible:true,
-        cid:this.$route.params.cid,
+        cid:null,
         name:'',
 
         list: [],
@@ -71,17 +71,44 @@
         nodata:false
       }
     },
-    mounted(){
-      if(this.cid) {
-        this.headerVisible = false;
+    activated(){
+      const meta = this.$route.meta;
+      if(meta.clear) {
+        this.clear();
+      }
+      
+      this.cid = this.$route.params.cid;
+      this.headerVisible = !this.cid;
+      this.setTitle();
+
+      if(this.cid && !meta.stay) {
+        this.clear();
         this.getList();
-        this.setTitle();
       }
       else {
-        document.getElementById('searchIpt').focus();
+        const $searchIpt = document.getElementById('searchIpt');
+        if($searchIpt) {
+          $searchIpt.focus();
+        }
       }
+
+      // scroll event
+      window.addEventListener('scroll', this.scrollFn);
+
+      document.body.scrollTop = this.$route.meta.stay?this.$store.state.searchScrollTop:0;
+    },
+    deactivated(){
+      window.removeEventListener('scroll', this.scrollFn);
     },
     methods: {
+      clear(){
+        this.name = '';
+        this.list = [];
+        this.start = 0;
+        this.allLoaded = false;
+        this.bottomStatus = '';
+        this.nodata = false;
+      },
       setTitle(){
         let title = '';
         switch(Number(this.cid)){
@@ -114,6 +141,9 @@
             break;
           case 10:
             title = '其他';
+            break;
+            default:
+            title = '搜索';
             break;
         }
         this.$com.setTitle(title);
@@ -157,7 +187,11 @@
           }
           this.$refs.loadmore.onBottomLoaded();
         }, 1500);
-      }
+      },
+      scrollFn(){
+        let scrollTop = document.body.scrollTop;
+        this.$store.dispatch('setSearchScrollTop',scrollTop);
+      },
     },
     components: {
       'my-footer': footer

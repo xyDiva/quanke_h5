@@ -9,10 +9,13 @@
       }
     }
     .dl {
+      position: relative;
       display: flex;
       justify-content: space-around;
       align-items: center;
       height: 1rem;
+      background-color: white;
+      z-index: 9;
       span {
         font-size: 0;
         line-height: 0;
@@ -100,6 +103,17 @@
       border-right: white 1px dashed;
       background: url(../assets/images/ico-index-white.png) center / 0.4rem no-repeat;
     }
+    .btn-back-no-coupon {
+      position: fixed;
+      width: 100%;
+      height: 0.98rem;
+      bottom: 0;
+      left: 0;
+      color: white;
+      font-size: 0.24rem;
+      background: #ea5513;
+      z-index: 9;
+    }
     .popup {
       position: fixed;
       width: 100%;
@@ -152,6 +166,9 @@
         }
       }
       &.popup-no-coupon {
+        .box {
+          padding: 0;
+        }
         p {
           font-size: 0.18rem;
           margin-top: 1.3rem;
@@ -161,6 +178,7 @@
           width: 1.9rem;
           right: 0.4rem;
           top: 3.4rem;
+          z-index: 9;
           img {
             width: 100%
           }
@@ -177,64 +195,75 @@
 
 <template>
   <div class="page-item">
+    <!-- 下载 -->
     <div class="dl" v-if="shared">
       <span><img src="../assets/images/logo.png"></span>
       <span><img src="../assets/images/ew-03.png"></span>
       <span><a href="/r/system/apk"><img src="../assets/images/d-02.png"></a></span>
     </div>
-    <div class="first-page">
-      <mt-swipe :auto="4000" :show-indicators="false" class="banner" :style="{height:bannerHeight+'px'}">
-        <mt-swipe-item><img :src="item.pic"></mt-swipe-item>
-      </mt-swipe>
-      <div class="pro-item">
-        <div class="col">
-          <h1>{{item.title}}</h1>
-          <button class="copy" :data-clipboard-text="item.goodsUrl">复制</button>
-        </div>
-        <div class="col">
-          <div class="price"><i>&yen;</i>{{item.priceA||0}}<i>.{{item.priceB||00}}</i></div>
-          <div class="tags">
-            <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon" v-if="item.coupon">{{item.coupon}}元券</span>
+
+    <!-- 返回首页 优惠券已领完 -->
+    <router-link to="/index" v-if="noCoupon">
+      <button class="btn-back-no-coupon">去券客首页逛逛</button>
+    </router-link>
+
+    <!-- 商品 -->
+    <div class="item" v-if="!noCoupon">
+      <div class="first-page">
+        <mt-swipe :auto="4000" :show-indicators="false" class="banner" :style="{height:bannerHeight+'px'}">
+          <mt-swipe-item><img :src="item.pic"></mt-swipe-item>
+        </mt-swipe>
+        <div class="pro-item">
+          <div class="col">
+            <h1>{{item.title}}</h1>
+            <button class="copy" :data-clipboard-text="item.goodsUrl">复制</button>
+          </div>
+          <div class="col">
+            <div class="price"><i>&yen;</i>{{item.priceA||0}}<i>.{{item.priceB||00}}</i></div>
+            <div class="tags">
+              <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon" v-if="item.coupon">{{item.coupon}}元券</span>
+            </div>
+          </div>
+          <div class="col">
+            <span class="original-price">原价：<del>{{item.price||0.00}}</del></span>
+            <span class="sold">已售：{{item.biz30day||0}}</span>
+          </div>
+          <div class="flex guide">
+            <div class="key">购买方式：</div>
+            <div class="value">①.先领取优惠券 ②.查看券后价格 ③.下单</div>
+          </div>
+          <div class="flex reason">
+            <div class="key">推荐理由：</div>
+            <div class="value">{{item.desc}}</div>
           </div>
         </div>
-        <div class="col">
-          <span class="original-price">原价：<del>{{item.price||0.00}}</del></span>
-          <span class="sold">已售：{{item.biz30day||0}}</span>
-        </div>
-        <div class="flex guide">
-          <div class="key">购买方式：</div>
-          <div class="value">①.先领取优惠券 ②.查看券后价格 ③.下单</div>
-        </div>
-        <div class="flex reason">
-          <div class="key">推荐理由：</div>
-          <div class="value">{{item.desc}}</div>
-        </div>
+        <div class="tip">继续拖动，查看图文详情</div>
       </div>
-      <div class="tip">继续拖动，查看图文详情</div>
+      <div class="item-imgs">
+        <ul>
+          <li v-for="item in detailImgs"><img v-lazy="item"></li>
+        </ul>
+      </div>
+      <div class="wrap-bottom">
+        <router-link to="/index" v-if="shared">
+          <button class="btn-back"></button>
+        </router-link>
+        <button class="btn-order" @click="popupVisible=true">领券下单</button>
+      </div>
     </div>
-    <div class="item-imgs">
-      <ul>
-        <li v-for="item in detailImgs"><img v-lazy="item"></li>
-      </ul>
-    </div>
-    <div class="wrap-bottom">
-      <router-link to="/index" v-if="shared">
-        <button class="btn-back"></button>
-      </router-link>
-      <button class="btn-order" @click="popupVisible=true">领券下单</button>
-    </div>
-
+    
     <!-- 弹出窗口 分享落地页 优惠券已领完 -->
     <div class="popup popup-no-coupon" v-if="popupVisible&&noCoupon">
       <div class="box">
-        <div class="content">
+        <img src="../assets/images/no-coupon.png">
+        <!--  <div class="content">
           客官您来晚了！<br>
           券已经被领完了！<br>
           下载券客APP，<br>
           再也不会错过优惠！
         </div>
         <p>关注券客商城<br>第一时间获得最新优惠信息</p>
-        <div class="qrcode"><img src="../assets/images/qrcode-gzh.png"></div>
+        <div class="qrcode"><img src="../assets/images/qrcode-gzh.png"></div> -->
       </div>
     </div>
 
@@ -279,36 +308,52 @@
       }
     },
     mounted(){
+      // back to top
+      document.body.scrollTop = 0;
+
+      //判断系统
+      this.system = this.$com.getSystem();
+
       const id = this.$route.params.id;
       api.goods.getById(id).then((r) => {
         if (r.success) {
+          const host = location.protocol + '//' + location.host + location.pathname;
+
+          // 微信分享参数
+          let params = {
+            title:'券客—先领券，再淘宝',
+            link:host,
+            imgUrl:host + 'static/img/logo-share.jpg',
+            desc:'专业买手每日推荐淘宝、天猫百万信誉商家最新折扣'
+          };
+
           // 券已领完 value为空
           if (!r.value) {
             this.noCoupon = true;
             this.popupVisible = true;
           }
+          else {
+            this.item = this.$com.convertGoods([r.value])[0];
+            this.getGoodImgs(this.item.thirdId);
 
-          this.item = this.$com.convertGoods([r.value])[0];
-          this.getGoodImgs(this.item.thirdId);
+            params = {
+              title:this.item.title,
+              link:host+'#/item/' + this.item.id + '?shared=true',
+              imgUrl:host + 'static/img/logo-share.jpg',
+              desc:this.item.goodsUrl
+            };
+
+            // 复制
+            this.copyInit();
+          }
 
           // wx init
-          let link = location.protocol + '//' + location.host + location.pathname + '#/item/' + this.item.id + '?shared=true';
-          this.$com.wxInit({
-            title: this.item.title,
-            link: link,
-            imgUrl: this.item.pic,
-            desc: this.item.goodsUrl
-          });
+          this.$com.wxInit(params);
         }
         else {
           Toast(r.message);
         }
       });
-      //判断系统
-      this.system = this.$com.getSystem();
-
-      // 复制
-      this.copyInit();
     },
     methods: {
       getGoodImgs(thirdId){
@@ -320,6 +365,7 @@
       },
       copyInit(){
         this.clipboardInit();
+
         if (this.system == 'ios') {
           document.addEventListener("selectionchange", function (e) {
             let content = document.getElementById('content');

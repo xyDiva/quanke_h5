@@ -63,6 +63,15 @@
         nodata:false
       }
     },
+    activated(){
+      // scroll event
+      window.addEventListener('scroll', this.scrollFn);
+
+      document.body.scrollTop = this.$route.meta.stay?this.$store.state.seckillScrollTop:0;
+    },
+    deactivated(){
+      window.removeEventListener('scroll', this.scrollFn);
+    },
     mounted(){
       this.getList();
 
@@ -107,6 +116,10 @@
           }
           this.$refs.loadmore.onBottomLoaded();
         }, 1500);
+      },
+      scrollFn(){
+        let scrollTop = document.body.scrollTop;
+        this.$store.dispatch('setSeckillScrollTop',scrollTop);
       }
     },
     components: {

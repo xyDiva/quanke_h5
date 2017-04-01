@@ -156,13 +156,12 @@
       // scroll event
       window.addEventListener('scroll', this.scrollFn);
 
-      let scrollTop = this.$store.state.indexScrollTop;
-      document.body.scrollTop = scrollTop;
+      document.body.scrollTop = this.$route.meta.stay?this.$store.state.indexScrollTop:0;
     },
     deactivated(){
       window.removeEventListener('scroll', this.scrollFn);
     },
-    created(){
+    mounted(){
       // get banner
       api.banner.query().then((r) => {
         if (r.success) {

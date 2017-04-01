@@ -32,10 +32,10 @@ import Search from './views/Search'
 
 const routes = [
   {path: '/login', component: Login,meta:{title:'登录'}},
-  {path: '/', component: Index,meta: {keep:true,title:'券客商城'}},
+  {path: '/',  redirect: '/index'},
   {path: '/index', component: Index,meta: {keep:true,title:'券客商城'}},
   {path: '/item/:id', component: Item,meta:{title:'券客商城'}},
-  {path: '/seckill', component: Seckill,meta:{title:'秒杀中心'}},
+  {path: '/seckill', component: Seckill,meta:{keep:true,title:'秒杀中心'}},
   {path: '/my', component: My,meta:{title:'我的'}},
   {path: '/my/edit', component: MyEdit,meta:{title:'修改资料'}},
   {path: '/message', component: Message,meta:{title:'通知中心'}},
@@ -43,8 +43,8 @@ const routes = [
   {path: '/about', component: About,meta:{title:'关于我们'}},
   {path: '/contact', component: Contact,meta:{title:'联系客服'}},
   {path: '/mall', component: Mall,meta:{title:'积分商城'}},
-  {path: '/search', component: Search,meta:{title:'搜索'}},
-  {path: '/search/:cid', component: Search,meta:{title:'搜索'}}
+  {path: '/search', component: Search,meta:{keep:true,title:'搜索'}},
+  {path: '/search/:cid', component: Search,meta:{keep:true,title:'搜索'}}
 ];
 
 const router = new VueRouter({
@@ -54,6 +54,28 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   let title = to.meta.title;
   common.setTitle(title);
+
+  // index -> search
+  if(to.path == '/search' && from.path == '/index'){
+    to.meta.clear = true;
+  }
+  else {
+    to.meta.clear = false;
+  };
+
+  // item -> index/seckill/search 保持滚动状态
+  if(from.path.indexOf('/item')>=0){
+    if(to.path == '/index' || to.path == '/seckill' || to.path.indexOf('/search')>=0){
+      to.meta.stay = true;
+    }
+    else {
+      to.meta.stay = false;
+    }
+  }
+  else {
+    to.meta.stay = false;
+  }
+
   next();
 })
 
