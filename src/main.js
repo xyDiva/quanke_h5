@@ -36,7 +36,7 @@ const routes = [
   {path: '/index', component: Index,meta: {keep:true,title:'券客商城'}},
   {path: '/item/:id', component: Item,meta:{title:'券客商城'}},
   {path: '/seckill', component: Seckill,meta:{keep:true,title:'秒杀中心'}},
-  {path: '/my', component: My,meta:{title:'我的'}},
+  {path: '/my', component: My,meta:{title:'个人中心'}},
   {path: '/my/edit', component: MyEdit,meta:{title:'修改资料'}},
   {path: '/message', component: Message,meta:{title:'通知中心'}},
   {path: '/message/:id', component: MessageDetail,meta:{title:'通知详情'}},
