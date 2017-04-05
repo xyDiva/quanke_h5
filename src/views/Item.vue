@@ -339,7 +339,7 @@
             params = {
               title:this.item.title,
               link:host+'#/item/' + this.item.id + '?shared=true',
-              imgUrl:host + 'static/img/logo-share.jpg',
+              imgUrl:this.item.pic,
               desc:this.item.goodsUrl
             };
 
