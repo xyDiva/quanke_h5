@@ -30,5 +30,6 @@ cnpm run build
 5.vue `keep-alive` 从详情返回列表时，列表位置也在原位  
 
 6.ios 长按无法弹出菜单识别二维码  
-
-7.微信内置浏览器识别二维码错位    
+微信内置浏览器识别二维码错位  
+文中有说通过增加img的内边距扩大接触面积...暂测无效;;;  
+reference:[微信内置浏览器 长按识别二维码 功能的两三个坑与解决方案](http://devework.com/weixin-qrcode-bug2.html)    
