@@ -18,11 +18,15 @@ Vue.prototype.$com = common; // 全局挂载
 /* views */
 import App from './App'
 import Login from './views/Login'
+import Bind from './views/Bind'
 import Index from './views/Index'
 import Item from './views/Item'
 import Seckill from './views/Seckill'
 import My from './views/My'
 import MyEdit from './views/MyEdit'
+import Income from './views/Income'
+import Withdraw from './views/Withdraw'
+import Address from './views/Address'
 import Message from './views/Message'
 import MessageDetail from './views/MessageDetail'
 import About from './views/About'
@@ -32,6 +36,7 @@ import Search from './views/Search'
 
 const routes = [
   {path: '/login', component: Login,meta:{title:'登录'}},
+  {path: '/bind', component: Bind,meta:{title:'手机绑定'}},
   {path: '/',  redirect: '/index'},
   {path: '/index', component: Index,meta: {keep:true,title:'券客商城'}},
   {path: '/item/:id', component: Item,meta:{title:'券客商城'}},
@@ -40,11 +45,14 @@ const routes = [
   {path: '/my/edit', component: MyEdit,meta:{title:'修改资料'}},
   {path: '/message', component: Message,meta:{title:'通知中心'}},
   {path: '/message/:id', component: MessageDetail,meta:{title:'通知详情'}},
+  {path: '/income',component:Income,meta:{title:'我的收益'}},
+  {path: '/withdraw',component:Withdraw,meta:{title:'申请提现'}},
+  {path: '/address',component:Address,meta:{title:'收货地址'}},
   {path: '/about', component: About,meta:{title:'关于我们'}},
   {path: '/contact', component: Contact,meta:{title:'联系客服'}},
   {path: '/mall', component: Mall,meta:{title:'积分商城'}},
   {path: '/search', component: Search,meta:{keep:true,title:'搜索'}},
-  {path: '/search/:cid', component: Search,meta:{keep:true,title:'搜索'}}
+  {path: '/search/:cid', component: Search,meta:{keep:true,title:'搜索'}},
 ];
 
 const router = new VueRouter({

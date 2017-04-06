@@ -56,33 +56,6 @@
       }
 
     }
-    .item {
-      position: relative;
-      line-height: 0.88rem;
-      margin-top: 0.05rem;
-      padding: 0 0.35rem;
-      background-color: white;
-      font-size: 0.28rem;
-      a {
-        display: block;
-        color: #030303;
-        font-size: 0.24rem;
-      }
-      span {
-        float: right;
-        padding-right: 0.3rem;
-        color: #979797;
-      }
-      &:after {
-        content: '';
-        position: absolute;
-        width: 0.5rem;
-        height: 0.88rem;
-        top: 0;
-        right: 0;
-        background: url("../assets/images/ico-right.png") left center / 0.2rem no-repeat;
-      }
-    }
     .btn-logout {
       display: block;
       width: 100%;
@@ -111,7 +84,7 @@
     </div>
 
     <div class="item">
-      <router-link to="/my/edit">我的收益<span>即时可提</span></router-link>
+      <router-link to="/income">我的收益<span>即时可提</span></router-link>
     </div>
     <div class="item">
       <a href="http://qk.notepasses.com/quanke/sign-in.html">每日签到</a>

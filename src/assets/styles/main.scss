@@ -231,12 +231,6 @@ header {
   }
 }
 
-/* 项目全局样式--wrap footer
-   ========================================================================== */
-.wrap-footer {
-  height: 1.08rem;
-}
-
 /* 项目全局样式--form
    ========================================================================== */
 .btn {
@@ -245,7 +239,7 @@ header {
   height: 0.88rem;
   color: white;
   font-size: 0.24rem;
-  background-color: #ea5513;
+  background-color: #ea5514;
   border: none;
   border-radius: 10px;
   &:disabled {
@@ -253,7 +247,7 @@ header {
   }
 }
 
-/* 项目全局样式--item--产品列表
+/* 项目全局样式--pro-item--产品列表
    ========================================================================== */
 .pro-item {
   position: relative;
@@ -333,19 +327,60 @@ header {
   font-size: 0.28rem;
 }
 
+/* 项目全局样式--item
+   ========================================================================== */
+.item {
+  position: relative;
+  line-height: 0.88rem;
+  margin-top: 0.05rem;
+  padding: 0 0.35rem;
+  background-color: white;
+  font-size: 0.24rem;
+  span {
+    float: right;
+    color: #979797;
+  }
+  a {
+    display: block;
+    color: #030303;
+    span {
+      padding-right: 0.3rem;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      width: 0.5rem;
+      height: 0.88rem;
+      top: 0;
+      right: 0;
+      background: url("./assets/images/ico-right.png") left center / 0.2rem no-repeat;
+    }
+  }
+  .ipt {
+    height: 0.88rem;
+    font-size: 0.24rem;
+    color: #979797;
+    text-align: right;
+  }
+}
+
+
 /* 项目全局样式--footer
    ========================================================================== */
+.wrap-footer {
+  height: 1.08rem;
+}
 footer {
   background-color: white;
 }
 
-/* 项目全局样式--toast
+/* 组件--toast
    ========================================================================== */
 .mint-toast-text {
   font-size: 0.24rem !important;
 }
 
-/* 项目全局样式--swipe
+/* 组件--swipe
    ========================================================================== */
 .banner .mint-swipe-indicator {
   width: 0.15rem;
@@ -358,7 +393,7 @@ footer {
 }
 
 
-/* 项目全局样式--loadMore
+/* 组件--loadMore
    ========================================================================== */
 .mint-loadmore-bottom {
   font-size:0.35rem;

@@ -112,4 +112,15 @@ api.wx = {
   })
 };
 
+// 省市区列表
+api.address = {
+  listDistrict: (parentId)=>new Promise((resolve, reject)=> {
+    Vue.http.get(HOST_URL + 'address/listDistrict?parentId=' + parentId).then((r)=> {
+      resolve(r.body);
+    }, (r)=> {
+      reject(r.body);
+    });
+  })
+};
+
 module.exports = api;
