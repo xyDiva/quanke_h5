@@ -20,7 +20,7 @@
           width: 100%;
         }
       }
-      .tel {
+      .name {
         font-size: 0.36rem;
       }
 
@@ -57,7 +57,7 @@
       }
     }
     .btn-logout {
-      display: block;
+      display: none;
       width: 100%;
       height: 0.88rem;
       margin-top: 0.05rem;
@@ -72,9 +72,10 @@
   <div class="page-my">
     <div class="info">
       <div class="avatar">
-        <img src="../assets/images/portrait.png">
+        <img v-if="user.avatar" src="user.avatar">
+        <img v-else src="../assets/images/portrait.png">
       </div>
-      <p class="tel">{{user.tel}}</p>
+      <p class="name">{{user.nickName}}</p>
     </div>
     <div class="item">
       <router-link to="/my/edit">个人资料</router-link>
