@@ -7,13 +7,16 @@
 <template>
   <div class="page-search">
     <header v-if="headerVisible">
-      <div class="search"><input type="text" id="searchIpt" placeholder="输入需要寻找的商品..." v-model="name"><button @click="getList"></button></div>
+      <div class="search"><input type="text" id="searchIpt" placeholder="输入需要寻找的商品..." v-model="name">
+        <button @click="search"></button>
+      </div>
       <router-link class="left" to="/index">
         <i class="ico back"></i>
       </router-link>
     </header>
     <div class="page-loadmore-wrapper" ref="wrapper" v-if="list.length">
-      <mt-loadmore :autoFill="false" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+      <mt-loadmore :autoFill="false" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange"
+                   :bottom-all-loaded="allLoaded" ref="loadmore">
         <div class="pro-item" v-if="list.length" v-for="item in list">
           <router-link :to="'/item/'+item.id">
             <div class="left"><img v-if="item.pic" :src="item.pic"></div>
@@ -58,36 +61,36 @@
   export default {
     data(){
       return {
-        headerVisible:true,
-        cid:null,
-        name:'',
+        headerVisible: true,
+        cid: null,
+        name: '',
 
         list: [],
-        start:0,
+        start: 0,
 
-        allLoaded:false,
-        bottomStatus:'',
+        allLoaded: false,
+        bottomStatus: '',
 
-        nodata:false
+        nodata: false
       }
     },
     activated(){
       const meta = this.$route.meta;
-      if(meta.clear) {
+      if (meta.clear) {
         this.clear();
       }
-      
+
       this.cid = this.$route.params.cid;
       this.headerVisible = !this.cid;
       this.setTitle();
 
-      if(this.cid && !meta.stay) {
-        this.clear();
+      if (this.cid && !meta.stay) {
+        this.clear('init');
         this.getList();
       }
       else {
         const $searchIpt = document.getElementById('searchIpt');
-        if($searchIpt) {
+        if ($searchIpt) {
           $searchIpt.focus();
         }
       }
@@ -95,14 +98,16 @@
       // scroll event
       window.addEventListener('scroll', this.scrollFn);
 
-      document.body.scrollTop = this.$route.meta.stay?this.$store.state.searchScrollTop:0;
+      document.body.scrollTop = this.$route.meta.stay ? this.$store.state.searchScrollTop : 0;
     },
     deactivated(){
       window.removeEventListener('scroll', this.scrollFn);
     },
     methods: {
-      clear(){
-        this.name = '';
+      clear(action){
+        if (action == 'init') {
+          this.name = '';
+        }
         this.list = [];
         this.start = 0;
         this.allLoaded = false;
@@ -111,7 +116,7 @@
       },
       setTitle(){
         let title = '';
-        switch(Number(this.cid)){
+        switch (Number(this.cid)) {
           case 1:
             title = '女装';
             break;
@@ -142,25 +147,29 @@
           case 10:
             title = '其他';
             break;
-            default:
+          default:
             title = '搜索';
             break;
         }
         this.$com.setTitle(title);
       },
+      search(){
+        this.clear();
+        this.getList();
+      },
       getList(){
         let params = {
-          categoryId:this.cid,
-          name:this.name,
-          start:this.start,
-          limit:10
+          categoryId: this.cid,
+          name: this.name,
+          start: this.start,
+          limit: 10
         };
         api.goods.query(params).then((r) => {
           if (r.success) {
             this.nodata = !r.list.length;
             this.start += r.list.length;
             this.total = r.total;
-            this.list = this.list.concat(this.$com.convertGoods(r.list||[]));
+            this.list = this.$com.convertGoods(r.list || []);
           }
           else {
             Toast({
@@ -179,7 +188,7 @@
       },
       loadBottom() {
         setTimeout(() => {
-          if(this.list.length < this.total) {
+          if (this.list.length < this.total) {
             this.getList();
           }
           else {
@@ -190,7 +199,7 @@
       },
       scrollFn(){
         let scrollTop = document.body.scrollTop;
-        this.$store.dispatch('setSearchScrollTop',scrollTop);
+        this.$store.dispatch('setSearchScrollTop', scrollTop);
       },
     },
     components: {

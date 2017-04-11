@@ -58,12 +58,12 @@
       .copy {
         position: absolute;
         width: 1rem;
-        padding: 0.8rem 0 0.2rem;
+        padding: 0.6rem 0 0.2rem;
         right: 0;
         top: 0;
         font-size: 0.18rem;
         text-align: center;
-        background: url("../assets/images/ico-link.png") center 0.3rem / 0.4rem no-repeat;
+        background: url("../assets/images/ico-link.png") center 0.15rem / 0.4rem no-repeat;
       }
     }
     .first-page {
@@ -251,7 +251,7 @@
         <button class="btn-order" @click="popupVisible=true">领券下单</button>
       </div>
     </div>
-    
+
     <!-- 弹出窗口 分享落地页 优惠券已领完 -->
     <div class="popup popup-no-coupon" v-if="popupVisible&&noCoupon">
       <div class="box">
