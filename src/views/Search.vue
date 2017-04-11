@@ -7,8 +7,11 @@
 <template>
   <div class="page-search">
     <header v-if="headerVisible">
-      <div class="search"><input type="text" id="searchIpt" placeholder="输入需要寻找的商品..." v-model="name">
-        <button @click="search"></button>
+      <div class="search">
+        <form action="#" onsubmit="return false;">
+          <input type="search" id="searchIpt" placeholder="输入需要寻找的商品..." v-model="name" @search="search">
+          <button @click="search"></button>
+        </form>
       </div>
       <router-link class="left" to="/index">
         <i class="ico back"></i>
@@ -77,7 +80,7 @@
     activated(){
       const meta = this.$route.meta;
       if (meta.clear) {
-        this.clear();
+        this.clear('init');
       }
 
       this.cid = this.$route.params.cid;
