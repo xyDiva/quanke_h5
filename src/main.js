@@ -27,12 +27,17 @@ import MyEdit from './views/MyEdit'
 import Income from './views/Income'
 import Withdraw from './views/Withdraw'
 import Address from './views/Address'
+import InviteCode from './views/InviteCode'
+import Invite from './views/Invite'
+import Order from './views/Order'
+import OrderAdd from './views/OrderAdd'
 import Message from './views/Message'
 import MessageDetail from './views/MessageDetail'
 import About from './views/About'
 import Contact from './views/Contact'
 import Mall from './views/Mall'
 import Search from './views/Search'
+import Share from './views/Share'
 
 const routes = [
   {path: '/login', component: Login,meta:{title:'登录'}},
@@ -48,11 +53,17 @@ const routes = [
   {path: '/income',component:Income,meta:{title:'我的收益'}},
   {path: '/withdraw',component:Withdraw,meta:{title:'申请提现'}},
   {path: '/address',component:Address,meta:{title:'收货地址'}},
+  {path: '/inviteCode',component:InviteCode,meta:{title:'输入邀请码'}},
+  {path: '/invite',component:Invite,meta:{title:'邀请好友'}},
+  {path: '/order',component:Order,meta:{title:'返利结果'}},
+  {path: '/order/add',component:OrderAdd,meta:{title:'晒单返利'}},
+
   {path: '/about', component: About,meta:{title:'关于我们'}},
   {path: '/contact', component: Contact,meta:{title:'联系客服'}},
   {path: '/mall', component: Mall,meta:{title:'积分商城'}},
   {path: '/search', component: Search,meta:{keep:true,title:'搜索'}},
   {path: '/search/:cid', component: Search,meta:{keep:true,title:'搜索'}},
+  {path: '/share', component: Share,meta:{title:'分享'}},
 ];
 
 const router = new VueRouter({

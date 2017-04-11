@@ -86,14 +86,14 @@
     <div class="item">
       <router-link to="/income">我的收益<span>即时可提</span></router-link>
     </div>
-    <div class="item">
-      <a href="http://qk.notepasses.com/quanke/sign-in.html">每日签到</a>
+    <div class="item" @click="checkBeforeRoute(1)">
+      <a href="javascript:;" id="signLink">每日签到</a>
     </div>
-    <div class="item">
-      <router-link to="/my/edit">推荐好友<span>送1000积分</span></router-link>
+    <div class="item" @click="checkBeforeRoute(2)">
+      <router-link to="/invite">推荐好友<span>送1000积分</span></router-link>
     </div>
-    <div class="item">
-      <router-link to="/my/edit">晒单返利<span>返利还赚钱</span></router-link>
+    <div class="item" @click="checkBeforeRoute(3)">
+      <router-link to="/order">晒单返利<span>返利还赚钱</span></router-link>
     </div>
     <div class="item">
       <router-link to="/contact">联系客服</router-link>
@@ -124,7 +124,7 @@
       api.user.getUserInfo().then((r) => {
         if (r.success) {
           this.user = r.value;
-          this.$store.dispatch('setUser',this.user);
+          this.$store.dispatch('setUser', this.user);
         }
         else {
           Toast({
@@ -132,13 +132,33 @@
             duration: 1500
           });
 
-          setTimeout(()=> {
+          setTimeout(() => {
             this.$router.push('/login');
           }, 2000);
         }
       })
     },
     methods: {
+      checkBeforeRoute(idx){
+        if (!this.user.tel) {
+          if (idx == 1) {
+            this.$router.push('/bind');
+          }
+          else {
+            this.$router.replace('/bind');
+          }
+        }
+        else {
+          if (idx == 1) {
+            document.getElementById('signLink').src = 'http://qk.notepasses.com/quanke/sign-in.html';
+          }
+          else if (idx == 2) {
+            if (!this.user.inviteCode) {
+              this.$router.push('/inviteCode');
+            }
+          }
+        }
+      },
       logout(){
         api.user.logout().then((r) => {
           if (r.success) {
