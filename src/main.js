@@ -37,7 +37,6 @@ import About from './views/About'
 import Contact from './views/Contact'
 import Mall from './views/Mall'
 import Search from './views/Search'
-import Share from './views/Share'
 
 const routes = [
   {path: '/login', component: Login,meta:{title:'登录'}},
@@ -62,8 +61,7 @@ const routes = [
   {path: '/contact', component: Contact,meta:{title:'联系客服'}},
   {path: '/mall', component: Mall,meta:{title:'积分商城'}},
   {path: '/search', component: Search,meta:{keep:true,title:'搜索'}},
-  {path: '/search/:cid', component: Search,meta:{keep:true,title:'搜索'}},
-  {path: '/share', component: Share,meta:{title:'分享'}},
+  {path: '/search/:cid', component: Search,meta:{keep:true,title:'搜索'}}
 ];
 
 const router = new VueRouter({
