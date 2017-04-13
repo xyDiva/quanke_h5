@@ -65,7 +65,7 @@ a {
   text-decoration: none;
   background-color: transparent; /* 1 */
   -webkit-text-decoration-skip: objects; /* 2 */
-  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
 }
 
@@ -93,7 +93,7 @@ textarea {
   font-size: 100%; /* 1 */
   line-height: 1.15; /* 1 */
   margin: 0; /* 2 */
-  padding:0;
+  padding: 0;
   outline: none;
   border: none;
   -webkit-appearance: none;
@@ -184,7 +184,7 @@ header {
       width: 100%;
       height: 0.6rem;
       border-radius: 6px;
-      border:none;
+      border: none;
       text-align: center;
       font-size: 0.24rem;
       &::-webkit-input-placeholder {
@@ -236,15 +236,23 @@ header {
    ========================================================================== */
 .btn {
   display: block;
-  width: 100%;
+  width: 6.2rem;
   height: 0.88rem;
+  margin-left: auto;
+  margin-right: auto;
   color: white;
-  font-size: 0.24rem;
+  font-size: 0.28rem;
   background-color: #ea5514;
-  border: none;
   border-radius: 10px;
+  border: none;
   &:disabled {
     color: #ffa286;
+  }
+  &.btn-bottom {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    border-radius: 0;
   }
 }
 
@@ -272,7 +280,7 @@ header {
     padding: 0.25rem 0.45rem 0 0.35rem;
   }
   .col:nth-child(2) {
-    display:flex;
+    display: flex;
     justify-content: space-between;
     margin: 0.2rem 0;
   }
@@ -289,12 +297,12 @@ header {
     }
   }
   .tags {
-    padding-top:0.05rem;
+    padding-top: 0.05rem;
     .tag {
       display: inline-block;
       width: 0.64rem;
       line-height: 0.3rem;
-      margin-left:0.05rem;
+      margin-left: 0.05rem;
       background-color: #ea5513;
       border-radius: 4px;
       color: white;
@@ -302,13 +310,13 @@ header {
       text-align: center;
       vertical-align: text-top;
       &.coupon {
-        width:0.8rem;
+        width: 0.8rem;
         background: transparent url("./assets/images/bg-coupon.png") center / cover no-repeat;
         color: #ea5513;
-        border-radius:0;
+        border-radius: 0;
       }
     }
-    }
+  }
   .original-price {
     margin-right: 0.5rem;
     font-size: 0.24rem;
@@ -365,12 +373,12 @@ header {
   }
 }
 
-
 /* 项目全局样式--footer
    ========================================================================== */
 .wrap-footer {
   height: 1.08rem;
 }
+
 footer {
   background-color: white;
 }
@@ -393,11 +401,10 @@ footer {
   }
 }
 
-
 /* 组件--loadMore
    ========================================================================== */
 .mint-loadmore-bottom {
-  font-size:0.35rem;
+  font-size: 0.35rem;
   span {
     display: inline-block;
     -webkit-transition: .2s linear;

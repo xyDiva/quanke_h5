@@ -32,17 +32,15 @@
 
 <template>
   <div class="page-login">
-    <section class="main">
-      <div class="item">
-        <input type="number" placeholder="请输入手机号码" v-model='tel'>
-      </div>
-      <div class="item">
-        <input type="number" placeholder="验证码" v-model='code'>
-        <button class="btn btn-send-code" @click="getCode" :disabled="getCodeBtnDisabled">{{text}}</button>
-      </div>
+    <div class="item">
+      <input type="number" placeholder="请输入手机号码" v-model='tel'>
+    </div>
+    <div class="item">
+      <input type="number" placeholder="验证码" v-model='code'>
+      <button class="btn btn-send-code" @click="getCode" :disabled="getCodeBtnDisabled">{{text}}</button>
+    </div>
 
-      <button class="btn btn-login" @click="login" :disabled="!(tel&&code)">登录</button>
-    </section>
+    <button class="btn btn-login" @click="login" :disabled="!(tel&&code)">登录</button>
   </div>
 </template>
 
@@ -57,7 +55,7 @@
         code: null,
 
         text: '发送验证码',
-        getCodeBtnDisabled:false
+        getCodeBtnDisabled: false
       }
     },
     methods: {
@@ -76,7 +74,7 @@
         this.text = n + 's';
         this.getCodeBtnDisabled = true;
 
-        let timer = setInterval(()=> {
+        let timer = setInterval(() => {
           n--;
           this.text = n + 's';
 
@@ -88,7 +86,7 @@
         }, 1000);
 
         // 接口
-        api.user.getCode(this.tel).then((r)=> {
+        api.user.getCode(this.tel).then((r) => {
           if (!r.success) {
             Toast(r.message);
           }

@@ -30,10 +30,11 @@
       }
       .list {
         display: flex;
-        justify-content: space-between;
+        /*justify-content: space-between;*/
         .box {
           width: 1.5rem;
           height: 1.5rem;
+          margin-right: 0.15rem;
           &.img {
             position: relative;
             border:#979797 1px solid;
@@ -101,12 +102,6 @@
       font-size: 0.2rem;
       color: #979797;
     }
-    .btn-update {
-      position: fixed;
-      bottom: 0;
-      margin-top: 0.5rem;
-      border-radius: 0;
-    }
   }
 </style>
 
@@ -143,7 +138,7 @@
       <br>
       <p>加成全每次只可使用一张</p>
     </div>
-    <button class="btn btn-update" @click="save">提交审核</button>
+    <button class="btn btn-bottom" @click="save">提交审核</button>
   </div>
 </template>
 
@@ -155,7 +150,7 @@
     data(){
       return {
         order: {
-            imgs:[1,2,3]
+            imgs:[1,2]
         }
       }
     },

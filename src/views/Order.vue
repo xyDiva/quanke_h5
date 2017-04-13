@@ -38,15 +38,6 @@
         }
       }
     }
-    .btn-add {
-      position: fixed;
-      width: 100%;
-      height: 0.88rem;
-      bottom: 0;
-      color: white;
-      background-color: #ea5514;
-      font-size: 0.24rem;
-    }
   }
 </style>
 
@@ -75,7 +66,7 @@
     </div>
     <div class="no-data" v-if="nodata">暂无记录</div>
     <router-link to="/order/add">
-      <button class="btn-add">再晒一单</button>
+      <button class="btn btn-bottom">再晒一单</button>
     </router-link>
   </div>
 </template>
@@ -101,49 +92,39 @@
         nodata: false
       }
     },
-    activated(){
-      // scroll event
-      window.addEventListener('scroll', this.scrollFn);
-
-      document.body.scrollTop = this.$route.meta.stay ? this.$store.state.seckillScrollTop : 0;
-    },
-    deactivated(){
-      window.removeEventListener('scroll', this.scrollFn);
-    },
     mounted(){
-//      this.getList();
-      this.list = [
-        {
-          id: 1,
-          createTime: new Date(),
-          status: 0
-        },
-        {
-          id: 2,
-          createTime: new Date(),
-          status: 1
-        },
-        {
-          id: 3,
-          createTime: new Date(),
-          status: 2,
-          reason:'我也不知道为什么可能是这样这样那样那样'
-        }
-      ];
+      this.getList();
+//      this.list = [
+//        {
+//          id: 1,
+//          createTime: new Date(),
+//          status: 0
+//        },
+//        {
+//          id: 2,
+//          createTime: new Date(),
+//          status: 1
+//        },
+//        {
+//          id: 3,
+//          createTime: new Date(),
+//          status: 2,
+//          reason:'我也不知道为什么可能是这样这样那样那样'
+//        }
+//      ];
     },
     methods: {
       getList(){
         let params = {
-          isSeckill: true,
           start: this.start,
           limit: 10
         };
-        api.goods.query(params).then((r) => {
+        api.rebate.query(params).then((r) => {
           if (r.success) {
             this.nodata = !r.list.length;
             this.start += r.list.length;
             this.total = r.total;
-            this.list = this.list.concat(this.$com.convertGoods(r.list || []));
+            this.list = r.list || [];
           }
           else {
             Toast(r.message);
@@ -163,10 +144,6 @@
           }
           this.$refs.loadmore.onBottomLoaded();
         }, 1500);
-      },
-      scrollFn(){
-        let scrollTop = document.body.scrollTop;
-        this.$store.dispatch('setSeckillScrollTop', scrollTop);
       }
     }
   }

@@ -80,7 +80,7 @@
       <router-link to="/message" class="info-msg">
         <i class="point" v-if="user.unreadNotify">N</i>
       </router-link>
-      <router-link to="" class="info-setting"></router-link>
+      <router-link to="/my/edit" class="info-setting"></router-link>
     </div>
 
     <div class="item">

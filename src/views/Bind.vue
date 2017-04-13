@@ -13,7 +13,6 @@
       right: 0.15rem;
     }
     .btn-bind {
-      width: 6.2rem;
       margin: 0.3rem auto 0.6rem;
     }
     .tip {
@@ -30,13 +29,10 @@
       <input type="number" placeholder="输入手机号码" v-model='tel'>
     </div>
     <div class="item">
-      <input type="number" placeholder="验证码" v-model='code'>
+      <input type="number" placeholder="验证码" v-model='verifyCode'>
       <button class="btn btn-send-code" @click="getCode" :disabled="getCodeBtnDisabled">{{text}}</button>
     </div>
-    <div class="item">
-      <input type="number" placeholder="输入邀请码" v-model='inviteCode'>
-    </div>
-    <button class="btn btn-bind" @click="bind" :disabled="!(tel&&code)">验证并绑定</button>
+    <button class="btn btn-bind" @click="bind" :disabled="!(tel&&verifyCode)">验证并绑定</button>
     <div class="tip">
       <p>重要：</p>
       <br>
@@ -53,8 +49,7 @@
     data(){
       return {
         tel: null,
-        code: null,
-        inviteCode:null,
+        verifyCode:null,
 
         text: '发送验证码',
         getCodeBtnDisabled:false
@@ -88,7 +83,7 @@
         }, 1000);
 
         // 接口
-        api.user.getCode(this.tel).then((r)=> {
+        api.user.getCodeForBind(this.tel).then((r)=> {
           if (!r.success) {
             Toast(r.message);
           }
@@ -97,7 +92,7 @@
       bind(){
         // 验证
         const reg_phone = /^\d{11}$/;
-        const reg_password = /^\d{6}$/;
+        const reg_code = /^\d{6}$/;
 
         if (!this.tel) {
           Toast('请输入手机号');
@@ -107,24 +102,24 @@
           Toast('手机号格式错误');
           return false;
         }
-        else if (!this.code) {
+        else if (!this.verifyCode) {
           Toast('请输入验证码');
           return false;
         }
-        else if (!reg_password.test(this.code)) {
+        else if (!reg_code.test(this.verifyCode)) {
           Toast('验证码格式错误');
           return false;
         }
 
         // 接口
-        api.user.login(this.tel, this.code).then((r) => {
+        api.user.bindTel({tel:this.tel,verifyCode:this.verifyCode}).then((r) => {
           if (r.success) {
             Toast({
-              message: '登录成功',
+              message: '绑定成功',
               duration: 1500
             });
             setTimeout(() => {
-              this.$router.push('/my');
+              this.$router.go(-1);
             }, 2000);
           }
           else {

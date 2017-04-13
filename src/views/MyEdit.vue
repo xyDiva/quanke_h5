@@ -28,17 +28,17 @@
 <template>
   <div class="page-my-edit">
     <div class="item">
-      昵称<span><input type="text" class="ipt" v-model='user.nickname' placeholder="淘宝账户名"></span>
+      昵称<span><input type="text" class="ipt" v-model='user.nickName' placeholder="淘宝账户名"></span>
     </div>
     <div class="item">
       性别
       <span>
         <label class="q-radio">
-          <input type="radio" class="radio" name="gender" value="男">
+          <input type="radio" class="radio" name="gender" value="1" v-model="user.sex">
           <i class="ico"></i><i class="label">男</i>
         </label>
         <label class="q-radio">
-          <input type="radio" class="radio" name="gender" value="女">
+          <input type="radio" class="radio" name="gender" value="2" v-model="user.sex">
           <i class="ico"></i><i class="label">女</i>
         </label>
       </span>
@@ -46,7 +46,7 @@
     <div class="item">
       <router-link to="/bind">
         手机绑定
-        <span><input type="tel" class="ipt" v-modal="user.tel" placeholder="未绑定"></span>
+        <span><input type="tel" class="ipt" v-model="user.tel" placeholder="未绑定"></span>
       </router-link>
     </div>
     <div class="item">
