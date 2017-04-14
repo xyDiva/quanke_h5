@@ -15,7 +15,14 @@ var port = process.env.PORT || config.dev.port
 var proxyTable = config.dev.proxyTable;
 
 proxyTable = {
-  '/ar': {
+  '/tr': { // 测试环境
+    target: 'http://qk.notepasses.com',
+    changeOrigin: true,
+    pathRewrite: {
+      '^/tr': '/tr'
+    }
+  },
+  '/ar': { // 正式环境
     target: 'http://qk.notepasses.com',
     changeOrigin: true,
     pathRewrite: {

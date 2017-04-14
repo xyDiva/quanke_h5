@@ -2,7 +2,7 @@ import Vue from 'vue'
 import {Promise} from 'es6-promise'
 
 
-let HOST_URL = window.location.protocol + '//' + window.location.host + '/ar/';
+let HOST_URL = window.location.protocol + '//' + window.location.host + '/tr/';
 
 let api = {};
 
@@ -46,6 +46,14 @@ api.user = {
   // 编辑用户信息
   editUserInfo: (user) => new Promise((resolve, reject) => {
     Vue.http.post(HOST_URL + 'user/edit', user).then((r) => {
+      resolve(r.body);
+    }, (r) => {
+      reject(r.body);
+    });
+  }),
+  // 获取用户信息--分享
+  getUserInfoForShare: (userId) => new Promise((resolve, reject) => {
+    Vue.http.get(HOST_URL + 'user/shareInfo?userId=' + userId).then((r) => {
       resolve(r.body);
     }, (r) => {
       reject(r.body);
