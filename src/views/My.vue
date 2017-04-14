@@ -72,7 +72,7 @@
   <div class="page-my">
     <div class="info">
       <div class="avatar">
-        <img v-if="user.avatar" src="user.avatar">
+        <img v-if="user.avatar" :src="user.avatar">
         <img v-else src="../assets/images/portrait.png">
       </div>
       <p class="name">{{user.nickName}}</p>

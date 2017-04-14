@@ -2,7 +2,13 @@ import Vue from 'vue'
 import {Promise} from 'es6-promise'
 
 
-let HOST_URL = window.location.protocol + '//' + window.location.host + '/tr/';
+let HOST_URL = window.location.protocol + '//' + window.location.host;
+if(location.href.indexOf('/quanke/')>=0){
+  HOST_URL += '/ar/';
+}
+else if(location.href.indexOf('/quankeTest/')>=0){
+  HOST_URL += '/tr/';
+}
 
 let api = {};
 
