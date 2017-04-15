@@ -6,7 +6,7 @@ let HOST_URL = window.location.protocol + '//' + window.location.host;
 if(location.href.indexOf('/quanke/')>=0){
   HOST_URL += '/ar/';
 }
-else if(location.href.indexOf('/quankeTest/')>=0){
+else if(location.href.indexOf('/quankeTest/')>=0 || location.host == 'localhost:1201'){
   HOST_URL += '/tr/';
 }
 
