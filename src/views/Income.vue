@@ -51,19 +51,14 @@
     <div class="info">
       <p class="balance">{{user.balance}}</p>
       <p>总计余额（元）</p>
-      <p class="income">昨日收益（元）：{{user.income}}元</p>
+      <p class="income">昨日收益（元）：{{user.incomeYesterday||0}}元</p>
     </div>
 
     <ul class="list">
-      <li>
-        <div class="col">晒单返利</div>
-        <div class="col">2017-03-24 17:12</div>
-        <div class="col">+2.76</div>
-      </li>
-      <li>
-        <div class="col">晒单返利</div>
-        <div class="col">2017-03-24 17:12</div>
-        <div class="col">+2.76</div>
+      <li v-for="item in list">
+        <div class="col">{{item.type|convertType}}</div>
+        <div class="col">{{item.createTime|convertTime}}</div>
+        <div class="col">{{item.amount|convertAmount}}</div>
       </li>
     </ul>
 
@@ -80,14 +75,70 @@
   export default {
     data(){
       return {
-        user: {
-          balance:234.32,
-          income:123
-        }
+        user: this.$store.state.user,
+        list:[]
       }
     },
     mounted(){
-      
+      api.user.getAccountLog().then((r) => {
+        if (r.success) {
+          this.list = [
+            {
+              createTime:+new Date(),
+              type:1,
+              amount:2.9
+            },
+            {
+              createTime:+new Date(),
+              type:0,
+              amount:-2.9
+            }
+          ];
+        }
+        else {
+          Toast(r.message);
+        }
+      }, (r) => {
+        Toast('failed');
+      })
+    },
+    filters:{
+      convertType(type){
+        let t = '';
+        switch (Number(type)) {
+          case 0:
+            t = '购物返利';
+            break;
+          case 1:
+            t = '下线购物提成';
+            break;
+          case 2:
+            t = '提现';
+            break;
+        }
+        return t;
+      },
+      convertTime(timestamp){
+        let d = new Date(timestamp),
+            year = d.getFullYear(),
+            month = d.getMonth() + 1,
+            day = d.getDate(),
+            hour = d.getHours(),
+            minute = d.getMinutes(),
+            second = d.getSeconds();
+
+        if(minute < 10) {
+          minute += '0';
+        }
+        if(second < 10) {
+          second += '0';
+        }
+
+        return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+      },
+      convertAmount(amount){
+        return amount > 0 ? '+' + amount + '' : amount;
+      }
     }
   }
 </script>

@@ -1,31 +1,27 @@
 <style lang='scss' rel="stylesheet/scss" scoped>
   .page-login {
-    .main {
-      padding: 0.4rem 0.65rem;
-      font-size: 0.24rem;
-      .item {
-        position: relative;
-        border-bottom: #9a9a9a 1px solid;
-        input {
-          width: 100%;
-          height: 0.88rem;
-          padding: 0;
-          border: none;
-          background: none;
-          font-size: 0.24rem;
-          color: #979797;
-        }
+    font-size: 0.24rem;
+    .item {
+      position: relative;
+      input {
+        width: 100%;
+        height: 0.88rem;
+        padding: 0;
+        border: none;
+        background: none;
+        font-size: 0.24rem;
+        color: #979797;
       }
-      .btn-send-code {
-        position: absolute;
-        width: 1.76rem;
-        height: 0.6rem;
-        top: 0.15rem;
-        right: 0.15rem;
-      }
-      .btn-login {
-        margin-top: 0.5rem;
-      }
+    }
+    .btn-send-code {
+      position: absolute;
+      width: 1.76rem;
+      height: 0.6rem;
+      top: 0.15rem;
+      right: 0.15rem;
+    }
+    .btn-login {
+      margin-top: 0.5rem;
     }
   }
 </style>

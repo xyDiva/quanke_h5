@@ -75,6 +75,14 @@ api.user = {
       reject(r.body);
     });
   }),
+  // 获取用户账户流水
+  getAccountLog: () => new Promise((resolve, reject) => {
+    Vue.http.get(HOST_URL + 'user/accountLog').then((r) => {
+      resolve(r.body);
+    }, (r) => {
+      reject(r.body);
+    });
+  }),
 };
 
 // notify
