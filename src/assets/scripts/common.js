@@ -43,6 +43,7 @@ let common = {
       item.priceA = x[0];
       item.priceB = x[1];
       item.tags = item.tag.split(',');
+      item.coupon = Math.floor(item.coupon);
     });
     return list;
   },
