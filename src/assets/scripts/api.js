@@ -2,11 +2,25 @@ import Vue from 'vue'
 import {Promise} from 'es6-promise'
 
 
-let HOST_URL = window.location.protocol + '//' + window.location.host + '/ar/';
+let mode = null; // 0 dev 1 test 2 pro
+let HOST_URL = window.location.protocol + '//' + window.location.host;
+if(location.href.indexOf('/quanke/')>=0){
+  HOST_URL += '/ar/';
+  mode = 2;
+}
+else if(location.href.indexOf('/quankeTest/')>=0){
+  HOST_URL += '/tr/';
+  mode = 1;
+}
+else if (location.host == 'localhost:1201') {
+  HOST_URL += '/tr/';
+  mode = 0;
+}
 
 let api = {};
 
 api.host = HOST_URL;
+api.mode = mode;
 
 // user
 api.user = {
@@ -130,7 +144,15 @@ api.banner = {
       reject(r.body);
     });
   }),
-  getImg: (fileName) => HOST_URL + 'banner/pic?fileName=' + fileName
+  getImg: (fileName) => HOST_URL + 'banner/pic?fileName=' + fileName,
+  upload: (formdata)=>new Promise((resolve,reject)=>{
+    Vue.http.headers.common['token'] = '7047ad46f0590400edc23fcc95e86610';
+    Vue.http.post(HOST_URL + 'banner/upload',formdata).then((r)=>{
+      resolve(r.body);
+    },(r)=>{
+      reject(r.body);
+    });
+  }) 
 };
 
 // wx
@@ -155,10 +177,28 @@ api.address = {
   })
 };
 
-// 返利
+// 晒单返利
 api.rebate = {
   query: (params) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'rebate/query',params).then((r) => {
+    Vue.http.get(HOST_URL + 'rebate',params).then((r) => {
+      resolve(r.body);
+    }, (r) => {
+      reject(r.body);
+    });
+  }),
+  save: (params) => new Promise((resolve, reject) => {
+    Vue.http.post(HOST_URL + 'rebate/save',params).then((r) => {
+      resolve(r.body);
+    }, (r) => {
+      reject(r.body);
+    });
+  })
+};
+
+// 提现
+api.withdraw = {
+  save: (params) => new Promise((resolve, reject) => {
+    Vue.http.post(HOST_URL + 'withdraw/save',params).then((r) => {
       resolve(r.body);
     }, (r) => {
       reject(r.body);

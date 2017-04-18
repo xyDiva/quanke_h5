@@ -66,10 +66,10 @@
         }
 
         // 接口
-        api.user.logout().then((r) => {
+        api.user.bindInviteCode(this.inviteCode).then((r) => {
           if (r.success) {
             Toast({
-              message: '设置成功',
+              message: '绑定成功',
               duration: 1500
             });
             setTimeout(() => {

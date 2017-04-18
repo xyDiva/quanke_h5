@@ -140,6 +140,7 @@
     },
     methods: {
       checkBeforeRoute(idx){
+      console.log('checkBeforeRoute');
         if (!this.user.tel) {
           if (idx == 1) {
             this.$router.push('/bind');
@@ -150,10 +151,17 @@
         }
         else {
           if (idx == 1) {
-            document.getElementById('signLink').src = 'http://qk.notepasses.com/quanke/sign-in.html';
+            let href = '';
+            if(api.mode == 0 || api.mode == 1) {
+              href = 'http://qk.notepasses.com/quankeTest/sign-in.html';
+            }
+            else if (api.mode == 2) {
+              href = 'http://qk.notepasses.com/quanke/sign-in.html';
+            }
+            document.getElementById('signLink').href = href;
           }
           else if (idx == 2) {
-            if (!this.user.inviteCode) {
+            if (!this.user.recommendCode) {
               this.$router.push('/inviteCode');
             }
           }

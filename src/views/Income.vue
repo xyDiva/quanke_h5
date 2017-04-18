@@ -28,8 +28,15 @@
         font-size: 0.24rem;
         color: #979797;
         background-color: white;
+        .col {
+          flex: 1;
+        }
         .col:nth-child(2) {
           font-size: 0.2rem;
+          text-align:center;
+        };
+        .col:nth-child(3) {
+          text-align:right;
         };
       }
     }
@@ -54,13 +61,14 @@
       <p class="income">昨日收益（元）：{{user.incomeYesterday||0}}元</p>
     </div>
 
-    <ul class="list">
+    <ul class="list" v-if="list.length">
       <li v-for="item in list">
         <div class="col">{{item.type|convertType}}</div>
         <div class="col">{{item.createTime|convertTime}}</div>
         <div class="col">{{item.amount|convertAmount}}</div>
       </li>
     </ul>
+    <div class="no-data" v-else>暂无记录</div>
 
     <router-link to="/withdraw">
       <button class="btn-withdraw">申请提现</button>
@@ -82,18 +90,7 @@
     mounted(){
       api.user.getAccountLog().then((r) => {
         if (r.success) {
-          this.list = [
-            {
-              createTime:+new Date(),
-              type:1,
-              amount:2.9
-            },
-            {
-              createTime:+new Date(),
-              type:0,
-              amount:-2.9
-            }
-          ];
+          this.list = r.list||[];
         }
         else {
           Toast(r.message);

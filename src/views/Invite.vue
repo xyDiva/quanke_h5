@@ -75,13 +75,13 @@
   <div class="page-invite">
     <div class="info">
       <p class="key">我的邀请码</p>
-      <p class="value">{{inviteCode}}</p>
+      <p class="value">{{user.recommendCode}}</p>
       <div class="faq"><i>?</i>如何填写邀请码</div>
     </div>
 
-    <div class="item">已邀请的用户<span>12</span></div>
+    <div class="item">已邀请的用户<span>{{user.recommendCount}}</span></div>
     <div class="item">
-      <router-link to="/withdraw">推广二维码<span>开启收益</span></router-link>
+      <router-link to="/share">推广二维码<span>开启收益</span></router-link>
     </div>
     <div class="tip">
       <p>说明：</p>
@@ -98,11 +98,8 @@
   export default {
     data(){
       return {
-        inviteCode: 'DX123'
+        user:this.$store.state.user
       }
-    },
-    mounted(){
-
     }
   }
 </script>

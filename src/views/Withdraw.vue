@@ -27,7 +27,7 @@
   <div class="page-withdraw">
     <div class="item"><input type="text" v-model="o.alipay" placeholder="支付宝账号(请使用真实姓名)"></div>
     <div class="item"><input type="text" v-model="o.name" placeholder="真实姓名"></div>
-    <div class="item">可提金额&nbsp;{{o.balance}}元</div>
+    <div class="item">可提金额&nbsp;{{user.balance}}元</div>
     <div class="item"><input type="number" v-model="amount" placeholder="提现金额（大于5元）"></div>
     <div class="tip">
       <p>重要提醒:</p>
@@ -48,10 +48,11 @@
   export default {
     data(){
       return {
+        user:this.$store.state.user,
         o:{
-          name:'熊',
-          tel:159,
-          balance:231
+          alipay:'',
+          name:'',
+          tel:''
         },
         amount:null
       }
@@ -73,12 +74,26 @@
           Toast('请输入提现金额');
           return false;
         }
+        else if (amount > user.balance) {
+          Toast('提现金额不能大于可提金额');
+          return false;
+        }
         else if (amount < 5) {
           Toast('提现金额必须大于5元');
           return false;
         }
         else {
-          Toast('withdraw');
+          api.withdraw.save(this.o).then((r) => {
+            if (r.success) {
+              Toast({
+                message: '申请提现成功',
+                duration: 1500
+              });
+              setTimeout(() => {
+                this.$router.go(-1);
+              }, 2000);
+            }
+          });
         } 
       }
     }

@@ -16,6 +16,9 @@
         width: 1.5rem;
         height: 1.5rem;
         border: #979797 1px solid;
+        img {
+          width:100%;
+        }
       }
       .center {
         flex:1;
@@ -49,10 +52,10 @@
         <div class="items">
           <div class="order-item" v-for="item in list">
             <router-link :to="'/item/'+item.id">
-              <div class="col screenshot"><img v-if="item.pic" :src="item.pic"></div>
+              <div class="col screenshot"><img v-if="item.imgUrl" :src="item.imgUrl"></div>
               <div class="col center">
-                <p class="time">{{item.createTime}}</p>
-                <p class="reason" v-if="item.reason">失败原因：{{item.reason}}</p>
+                <p class="time">{{item.createTime|convertTime}}</p>
+                <p class="reason" v-if="item.refuseRemark">失败原因：{{item.refuseRemark}}</p>
               </div>
               <div class="col status" :class="{s0:item.status==0,s1:item.status==1,s2:item.status==2}"></div>
             </router-link>
@@ -94,24 +97,6 @@
     },
     mounted(){
       this.getList();
-//      this.list = [
-//        {
-//          id: 1,
-//          createTime: new Date(),
-//          status: 0
-//        },
-//        {
-//          id: 2,
-//          createTime: new Date(),
-//          status: 1
-//        },
-//        {
-//          id: 3,
-//          createTime: new Date(),
-//          status: 2,
-//          reason:'我也不知道为什么可能是这样这样那样那样'
-//        }
-//      ];
     },
     methods: {
       getList(){
@@ -124,6 +109,15 @@
             this.nodata = !r.list.length;
             this.start += r.list.length;
             this.total = r.total;
+
+            //convert
+            r.list.forEach((item)=>{
+              console.log(item);
+              let firstImg = item.orderPic.split(',')[0];
+              if(firstImg){
+                item.imgUrl = api.banner.getImg(firstImg);
+              }
+            });
             this.list = r.list || [];
           }
           else {
@@ -144,6 +138,26 @@
           }
           this.$refs.loadmore.onBottomLoaded();
         }, 1500);
+      }
+    },
+    filters:{
+      convertTime(timestamp){
+        let d = new Date(timestamp),
+            year = d.getFullYear(),
+            month = d.getMonth() + 1,
+            day = d.getDate(),
+            hour = d.getHours(),
+            minute = d.getMinutes(),
+            second = d.getSeconds();
+
+        if(minute < 10) {
+          minute += '0';
+        }
+        if(second < 10) {
+          second += '0';
+        }
+
+        return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
       }
     }
   }

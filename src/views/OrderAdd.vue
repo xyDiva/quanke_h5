@@ -38,6 +38,9 @@
           &.img {
             position: relative;
             border:#979797 1px solid;
+            img {
+              width:100%;
+            }
             .del {
               position: absolute;
               width: 100%;
@@ -50,6 +53,7 @@
             }
           }
           &.add {
+            position:relative;
             padding-top: 0.85rem;
             border:#979797 1px dashed;
             border-radius: 0.1rem;
@@ -57,6 +61,14 @@
             text-align: center;
             font-size: 0.2rem;
             color: #979797;
+            input[type=file] {
+              position:absolute;
+              width:100%;
+              height:100%;
+              top:0;
+              left:0;
+              opacity:0;
+            }
           }
         }
       }
@@ -110,11 +122,11 @@
     <div class="wrap-upload">
       <div class="top-tip">请上传带有订单创建时间的图片</div>
       <div class="list">
-        <div class="box img" v-for="item in order.imgs">
-          <img src="">
+        <div class="box img" v-for="item in imgs">
+          <img :src="item">
           <div class="del">删除</div>
         </div>
-        <div class="box add">添加照片</div>
+        <div class="box add"><input type="file" id='fileIpt' @change='upload'>添加图片</div>
       </div>
       <div class="bottom-tip">
         <p>单次可上传三张截图返利</p>
@@ -122,10 +134,10 @@
       </div>
     </div>
     <div class="item">
-      <input type="text" class="ipt" v-model='order.name' placeholder="输入商品名称(据说输入商品名称会加快返利速度)">
+      <input type="text" class="ipt" v-model='o.userDesc' placeholder="输入商品名称(据说输入商品名称会加快返利速度)">
     </div>
     <div class="item">
-      <textarea v-model="order.desc" placeholder="请输入短评"></textarea>
+      <textarea v-model="o.userComment" placeholder="请输入短评"></textarea>
     </div>
     <div class="tip">
       <p>返利规则说明：</p>
@@ -149,17 +161,42 @@
   export default {
     data(){
       return {
-        order: {
-            imgs:[1,2]
-        }
+        o: {
+          userDesc:'',
+          userComment:'',
+          orderPic:''
+        },
+        imgs:[]
       }
     },
+    mounted(){
+      
+    },
     methods: {
+      upload(){
+        let file = document.getElementById("fileIpt").files[0];
+        let formData = new FormData();
+        formData.append('file',file);
+
+        api.banner.upload(formData).then((r) => {
+          if (r.success) {
+            let arr = this.o.orderPic?this.o.orderPic.split(','):[];
+            arr.push(r.value);
+            this.o.orderPic = arr.toString();
+
+            let imgUrl = api.banner.getImg(r.value);
+            this.imgs.push(imgUrl);
+          }
+          else {
+            Toast(r.message);
+          }
+        });
+      },
       save(){
-        api.user.editUserInfo(this.user).then((r) => {
+        api.rebate.save(this.o).then((r) => {
           if (r.success) {
             Toast({
-              message: '修改成功',
+              message: '提交成功',
               duration: 1500
             });
             setTimeout(() => {
