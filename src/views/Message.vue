@@ -1,6 +1,6 @@
 <style lang='scss' rel="stylesheet/scss">
   .page-message {
-    .item {
+    .msg-item {
       height: 1.86rem;
       padding: 0.25rem 0.3rem;
       border-bottom: #969696 1px solid;
@@ -58,7 +58,7 @@
 
 <template>
   <div class="page-message">
-    <div class="item" v-if="list.length" v-for="(item,index) in list" @click="setMsg(item)">
+    <div class="msg-item" v-if="list.length" v-for="(item,index) in list" @click="setMsg(item)">
       <router-link :to="'/message/'+(item.id)">
         <div class="row">
           <div class="title" :class="{'ico-type1':item.type==1,'ico-type2':item.type==2}">{{item.title}}</div>

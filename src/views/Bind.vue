@@ -1,16 +1,8 @@
 <style lang='scss' rel="stylesheet/scss" scoped>
-  .page-login {
-    font-size: 0.24rem;
+  .page-bind {
     .item {
-      position: relative;
       input {
         width: 100%;
-        height: 0.88rem;
-        padding: 0;
-        border: none;
-        background: none;
-        font-size: 0.24rem;
-        color: #979797;
       }
     }
     .btn-send-code {
@@ -20,23 +12,32 @@
       top: 0.15rem;
       right: 0.15rem;
     }
-    .btn-login {
-      margin-top: 0.5rem;
+    .btn-bind {
+      margin: 0.3rem auto 0.6rem;
+    }
+    .tip {
+      padding: 0 0.35rem;
+      font-size: 0.24rem;
+      color: #979797;
     }
   }
 </style>
 
 <template>
-  <div class="page-login">
+  <div class="page-bind">
     <div class="item">
-      <input type="number" placeholder="请输入手机号码" v-model='tel'>
+      <input type="number" placeholder="输入手机号码" v-model='tel'>
     </div>
     <div class="item">
-      <input type="number" placeholder="验证码" v-model='code'>
+      <input type="number" placeholder="验证码" v-model='verifyCode'>
       <button class="btn btn-send-code" @click="getCode" :disabled="getCodeBtnDisabled">{{text}}</button>
     </div>
-
-    <button class="btn btn-login" @click="login" :disabled="!(tel&&code)">登录</button>
+    <button class="btn btn-bind" @click="bind" :disabled="!(tel&&verifyCode)">验证并绑定</button>
+    <div class="tip">
+      <p>重要：</p>
+      <br>
+      <p>账户绑定的手机号是相应活动积分、购物返利验证的唯一识别，请务必填写真实有效的手机号。</p>
+    </div>
   </div>
 </template>
 
@@ -48,10 +49,10 @@
     data(){
       return {
         tel: null,
-        code: null,
+        verifyCode:null,
 
         text: '发送验证码',
-        getCodeBtnDisabled: false
+        getCodeBtnDisabled:false
       }
     },
     methods: {
@@ -70,7 +71,7 @@
         this.text = n + 's';
         this.getCodeBtnDisabled = true;
 
-        let timer = setInterval(() => {
+        let timer = setInterval(()=> {
           n--;
           this.text = n + 's';
 
@@ -82,16 +83,16 @@
         }, 1000);
 
         // 接口
-        api.user.getCode(this.tel).then((r) => {
+        api.user.getCodeForBind(this.tel).then((r)=> {
           if (!r.success) {
             Toast(r.message);
           }
         });
       },
-      login(){
+      bind(){
         // 验证
         const reg_phone = /^\d{11}$/;
-        const reg_password = /^\d{6}$/;
+        const reg_code = /^\d{6}$/;
 
         if (!this.tel) {
           Toast('请输入手机号');
@@ -101,24 +102,24 @@
           Toast('手机号格式错误');
           return false;
         }
-        else if (!this.code) {
+        else if (!this.verifyCode) {
           Toast('请输入验证码');
           return false;
         }
-        else if (!reg_password.test(this.code)) {
+        else if (!reg_code.test(this.verifyCode)) {
           Toast('验证码格式错误');
           return false;
         }
 
         // 接口
-        api.user.login(this.tel, this.code).then((r) => {
+        api.user.bindTel({tel:this.tel,verifyCode:this.verifyCode}).then((r) => {
           if (r.success) {
             Toast({
-              message: '登录成功',
+              message: '绑定成功',
               duration: 1500
             });
             setTimeout(() => {
-              this.$router.push('/my');
+              this.$router.go(-1);
             }, 2000);
           }
           else {
