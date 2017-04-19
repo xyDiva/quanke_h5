@@ -28,7 +28,7 @@
     <div class="item"><input type="text" v-model="o.alipay" placeholder="支付宝账号(请使用真实姓名)"></div>
     <div class="item"><input type="text" v-model="o.name" placeholder="真实姓名"></div>
     <div class="item">可提金额&nbsp;{{user.balance}}元</div>
-    <div class="item"><input type="number" v-model="amount" placeholder="提现金额（大于5元）"></div>
+    <div class="item"><input type="number" v-model="o.amount" placeholder="提现金额（大于5元）"></div>
     <div class="tip">
       <p>重要提醒:</p>
       <br>
@@ -52,9 +52,9 @@
         o:{
           alipay:'',
           name:'',
-          tel:''
-        },
-        amount:null
+          tel:'',
+          amount:null
+        }
       }
     },
     mounted(){
@@ -62,23 +62,23 @@
     },
     methods: {
       withdraw(){
-        if(!o.alipay) {
+        if(!this.o.alipay) {
           Toast('请输入支付宝账号');
           return false;
         }
-        else if (!o.name) {
+        else if (!this.o.name) {
           Toast('请输入真实姓名');
           return false;
         }
-        else if (!amount) {
+        else if (!this.o.amount) {
           Toast('请输入提现金额');
           return false;
         }
-        else if (amount > user.balance) {
+        else if (this.amount > this.user.balance) {
           Toast('提现金额不能大于可提金额');
           return false;
         }
-        else if (amount < 5) {
+        else if (this.amount < 5) {
           Toast('提现金额必须大于5元');
           return false;
         }
@@ -92,6 +92,9 @@
               setTimeout(() => {
                 this.$router.go(-1);
               }, 2000);
+            }
+            else {
+              Toast(r.message);
             }
           });
         } 

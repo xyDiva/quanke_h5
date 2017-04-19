@@ -158,7 +158,8 @@
           left: 0.15rem;
           top: 0;
         }
-        .btn {
+        .copy {
+          width:100%;
           border: white 1px solid;
         }
         p {
@@ -208,7 +209,7 @@
     </router-link>
 
     <!-- 商品 -->
-    <div class="item" v-if="!noCoupon">
+    <div class="pro-detail" v-if="!noCoupon">
       <div class="first-page">
         <mt-swipe :auto="4000" :show-indicators="false" class="banner" :style="{height:bannerHeight+'px'}">
           <mt-swipe-item><img :src="item.pic"></mt-swipe-item>

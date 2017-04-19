@@ -38,7 +38,7 @@
         }
       }
       .time {
-        width: 0.85rem;
+        width: 1rem;
         line-height: 0.35rem;
         text-align: right;
       }

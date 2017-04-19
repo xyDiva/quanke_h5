@@ -2,6 +2,9 @@
   .page-my-edit {
     .item {
       .q-radio {
+        input {
+          display:none;
+        }
         i {
           vertical-align: middle;
         }
@@ -28,7 +31,7 @@
 <template>
   <div class="page-my-edit">
     <div class="item">
-      昵称<span><input type="text" class="ipt" v-model='user.nickName' placeholder="淘宝账户名"></span>
+      昵称<span><input type="text" class="ipt" v-model='user.nickName' placeholder="微信名"></span>
     </div>
     <div class="item">
       性别

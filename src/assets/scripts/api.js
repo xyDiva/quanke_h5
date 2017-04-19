@@ -115,6 +115,13 @@ api.notify = {
       reject(r.body);
     });
   }),
+  save: (id)=>new Promise((resolve, reject)=> {
+    Vue.http.get(HOST_URL + 'user/notify/read?notifyId='+id).then((r)=> {
+      resolve(r.body);
+    }, (r)=> {
+      reject(r.body);
+    });
+  })
 };
 
 // goods
@@ -153,7 +160,6 @@ api.banner = {
   }),
   getImg: (fileName) => HOST_URL + 'banner/pic?fileName=' + fileName,
   upload: (formdata)=>new Promise((resolve,reject)=>{
-    Vue.http.headers.common['token'] = '7047ad46f0590400edc23fcc95e86610';
     Vue.http.post(HOST_URL + 'banner/upload',formdata).then((r)=>{
       resolve(r.body);
     },(r)=>{
@@ -181,13 +187,27 @@ api.address = {
     }, (r)=> {
       reject(r.body);
     });
+  }),
+  save: (params)=>new Promise((resolve, reject)=> {
+    Vue.http.post(HOST_URL + 'address/save',params).then((r)=> {
+      resolve(r.body);
+    }, (r)=> {
+      reject(r.body);
+    });
+  }),
+  getAddress:(userId)=>new Promise((resolve, reject)=> {
+    Vue.http.get(HOST_URL + 'address/getByUserId?userId='+userId).then((r)=> {
+      resolve(r.body);
+    }, (r)=> {
+      reject(r.body);
+    });
   })
 };
 
 // 晒单返利
 api.rebate = {
   query: (params) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'rebate',params).then((r) => {
+    Vue.http.get(HOST_URL + 'rebate',{params:params}).then((r) => {
       resolve(r.body);
     }, (r) => {
       reject(r.body);

@@ -8,7 +8,6 @@
         &::-webkit-input-placeholder {
           color: #979797;
         }
-      ;
       }
       textarea {
         width: 100%;
@@ -17,6 +16,9 @@
         font-size: 0.24rem;
         resize: none;
       }
+    }
+    .btn-save {
+      margin-top: 0.15rem;
     }
   }
 </style>
@@ -31,7 +33,9 @@
         <span>{{o.province||'省'}},{{o.city||'市'}},{{o.country||'区'}}</span>
       </router-link>
     </div>
-    <div class="item"><textarea placeholder="详细地址" v-modal="o.address"></textarea></div>
+    <div class="item"><textarea placeholder="详细地址" v-model="o.address"></textarea></div>
+
+    <button class="btn btn-save" @click="save">保存</button>
 
     <!-- 选择省市区 -->
     <addresslist :show='addressVisible' v-on:addressEvent="toggleAddress"></addresslist>
@@ -52,7 +56,7 @@
   export default {
     data(){
       return {
-        id: this.$route.params.id,
+        user: this.$store.state.user,
         o: {
           name: '',
           tel: '',
@@ -68,24 +72,45 @@
       }
     },
     mounted(){
-      if (this.id) {
-        this.getAddress();
-      }
+      this.getAddress();
     },
     methods: {
       getAddress(){
-        let params = {
-          id: this.id
-        };
+        api.address.getAddress(this.user.id).then((r) => {
+          if (r.success) {
+            this.o = r.value;
+          }
+          else {
+            Toast(r.message);
+          }
+        });
       },
       toggleAddress(arg, selectedItem){
-        console.log(arg ? 'show' : 'hide');
         this.addressVisible = arg;
         if (selectedItem) {
           this.o.province = selectedItem.province;
+          this.o.provinceId = selectedItem.provinceId;
           this.o.city = selectedItem.city;
+          this.o.cityId = selectedItem.cityId;
           this.o.country = selectedItem.county;
+          this.o.countryId = selectedItem.countyId;
         }
+      },
+      save(){
+        api.address.save(this.o).then((r) => {
+          if (r.success) {
+            Toast({
+              message: '保存成功',
+              duration: 1500
+            });
+            setTimeout(() => {
+              this.$router.go(-1);
+            }, 2000);
+          }
+          else {
+            Toast(r.message);
+          }
+        })
       }
     },
     components: {

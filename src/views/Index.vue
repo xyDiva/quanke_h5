@@ -66,7 +66,7 @@
       <a class="left" href="javascript:;">
         <i class="ico logo"></i>
       </a>
-      <a class="right" href="http://qk.notepasses.com/quanke/sign-in.html">
+      <a class="right" id='qdLink'>
         <i class="ico sign"></i>
       </a>
     </header>
@@ -162,6 +162,15 @@
       window.removeEventListener('scroll', this.scrollFn);
     },
     mounted(){
+      let href = '';
+      if(api.mode == 0 || api.mode == 1) {
+        href = 'http://qk.notepasses.com/quankeTest/sign-in.html';
+      }
+      else if (api.mode == 2) {
+        href = 'http://qk.notepasses.com/quanke/sign-in.html';
+      }
+      document.getElementById('qdLink').href = href;
+
       // get banner
       api.banner.query().then((r) => {
         if (r.success) {

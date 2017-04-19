@@ -50,9 +50,6 @@
           width: 100%;
         }
       }
-      .name {
-        font-size: 0.36rem;
-      }
       .tel {
         font-size: 0.24rem;
         color: white;
@@ -60,12 +57,7 @@
     }
     .btn-logout {
       display: none;
-      width: 100%;
-      height: 0.88rem;
       margin-top: 0.15rem;
-      background-color: white;
-      color: #ea5514;
-      font-size: 0.28rem;
     }
   }
 </style>
@@ -89,7 +81,7 @@
       <router-link to="/income">我的收益<span>即时可提</span></router-link>
     </div>
     <div class="item" @click="checkBeforeRoute(1)">
-      <a href="javascript:;" id="signLink">每日签到</a>
+      <a href="javascript:;" id="qdLink">每日签到</a>
     </div>
     <div class="item" @click="checkBeforeRoute(2)">
       <router-link to="/invite">推荐好友<span>送1000积分</span></router-link>
@@ -142,7 +134,6 @@
     },
     methods: {
       checkBeforeRoute(idx){
-      console.log('checkBeforeRoute');
         if (!this.user.tel) {
           if (idx == 1) {
             this.$router.push('/bind');
@@ -160,7 +151,7 @@
             else if (api.mode == 2) {
               href = 'http://qk.notepasses.com/quanke/sign-in.html';
             }
-            document.getElementById('signLink').href = href;
+            document.getElementById('qdLink').href = href;
           }
           else if (idx == 2) {
             if (!this.user.recommendCode) {

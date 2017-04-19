@@ -46,9 +46,11 @@
         counties: [],
         selectedItem: {
           province: '',
+          provinceId:'',
           city: '',
+          cityId:'',
           county: '',
-          id: ''
+          countyId:''
         }
       }
     },
@@ -74,16 +76,18 @@
         if (this.type == 'provinces') {
           this.type = 'cities';
           this.selectedItem.province = name;
+          this.selectedItem.provinceId = id;
           this.getList(id);
         }
         else if (this.type == 'cities') {
           this.type = 'counties';
           this.selectedItem.city = name;
+          this.selectedItem.cityId = id;
           this.getList(id);
         }
         else if (this.type == 'counties') {
           this.selectedItem.county = name;
-          this.selectedItem.id = id;
+          this.selectedItem.countyId = id;
           this.type = 'provinces';
           this.$emit('addressEvent', false, this.selectedItem);
         }

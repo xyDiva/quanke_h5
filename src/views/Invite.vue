@@ -79,9 +79,9 @@
       <div class="faq"><i>?</i>如何填写邀请码</div>
     </div>
 
-    <div class="item">已邀请的用户<span>{{user.recommendCount}}</span></div>
+    <div class="item">已邀请的用户<span>{{user.recommendCount||0}}</span></div>
     <div class="item">
-      <router-link to="/share">推广二维码<span>开启收益</span></router-link>
+      <router-link :to="'/share?userid='+user.id">推广二维码<span>开启收益</span></router-link>
     </div>
     <div class="tip">
       <p>说明：</p>

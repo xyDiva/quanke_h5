@@ -140,7 +140,7 @@
     <p class="p13">街头暗号：{{user.recommendCode}}</p>
     <p class="p14">就是自己人</p>
     <div class="qrcode">
-      <img :src="'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='+user.qrcodeTicket">
+      <img :src='imgUrl'>
       <span class="p15">扫这个二维码<br>一般都是<br>持家<br>会赚钱<br>貌美如花<br>的人</span>
     </div>
     <p class="p16">此二维码有效期至{{user.qrcodeExpiried | convertDate}}</p>
@@ -156,6 +156,7 @@
       return {
         userId: null,
         user: {},
+        imgUrl:'',
         width: document.body.clientWidth / 4.2
       }
     },
@@ -164,6 +165,7 @@
       api.user.getUserInfoForShare(this.userId).then((r) => {
         if (r.success) {
           this.user = r.value;
+          this.imgUrl = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='+this.user.qrcodeTicket;
         }
         else {
           Toast({

@@ -35,6 +35,7 @@
           width: 1.5rem;
           height: 1.5rem;
           margin-right: 0.15rem;
+          overflow:hidden;
           &.img {
             position: relative;
             border:#979797 1px solid;
@@ -122,14 +123,14 @@
     <div class="wrap-upload">
       <div class="top-tip">请上传带有订单创建时间的图片</div>
       <div class="list">
-        <div class="box img" v-for="item in imgs">
-          <img :src="item">
-          <div class="del">删除</div>
+        <div class="box img" v-if="imgUrl">
+          <img :src="imgUrl">
+          <div class="del" @click="del">删除</div>
         </div>
         <div class="box add"><input type="file" id='fileIpt' @change='upload'>添加图片</div>
       </div>
       <div class="bottom-tip">
-        <p>单次可上传三张截图返利</p>
+        <p>单次可上传一张返利截图</p>
         <p class="faq"><i>?</i>如何找到订单信息</p>
       </div>
     </div>
@@ -144,11 +145,11 @@
       <br>
       <p>上传通过券客 购买的订单信息提交审核，审核通过后返还订单付款金额的4%至用户账户。(例：付款金额100元，则返利4元)</p>
       <br>
-      <p>用户眉笔返利成功后，券客将按该笔订单付款金额的2%奖励用户的邀请者(例：付款金额100元，2元奖励会自动奖励给晒单返利用户的邀请者，如无邀请者则无奖励)</p>
+      <p>用户每笔返利成功后，券客将按该笔订单付款金额的2%奖励用户的邀请者(例：付款金额100元，2元奖励会自动奖励给晒单返利用户的邀请者，如无邀请者则无奖励)</p>
       <br>
       <p>审核通过后，相应奖励会自动发放至用户的账户</p>
       <br>
-      <p>加成全每次只可使用一张</p>
+      <p>返利订单有效期为创建订单的90天内</p>
     </div>
     <button class="btn btn-bottom" @click="save">提交审核</button>
   </div>
@@ -166,7 +167,7 @@
           userComment:'',
           orderPic:''
         },
-        imgs:[]
+        imgUrl:''
       }
     },
     mounted(){
@@ -177,22 +178,27 @@
         let file = document.getElementById("fileIpt").files[0];
         let formData = new FormData();
         formData.append('file',file);
+        formData.append('name',file.name);
 
         api.banner.upload(formData).then((r) => {
           if (r.success) {
-            let arr = this.o.orderPic?this.o.orderPic.split(','):[];
-            arr.push(r.value);
-            this.o.orderPic = arr.toString();
-
-            let imgUrl = api.banner.getImg(r.value);
-            this.imgs.push(imgUrl);
+            this.o.orderPic = r.value;
+            this.imgUrl = api.banner.getImg(r.value);
           }
           else {
             Toast(r.message);
           }
         });
       },
+      del(){
+        this.imgUrl = '';
+        this.o.orderPic = '';
+      },
       save(){
+        if(!this.o.orderPic) {
+          Toast('请上传图片');
+          return false;
+        }
         api.rebate.save(this.o).then((r) => {
           if (r.success) {
             Toast({
@@ -200,7 +206,7 @@
               duration: 1500
             });
             setTimeout(() => {
-              this.$router.go(-1);
+              this.$router.replace('/order');
             }, 2000);
           }
           else {
