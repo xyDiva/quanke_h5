@@ -37,9 +37,7 @@
       <input type="text" placeholder="输入邀请码" v-model='inviteCode'>
     </div>
     <button class="btn btn-set" @click="setInviteCode" :disabled="!inviteCode">确认输入，下一步</button>
-    <router-link to="/invite">
-      <button class="btn btn-skip">无邀请码，跳过</button>
-    </router-link>
+    <button class="btn btn-skip" @click="skip">无邀请码，跳过</button>
     <div class="tip">
       <p>重要提醒：</p>
       <br>
@@ -55,6 +53,7 @@
   export default {
     data(){
       return {
+        user:this.$store.state.user,
         inviteCode: null
       }
     },
@@ -82,6 +81,17 @@
         }, (r) => {
           Toast('failed');
         })
+      },
+      skip(){
+        this.user.pid = 0;
+        api.user.editUserInfo(this.user).then((r) => {
+          if (r.success) {
+            this.$router.push('/invite');
+          }
+          else {
+            console.log(r.message);
+          }
+        });
       }
     }
   }

@@ -27,18 +27,18 @@
   <div class="page-address">
     <div class="item"><input type="text" v-model="o.name" placeholder="收货人姓名(请使用真实姓名)"></div>
     <div class="item"><input type="text" v-model="o.tel" placeholder="手机号码"></div>
-    <div class="item">
-      <router-link to="" @click.native="toggleAddress(true)">
+    <div class="item" @click="toggleAddress(true)">
+      <a href="javascript:;">
         省市区
         <span>{{o.province||'省'}},{{o.city||'市'}},{{o.country||'区'}}</span>
-      </router-link>
+      </a>
     </div>
     <div class="item"><textarea placeholder="详细地址" v-model="o.address"></textarea></div>
 
     <button class="btn btn-save" @click="save">保存</button>
 
     <!-- 选择省市区 -->
-    <addresslist :show='addressVisible' v-on:addressEvent="toggleAddress"></addresslist>
+    <addresslist :show='isSelect' v-on:addressEvent="toggleAddress"></addresslist>
 
   </div>
 </template>
@@ -67,8 +67,12 @@
           country: '',
           countryId: '',
           address: ''
-        },
-        addressVisible: false
+        }
+      }
+    },
+    computed:{
+      isSelect() {
+        return this.$store.state.isSelect
       }
     },
     mounted(){
@@ -78,7 +82,7 @@
       getAddress(){
         api.address.getAddress(this.user.id).then((r) => {
           if (r.success) {
-            this.o = r.value;
+            this.o = r.value || {};
           }
           else {
             Toast(r.message);
@@ -86,7 +90,7 @@
         });
       },
       toggleAddress(arg, selectedItem){
-        this.addressVisible = arg;
+        this.$store.dispatch('setIsSelect',arg);
         if (selectedItem) {
           this.o.province = selectedItem.province;
           this.o.provinceId = selectedItem.provinceId;
@@ -97,6 +101,22 @@
         }
       },
       save(){
+        if(!this.o.name) {
+          Toast('请填写收货人姓名');
+          return false;
+        }
+        else if (!this.o.tel) {
+          Toast('请填写手机号码');
+          return false;
+        }
+        else if (!this.o.provinceId || !this.o.cityId || !this.o.countryId) {
+          Toast('请选择省市区');
+          return false;
+        }
+        else if (!this.o.address) {
+          Toast('请填写详细地址');
+          return false;
+        }
         api.address.save(this.o).then((r) => {
           if (r.success) {
             Toast({

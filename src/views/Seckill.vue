@@ -78,7 +78,7 @@
       // 微信分享
       let link = location.protocol + '//' + location.host + location.pathname;
       this.$com.wxInit({
-        link: link + '#/seckill',
+        link: link + '?reurl=' + encodeURIComponent(link + '#/seckill'),
         desc: '每日定时直播秒杀，会员超低价格抢购产品'
       });
     },

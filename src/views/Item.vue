@@ -318,7 +318,7 @@
       const id = this.$route.params.id;
       api.goods.getById(id).then((r) => {
         if (r.success) {
-          const host = location.protocol + '//' + location.host + location.pathname;
+          const link = location.protocol + '//' + location.host + location.pathname;
 
           // 微信分享参数
           let params = {};
@@ -334,7 +334,7 @@
 
             params = {
               title:this.item.title,
-              link:host+'#/item/' + this.item.id + '?shared=true',
+              link: link + '?reurl=' + encodeURIComponent(link + '#/item/' + this.item.id + '?shared=true'),
               imgUrl:this.item.pic,
               desc:this.item.goodsUrl
             };

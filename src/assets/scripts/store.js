@@ -9,7 +9,12 @@ const store = new Vuex.Store({
     msg: {},
     indexScrollTop:0,
     searchScrollTop:0,
-    seckillScrollTop:0
+    seckillScrollTop:0,
+
+    isSelect:false
+  },
+  getters:{
+    isSelect:state=>state.isSelect
   },
   mutations: {
     setUser(state,user){
@@ -26,6 +31,9 @@ const store = new Vuex.Store({
     },
     setSeckillScrollTop (state, seckillScrollTop) {
       state.seckillScrollTop = seckillScrollTop;
+    },
+    setIsSelect(state,isSelect) {
+      state.isSelect = isSelect;
     }
   },
   actions: {
@@ -43,6 +51,9 @@ const store = new Vuex.Store({
     },
     setSeckillScrollTop (context, seckillScrollTop) {
       context.commit('setSeckillScrollTop',seckillScrollTop);
+    },
+    setIsSelect (context,isSelect) {
+      context.commit('setIsSelect',isSelect);
     }
   }
 });

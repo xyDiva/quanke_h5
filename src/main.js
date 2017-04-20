@@ -71,6 +71,13 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  // todo hack 微信公众号中分享出来的链接如果带#号，打开后#号后面的部分url会被截断
+  let reUrl = common.getQueryString('reurl');
+  if(reUrl){
+    location.href = reUrl;
+    return false;
+  }
+
   let title = to.meta.title;
   common.setTitle(title);
 
@@ -93,6 +100,13 @@ router.beforeEach((to, from, next) => {
   }
   else {
     to.meta.stay = false;
+  }
+
+  // address
+  if(from.path == '/address' && store.getters.isSelect) {
+    store.dispatch('setIsSelect',false);
+    next(false);
+    return false;
   }
 
   next();

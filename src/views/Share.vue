@@ -179,7 +179,7 @@
       let link = location.protocol + '//' + location.host + location.pathname;
       this.$com.wxInit({
         title: '券客：先领券-再淘宝 精选海量淘宝优惠券',
-        link: link + '#/share?userid=' + this.userId,
+        link: link + '?reurl=' + encodeURIComponent(link + '#/share?userid=' + this.userId),
         desc: '专业买手推荐海量淘宝、天猫等百万家信誉商家最新折扣、优惠券'
       });
     },

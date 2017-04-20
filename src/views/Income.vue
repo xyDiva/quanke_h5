@@ -125,10 +125,10 @@
             second = d.getSeconds();
 
         if(minute < 10) {
-          minute += '0';
+          minute = '0' + minute;
         }
         if(second < 10) {
-          second += '0';
+          second = '0' + second;
         }
 
         return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;

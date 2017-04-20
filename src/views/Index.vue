@@ -149,7 +149,9 @@
 
         nodata:false,
 
-        topBtnVisible: false
+        topBtnVisible: false,
+
+        user:this.$store.state.user
       }
     },
     activated(){
@@ -157,20 +159,13 @@
       window.addEventListener('scroll', this.scrollFn);
 
       document.body.scrollTop = this.$route.meta.stay?this.$store.state.indexScrollTop:0;
+
+      this.setQDLink();
     },
     deactivated(){
       window.removeEventListener('scroll', this.scrollFn);
     },
     mounted(){
-      let href = '';
-      if(api.mode == 0 || api.mode == 1) {
-        href = 'http://qk.notepasses.com/quankeTest/sign-in.html';
-      }
-      else if (api.mode == 2) {
-        href = 'http://qk.notepasses.com/quanke/sign-in.html';
-      }
-      document.getElementById('qdLink').href = href;
-
       // get banner
       api.banner.query().then((r) => {
         if (r.success) {
@@ -193,6 +188,24 @@
       this.$com.wxInit();
     },
     methods: {
+      setQDLink(){
+        let href = '';
+        if(!this.user.id) {
+          href = '#/login';
+        }
+        else if (!this.user.tel){
+          href = '#/bind';
+        }
+        else {
+          if(api.mode == 0 || api.mode == 1) {
+            href = 'http://qk.notepasses.com/quankeTest/sign-in.html';
+          }
+          else if (api.mode == 2) {
+            href = 'http://qk.notepasses.com/quanke/sign-in.html';
+          }
+        }
+        document.getElementById('qdLink').href = href;
+      },
       getList(){
         let params = {
           start:this.start,

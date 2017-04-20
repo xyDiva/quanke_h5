@@ -18,6 +18,12 @@ let common = {
     return vars;
   },
 
+  getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+  },
+
   // 判断系统 ios or android
   getSystem(){
     let agent = navigator.userAgent;
@@ -132,7 +138,9 @@ let common = {
         });
       });
     });
-  }
+  },
+
+
 };
 
 module.exports = common;

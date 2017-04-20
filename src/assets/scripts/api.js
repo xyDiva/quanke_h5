@@ -82,7 +82,7 @@ api.user = {
   }),
   // 绑定手机号
   bindTel:(params)=>new Promise((resolve,reject)=>{
-    Vue.http.get(HOST_URL+'user/boundTel',params).then((r) => {
+    Vue.http.get(HOST_URL+'user/boundTel',{params:params}).then((r) => {
       resolve(r.body);
     }, (r) => {
       reject(r.body);

@@ -50,7 +50,7 @@
           width: 100%;
         }
       }
-      .tel {
+      .name {
         font-size: 0.24rem;
         color: white;
       }
@@ -67,9 +67,9 @@
     <div class="info">
       <router-link to="/my/edit">
         <div class="avatar">
-          <img src="../assets/images/portrait.png">
+          <img :src="user.avatar">
         </div>
-        <p class="tel">{{user.tel}}</p>
+        <p class="name">{{user.nickName}}</p>
       </router-link>
       <router-link to="/message" class="info-msg">
         <i class="point" v-if="user.unreadNotify">N</i>
@@ -154,7 +154,7 @@
             document.getElementById('qdLink').href = href;
           }
           else if (idx == 2) {
-            if (!this.user.recommendCode) {
+            if (this.user.pid == ''||this.user.pid == undefined||this.user.id == null) {
               this.$router.push('/inviteCode');
             }
           }

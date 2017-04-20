@@ -108,6 +108,7 @@
     },
     methods: {
       clear(action){
+        console.log('clear')
         if (action == 'init') {
           this.name = '';
         }
@@ -172,7 +173,7 @@
             this.nodata = !r.list.length;
             this.start += r.list.length;
             this.total = r.total;
-            this.list = this.$com.convertGoods(r.list || []);
+            this.list = this.list.concat(this.$com.convertGoods(r.list || []));
           }
           else {
             Toast({
