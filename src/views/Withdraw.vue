@@ -25,7 +25,7 @@
 
 <template>
   <div class="page-withdraw">
-    <div class="item"><input type="text" v-model="o.alipay" placeholder="支付宝账号(请使用真实姓名)"></div>
+    <div class="item"><input type="text" v-model="o.alipay" placeholder="支付宝账号"></div>
     <div class="item"><input type="text" v-model="o.name" placeholder="真实姓名"></div>
     <div class="item">可提金额&nbsp;{{user.balance}}元</div>
     <div class="item"><input type="number" v-model="o.amount" placeholder="提现金额（大于5元）"></div>

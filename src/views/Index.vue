@@ -190,13 +190,7 @@
       this.getList();
 
       // 微信分享
-      let link = location.protocol + '//' + location.host + location.pathname;
-      this.$com.wxInit({
-        title: '券客—先领券，再淘宝',
-        link: link + '#/index',
-        imgUrl: link + 'static/img/logo-share.jpg',
-        desc: '专业买手每日推荐淘宝、天猫百万信誉商家最新折扣'
-      });
+      this.$com.wxInit();
     },
     methods: {
       getList(){

@@ -137,7 +137,7 @@
     <p class="p10">来不及细说了</p>
     <p class="p11">赶紧上船！</p>
     <p class="p12">每天直播好多券，赶紧抢个好位置</p>
-    <p class="p13">街头暗号：{{user.recommendCode}}</p>
+    <p class="p13">接头暗号：{{user.recommendCode}}</p>
     <p class="p14">就是自己人</p>
     <div class="qrcode">
       <img :src='imgUrl'>
@@ -173,7 +173,15 @@
             duration: 1500
           });
         }
-      })
+      });
+
+      // 微信分享
+      let link = location.protocol + '//' + location.host + location.pathname;
+      this.$com.wxInit({
+        title: '券客：先领券-再淘宝 精选海量淘宝优惠券',
+        link: link + '#/share?userid=' + this.userId,
+        desc: '专业买手推荐海量淘宝、天猫等百万家信誉商家最新折扣、优惠券'
+      });
     },
     filters: {
       convertDate(timestamp){

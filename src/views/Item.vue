@@ -321,12 +321,7 @@
           const host = location.protocol + '//' + location.host + location.pathname;
 
           // 微信分享参数
-          let params = {
-            title:'券客—先领券，再淘宝',
-            link:host,
-            imgUrl:host + 'static/img/logo-share.jpg',
-            desc:'专业买手每日推荐淘宝、天猫百万信誉商家最新折扣'
-          };
+          let params = {};
 
           // 券已领完 value为空
           if (!r.value) {

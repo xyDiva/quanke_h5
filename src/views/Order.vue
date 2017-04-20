@@ -103,13 +103,8 @@
         };
         api.rebate.query(params).then((r) => {
           if (r.success) {
-            this.nodata = !r.list.length;
             this.start += r.list.length;
             this.total = r.total;
-
-            if(this.nodata) {
-              this.$router.replace('/order/add');
-            }
 
             //convert
             r.list.forEach((item)=>{
@@ -118,7 +113,12 @@
                 item.imgUrl = api.banner.getImg(firstImg);
               }
             });
-            this.list = r.list || [];
+            this.list = this.list.concat(r.list || []);
+
+            this.nodata = !this.list.length;
+            if(this.nodata) {
+              this.$router.replace('/order/add');
+            }
           }
           else {
             Toast(r.message);

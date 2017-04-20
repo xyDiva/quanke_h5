@@ -78,9 +78,7 @@
       // 微信分享
       let link = location.protocol + '//' + location.host + location.pathname;
       this.$com.wxInit({
-        title: '券客—先领券，再淘宝',
         link: link + '#/seckill',
-        imgUrl: link + 'static/img/logo-share.jpg',
         desc: '每日定时直播秒杀，会员超低价格抢购产品'
       });
     },

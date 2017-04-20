@@ -96,11 +96,16 @@ let common = {
         jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
       });
       wx.ready(()=>{
+        let link = location.protocol + '//' + location.host + location.pathname;
+        if(!data) {
+          data = {};
+        }
+
         // 分享到朋友圈
         wx.onMenuShareTimeline({
-          title: data.title, // 分享标题
-          link: data.link, // 分享链接
-          imgUrl: data.imgUrl, // 分享图标
+          title: data.title || '券客—先领券，再淘宝', // 分享标题
+          link: data.link || link + '#/index', // 分享链接
+          imgUrl: data.imgUrl || link + 'static/img/logo-share.jpg', // 分享图标
           success: function () {
             // 用户确认分享后执行的回调函数
             console.log('分享到朋友圈成功');
@@ -112,10 +117,10 @@ let common = {
         });
         // 分享给好友
         wx.onMenuShareAppMessage({
-          title: data.title, // 分享标题
-          desc: data.desc, // 分享描述
-          link: data.link, // 分享链接
-          imgUrl: data.imgUrl, // 分享图标
+          title: data.title || '券客—先领券，再淘宝', // 分享标题
+          desc: data.desc || '专业买手每日推荐淘宝、天猫百万信誉商家最新折扣', // 分享描述
+          link: data.link || link + '#/index', // 分享链接
+          imgUrl: data.imgUrl || link + 'static/img/logo-share.jpg', // 分享图标
           success: function () {
             // 用户确认分享后执行的回调函数
             console.log('分享给好友成功');

@@ -60,7 +60,7 @@
         return month + '-' + day + ' ' + hour + ':' + minute;
       }
     },
-    mounted(){
+    updated(){
       this.save();
     },
     methods:{
