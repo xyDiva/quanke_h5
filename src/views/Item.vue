@@ -159,7 +159,7 @@
           top: 0;
         }
         .copy {
-          width:100%;
+          width: 100%;
           border: white 1px solid;
         }
         p {
@@ -220,14 +220,15 @@
             <button class="copy" :data-clipboard-text="item.goodsUrl">复制</button>
           </div>
           <div class="col">
-            <div class="price"><i>&yen;</i>{{item.priceA||0}}<i>.{{item.priceB||00}}</i></div>
+            <div class="price"><i>&yen;</i>{{item.priceA || 0}}<i>.{{item.priceB || 00}}</i></div>
             <div class="tags">
-              <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon" v-if="item.coupon">{{item.coupon}}元券</span>
+              <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon"
+                                                                             v-if="item.coupon">{{item.coupon}}元券</span>
             </div>
           </div>
           <div class="col">
-            <span class="original-price">原价：<del>{{item.price||0.00}}</del></span>
-            <span class="sold">已售：{{item.biz30day||0}}</span>
+            <span class="original-price">原价：<del>{{item.price || 0.00}}</del></span>
+            <span class="sold">已售：{{item.biz30day || 0}}</span>
           </div>
           <div class="flex guide">
             <div class="key">购买方式：</div>
@@ -333,10 +334,10 @@
             this.getGoodImgs(this.item.thirdId);
 
             params = {
-              title:this.item.title,
+              title: this.item.title,
               link: link + '?reurl=' + encodeURIComponent(link + '#/item/' + this.item.id + '?shared=true'),
-              imgUrl:this.item.pic,
-              desc:this.item.goodsUrl
+              imgUrl: this.item.pic,
+              desc: this.item.goodsUrl
             };
 
             // 复制
@@ -349,6 +350,14 @@
         else {
           Toast(r.message);
         }
+      }).catch((error) => {
+        Toast({
+          message: '获取商品失败',
+          duration: 1500
+        });
+        setTimeout(() => {
+          this.$router.push('/index');
+        }, 2000);
       });
     },
     methods: {

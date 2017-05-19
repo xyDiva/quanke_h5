@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     isSelect:false
   },
   getters:{
+    user:state=>state.user,
     isSelect:state=>state.isSelect
   },
   mutations: {

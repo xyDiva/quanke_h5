@@ -108,7 +108,6 @@
     },
     methods: {
       clear(action){
-        console.log('clear')
         if (action == 'init') {
           this.name = '';
         }

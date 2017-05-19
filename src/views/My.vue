@@ -95,7 +95,7 @@
     <div class="item">
       <router-link to="/about">关于我们</router-link>
     </div>
-    <button class="btn-logout" @click="logout">退出登录</button>
+    <button class="btn btn-logout" @click="logout">退出登录</button>
 
     <div>
       <my-footer tab="my"></my-footer>
@@ -121,6 +121,8 @@
           this.$store.dispatch('setUser', this.user);
         }
         else {
+          this.user = {};
+          this.$store.dispatch('setUser', {});
           Toast({
             message: r.message,
             duration: 1500
@@ -154,7 +156,7 @@
             document.getElementById('qdLink').href = href;
           }
           else if (idx == 2) {
-            if (this.user.pid == ''||this.user.pid == undefined||this.user.id == null) {
+            if (this.user.pid === ''||this.user.pid === undefined || this.user.id === null) {
               this.$router.push('/inviteCode');
             }
           }
@@ -163,6 +165,7 @@
       logout(){
         api.user.logout().then((r) => {
           if (r.success) {
+            this.$store.dispatch('setUser', {});
             Toast({
               message: '退出成功',
               duration: 1500

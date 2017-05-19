@@ -131,7 +131,7 @@
       </div>
       <div class="bottom-tip">
         <p>单次可上传一张返利截图</p>
-        <p class="faq"><i>?</i>如何找到订单信息</p>
+        <a class="faq" href="http://mp.weixin.qq.com/s/Qkem75pNnQY96kjPtN61LA"><i>?</i>如何找到订单信息</a>
       </div>
     </div>
     <div class="item">

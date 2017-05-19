@@ -151,16 +151,22 @@
 
         topBtnVisible: false,
 
-        user:this.$store.state.user
+        user:this.$store.getters.user
       }
     },
+    // computed:{
+    //   user(){
+    //     return this.$store.getters.user
+    //   }
+    // },
     activated(){
       // scroll event
       window.addEventListener('scroll', this.scrollFn);
 
       document.body.scrollTop = this.$route.meta.stay?this.$store.state.indexScrollTop:0;
-
-      this.setQDLink();
+      
+      console.log('index activate')
+      this.getUser();
     },
     deactivated(){
       window.removeEventListener('scroll', this.scrollFn);
@@ -188,6 +194,18 @@
       this.$com.wxInit();
     },
     methods: {
+      getUser(){
+        api.user.getUserInfo().then((r) => {
+          if (r.success) {
+            this.user = r.value;
+          }
+          else {
+            this.user = {};
+          }
+          this.$store.dispatch('setUser', this.user);
+          this.setQDLink();
+        })
+      },
       setQDLink(){
         let href = '';
         if(!this.user.id) {

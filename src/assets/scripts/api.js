@@ -3,11 +3,11 @@ import {Promise} from 'es6-promise'
 
 let mode = null; // 0 dev 1 test 2 pro
 let HOST_URL = window.location.protocol + '//' + window.location.host;
-if(location.href.indexOf('/quanke/')>=0){
+if (location.href.indexOf('/quanke/') >= 0) {
   HOST_URL += '/ar/';
   mode = 2;
 }
-else if(location.href.indexOf('/quankeTest/')>=0){
+else if (location.href.indexOf('/quankeTest/') >= 0) {
   HOST_URL += '/tr/';
   mode = 1;
 }
@@ -64,7 +64,7 @@ api.user = {
       reject(r.body);
     });
   }),
-    // 获取用户信息--分享
+  // 获取用户信息--分享
   getUserInfoForShare: (userId) => new Promise((resolve, reject) => {
     Vue.http.get(HOST_URL + 'user/shareInfo?userId=' + userId).then((r) => {
       resolve(r.body);
@@ -81,16 +81,16 @@ api.user = {
     });
   }),
   // 绑定手机号
-  bindTel:(params)=>new Promise((resolve,reject)=>{
-    Vue.http.get(HOST_URL+'user/boundTel',{params:params}).then((r) => {
+  bindTel: (params) => new Promise((resolve, reject) => {
+    Vue.http.get(HOST_URL + 'user/boundTel', {params: params}).then((r) => {
       resolve(r.body);
     }, (r) => {
       reject(r.body);
     });
   }),
   // 绑定邀请码
-  bindInviteCode:(code)=>new Promise((resolve,reject)=>{
-    Vue.http.get(HOST_URL+'user/boundRecommendCode?recomCode='+code).then((r) => {
+  bindInviteCode: (code) => new Promise((resolve, reject) => {
+    Vue.http.get(HOST_URL + 'user/boundRecommendCode?recomCode=' + code).then((r) => {
       resolve(r.body);
     }, (r) => {
       reject(r.body);
@@ -115,10 +115,10 @@ api.notify = {
       reject(r.body);
     });
   }),
-  save: (id)=>new Promise((resolve, reject)=> {
-    Vue.http.get(HOST_URL + 'user/notify/read?notifyId='+id).then((r)=> {
+  save: (id) => new Promise((resolve, reject) => {
+    Vue.http.get(HOST_URL + 'user/notify/read?notifyId=' + id).then((r) => {
       resolve(r.body);
-    }, (r)=> {
+    }, (r) => {
       reject(r.body);
     });
   })
@@ -159,21 +159,21 @@ api.banner = {
     });
   }),
   getImg: (fileName) => HOST_URL + 'banner/pic?fileName=' + fileName,
-  upload: (formdata)=>new Promise((resolve,reject)=>{
-    Vue.http.post(HOST_URL + 'banner/upload',formdata).then((r)=>{
+  upload: (formdata) => new Promise((resolve, reject) => {
+    Vue.http.post(HOST_URL + 'banner/upload', formdata).then((r) => {
       resolve(r.body);
-    },(r)=>{
+    }, (r) => {
       reject(r.body);
     });
-  }) 
+  })
 };
 
 // wx
 api.wx = {
-  getWXParams:(url)=>new Promise((resolve,reject)=>{
-    Vue.http.get(HOST_URL + 'wx/wxEncodeconfig?url=' + url).then((r)=>{
+  getWXParams: (url) => new Promise((resolve, reject) => {
+    Vue.http.get(HOST_URL + 'wx/wxEncodeconfig?url=' + url).then((r) => {
       resolve(r.body);
-    },(r)=>{
+    }, (r) => {
       reject(r.body);
     });
   })
@@ -181,24 +181,24 @@ api.wx = {
 
 // 省市区列表
 api.address = {
-  listDistrict: (parentId)=>new Promise((resolve, reject)=> {
-    Vue.http.get(HOST_URL + 'address/listDistrict?parentId=' + parentId).then((r)=> {
+  listDistrict: (parentId) => new Promise((resolve, reject) => {
+    Vue.http.get(HOST_URL + 'address/listDistrict?parentId=' + parentId).then((r) => {
       resolve(r.body);
-    }, (r)=> {
+    }, (r) => {
       reject(r.body);
     });
   }),
-  save: (params)=>new Promise((resolve, reject)=> {
-    Vue.http.post(HOST_URL + 'address/save',params).then((r)=> {
+  save: (params) => new Promise((resolve, reject) => {
+    Vue.http.post(HOST_URL + 'address/save', params).then((r) => {
       resolve(r.body);
-    }, (r)=> {
+    }, (r) => {
       reject(r.body);
     });
   }),
-  getAddress:(userId)=>new Promise((resolve, reject)=> {
-    Vue.http.get(HOST_URL + 'address/getByUserId?userId='+userId).then((r)=> {
+  getAddress: (userId) => new Promise((resolve, reject) => {
+    Vue.http.get(HOST_URL + 'address/getByUserId?userId=' + userId).then((r) => {
       resolve(r.body);
-    }, (r)=> {
+    }, (r) => {
       reject(r.body);
     });
   })
@@ -207,14 +207,14 @@ api.address = {
 // 晒单返利
 api.rebate = {
   query: (params) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'rebate',{params:params}).then((r) => {
+    Vue.http.get(HOST_URL + 'rebate', {params: params}).then((r) => {
       resolve(r.body);
     }, (r) => {
       reject(r.body);
     });
   }),
   save: (params) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'rebate/save',params).then((r) => {
+    Vue.http.post(HOST_URL + 'rebate/save', params).then((r) => {
       resolve(r.body);
     }, (r) => {
       reject(r.body);
@@ -225,7 +225,7 @@ api.rebate = {
 // 提现
 api.withdraw = {
   save: (params) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'withdraw/save',params).then((r) => {
+    Vue.http.post(HOST_URL + 'withdraw/save', params).then((r) => {
       resolve(r.body);
     }, (r) => {
       reject(r.body);
