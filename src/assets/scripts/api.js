@@ -2,17 +2,14 @@ import Vue from 'vue'
 import {Promise} from 'es6-promise'
 
 let mode = null; // 0 dev 1 test 2 pro
-let HOST_URL = window.location.protocol + '//' + window.location.host;
-if (location.href.indexOf('/quanke/') >= 0) {
-  HOST_URL += '/ar/';
+let HOST_URL = window.location.protocol + '//' + window.location.host + '/';
+if (location.host == 'qk.notepasses.com') {
   mode = 2;
 }
-else if (location.href.indexOf('/quankeTest/') >= 0) {
-  HOST_URL += '/tr/';
+else if (location.host == 'qktest.notepasses.com') {
   mode = 1;
 }
 else if (location.host == 'localhost:1201') {
-  HOST_URL += '/tr/';
   mode = 0;
 }
 
@@ -53,7 +50,7 @@ api.user = {
     Vue.http.get(HOST_URL + 'user/my').then((r) => {
       resolve(r.body);
     }, (r) => {
-      reject(r.body);
+      reject(r);
     });
   }),
   // 编辑用户信息

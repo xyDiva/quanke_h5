@@ -164,7 +164,7 @@
       window.addEventListener('scroll', this.scrollFn);
 
       document.body.scrollTop = this.$route.meta.stay?this.$store.state.indexScrollTop:0;
-      
+
       console.log('index activate')
       this.getUser();
     },
@@ -215,8 +215,11 @@
           href = '#/bind';
         }
         else {
-          if(api.mode == 0 || api.mode == 1) {
-            href = 'http://qk.notepasses.com/quankeTest/sign-in.html';
+          if (api.mode == 0) {
+            href = 'http://localhost/quanke/sign-in.html';
+          }
+          else if (api.mode == 1) {
+            href = 'http://qktest.notepasses.com/quanke/sign-in.html';
           }
           else if (api.mode == 2) {
             href = 'http://qk.notepasses.com/quanke/sign-in.html';

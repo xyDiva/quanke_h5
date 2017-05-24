@@ -4,7 +4,7 @@
 
  import api from './api'
  import {Toast} from 'mint-ui'
- 
+
  let wx = require('weixin-js-sdk');
 
 let common = {

@@ -14,19 +14,63 @@ var port = process.env.PORT || config.dev.port
 // https://github.com/chimurai/http-proxy-middleware
 var proxyTable = config.dev.proxyTable;
 
+var target = 'http://qktest.notepasses.com';
+
 proxyTable = {
-  '/tr': { // 测试环境
-    target: 'http://qk.notepasses.com',
+  '/user': {
+    target: target,
     changeOrigin: true,
     pathRewrite: {
-      '^/tr': '/tr'
+      '^/user': '/user'
     }
   },
-  '/ar': { // 正式环境
-    target: 'http://qk.notepasses.com',
+  '/notify': {
+    target: target,
     changeOrigin: true,
     pathRewrite: {
-      '^/ar': '/ar'
+      '^/notify': '/notify'
+    }
+  },
+  '/goods': {
+    target: target,
+    changeOrigin: true,
+    pathRewrite: {
+      '^/goods': '/goods'
+    }
+  },
+  '/banner': {
+    target: target,
+    changeOrigin: true,
+    pathRewrite: {
+      '^/banner': '/banner'
+    }
+  },
+  '/wx': {
+    target: target,
+    changeOrigin: true,
+    pathRewrite: {
+      '^/wx': '/wx'
+    }
+  },
+  '/address': {
+    target: target,
+    changeOrigin: true,
+    pathRewrite: {
+      '^/address': '/address'
+    }
+  },
+  '/rebate': {
+    target: target,
+    changeOrigin: true,
+    pathRewrite: {
+      '^/rebate': '/rebate'
+    }
+  },
+  '/withdraw': {
+    target: target,
+    changeOrigin: true,
+    pathRewrite: {
+      '^/withdraw': '/withdraw'
     }
   }
 };

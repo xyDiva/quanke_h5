@@ -116,25 +116,32 @@
     },
     mounted(){
       api.user.getUserInfo().then((r) => {
-        if (r.success) {
+        if (r.success && r.value) {
           this.user = r.value;
           this.$store.dispatch('setUser', this.user);
         }
         else {
-          this.user = {};
-          this.$store.dispatch('setUser', {});
-          Toast({
-            message: r.message,
-            duration: 1500
-          });
-
-          setTimeout(() => {
-            this.$router.push('/login');
-          }, 2000);
+          this.unLoggedHandler(r);
+        }
+      }).catch((r) => {
+        if (r.status == 403) {
+          this.unLoggedHandler();
         }
       })
     },
     methods: {
+      unLoggedHandler(r){
+        this.user = {};
+        this.$store.dispatch('setUser', {});
+        Toast({
+          message: r && r.message || '请登录',
+          duration: 1500
+        });
+
+        setTimeout(() => {
+          this.$router.push('/login');
+        }, 2000);
+      },
       checkBeforeRoute(idx){
         if (!this.user.tel) {
           if (idx == 1) {
@@ -147,8 +154,11 @@
         else {
           if (idx == 1) {
             let href = '';
-            if(api.mode == 0 || api.mode == 1) {
-              href = 'http://qk.notepasses.com/quankeTest/sign-in.html';
+            if (api.mode == 0) {
+              href = 'http://localhost/quanke/sign-in.html';
+            }
+            else if (api.mode == 1) {
+              href = 'http://qktest.notepasses.com/quanke/sign-in.html';
             }
             else if (api.mode == 2) {
               href = 'http://qk.notepasses.com/quanke/sign-in.html';
@@ -156,7 +166,7 @@
             document.getElementById('qdLink').href = href;
           }
           else if (idx == 2) {
-            if (this.user.pid === ''||this.user.pid === undefined || this.user.id === null) {
+            if (this.user.pid === '' || this.user.pid === undefined || this.user.id === null) {
               this.$router.push('/inviteCode');
             }
           }

@@ -9,7 +9,7 @@
     <header v-if="headerVisible">
       <div class="search">
         <form action="#" onsubmit="return false;">
-          <input type="search" id="searchIpt" placeholder="输入需要寻找的商品..." v-model="name" @search="search">
+          <input type="search" id="searchIpt" placeholder="输入需要寻找的商品..." v-model="name">
           <button @click="search"></button>
         </form>
       </div>
@@ -157,6 +157,7 @@
         this.$com.setTitle(title);
       },
       search(){
+          console.log('search')
         this.clear();
         this.getList();
       },
