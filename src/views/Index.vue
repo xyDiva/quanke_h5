@@ -62,7 +62,9 @@
 <template>
   <div class="page-index">
     <header>
-      <router-link class="search" to="/search"><input type="text" placeholder="输入需要寻找的商品..."><button></button></router-link>
+      <router-link class="search" to="/search"><input type="text" placeholder="输入需要寻找的商品...">
+        <button></button>
+      </router-link>
       <a class="left" href="javascript:;">
         <i class="ico logo"></i>
       </a>
@@ -89,31 +91,29 @@
       <router-link to="/search/9"></router-link>
       <router-link to="/search/10"></router-link>
     </div>
-    <div class="page-loadmore-wrapper" ref="wrapper" v-if="list.length">
-      <mt-loadmore :autoFill="false" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-        <div class="pro-item" v-for="item in list">
-          <router-link :to="'/item/'+item.id">
-            <div class="left"><img v-if="item.pic" :src="item.pic"></div>
-            <div class="right">
-              <div class="col title">{{item.title}}</div>
-              <div class="col">
-                <div class="price"><i>&yen;</i>{{item.priceA}}<i>.{{item.priceB}}</i></div>
-                <div class="tags">
-                  <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon" v-if="item.coupon">{{item.coupon}}元券</span>
-                </div>
-              </div>
-              <div class="col">
-                <span class="original-price">原价：<del>{{item.price}}</del></span>
-                <span class="sold">已售：{{item.biz30day}}</span>
+    <div class="page-loadmore-wrapper" ref="wrapper"
+         v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10" v-if="list.length">
+      <div class="pro-item" v-for="item in list">
+        <router-link :to="'/item/'+item.id">
+          <div class="left"><img v-if="item.pic" :src="item.pic"></div>
+          <div class="right">
+            <div class="col title">{{item.title}}</div>
+            <div class="col">
+              <div class="price"><i>&yen;</i>{{item.priceA}}<i>.{{item.priceB}}</i></div>
+              <div class="tags">
+                <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon" v-if="item.coupon">{{item.coupon}}元券</span>
               </div>
             </div>
-          </router-link>
-        </div>
-        <div slot="bottom" class="mint-loadmore-bottom">
-          <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
-          <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-        </div>
-      </mt-loadmore>
+            <div class="col">
+              <span class="original-price">原价：<del>{{item.price}}</del></span>
+              <span class="sold">已售：{{item.biz30day}}</span>
+            </div>
+          </div>
+        </router-link>
+      </div>
+      <div slot="bottom" class="mint-loadmore-bottom">
+        <span v-show="loading"><mt-spinner type="snake"></mt-spinner></span>
+      </div>
     </div>
     <div class="no-data" v-if="nodata">暂无记录</div>
     <div class="btn-top" v-if="topBtnVisible" @click="toTop"></div>
@@ -125,50 +125,48 @@
 
 <script>
   import Vue from 'vue'
-  import {Toast, Swipe, SwipeItem, Loadmore, Spinner} from 'mint-ui'
+  import {Toast, Swipe, SwipeItem, Spinner, InfiniteScroll} from 'mint-ui'
   import api from '../assets/scripts/api'
   import footer from '../components/Footer'
 
   Vue.component(Swipe.name, Swipe);
   Vue.component(SwipeItem.name, SwipeItem);
-  Vue.component(Loadmore.name, Loadmore);
+  Vue.use(InfiniteScroll);
   Vue.component(Spinner.name, Spinner);
 
   export default {
     data(){
       return {
-        bannerHeight:document.body.clientWidth/2,
+        bannerHeight: document.body.clientWidth / 2,
         bannerList: [],
 
         list: [],
-        start:0,
-        total:0,
+        start: 0,
+        total: 0,
 
-        allLoaded:false,
-        bottomStatus:'',
+        allLoaded: false,
+        bottomStatus: '',
+        loading: false,
 
-        nodata:false,
+        nodata: false,
 
         topBtnVisible: false,
 
-        user:this.$store.getters.user
+        user: this.$store.getters.user
       }
     },
-    // computed:{
-    //   user(){
-    //     return this.$store.getters.user
-    //   }
-    // },
     activated(){
+      this.loading =false;
       // scroll event
       window.addEventListener('scroll', this.scrollFn);
 
-      document.body.scrollTop = this.$route.meta.stay?this.$store.state.indexScrollTop:0;
+      document.body.scrollTop = this.$route.meta.stay ? this.$store.state.indexScrollTop : 0;
 
       console.log('index activate')
       this.getUser();
     },
     deactivated(){
+      this.loading = true;
       window.removeEventListener('scroll', this.scrollFn);
     },
     mounted(){
@@ -208,35 +206,29 @@
       },
       setQDLink(){
         let href = '';
-        if(!this.user.id) {
+        if (!this.user.id) {
           href = '#/login';
         }
-        else if (!this.user.tel){
+        else if (!this.user.tel) {
           href = '#/bind';
         }
         else {
-          if (api.mode == 0) {
-            href = 'http://localhost/quanke/sign-in.html';
-          }
-          else if (api.mode == 1) {
-            href = 'http://qktest.notepasses.com/quanke/sign-in.html';
-          }
-          else if (api.mode == 2) {
-            href = 'http://qk.notepasses.com/quanke/sign-in.html';
-          }
+          href = api.host + '/quanke/sign-in.html';
         }
         document.getElementById('qdLink').href = href;
       },
       getList(){
+        this.loading = true;
         let params = {
-          start:this.start,
-          limit:10
+          start: this.start,
+          limit: 10
         };
         api.goods.query(params).then((r) => {
+          this.loading = false;
           if (r.success) {
             this.start += r.list.length;
             this.total = r.total;
-            this.list = this.list.concat(this.$com.convertGoods(r.list||[]));
+            this.list = this.list.concat(this.$com.convertGoods(r.list || []));
           }
           else {
             Toast({
@@ -261,16 +253,14 @@
       handleBottomChange(status) {
         this.bottomStatus = status;
       },
-      loadBottom() {
-        setTimeout(() => {
-          if(this.list.length < this.total) {
-            this.getList();
-          }
-          else {
-            this.allLoaded = true;
-          }
-          this.$refs.loadmore.onBottomLoaded();
-        }, 1500);
+      loadMore(){
+        if (this.allLoaded)
+          return;
+        if (this.list.length < this.total) {
+          this.getList();
+        } else {
+          this.allLoaded = true;
+        }
       }
     },
     components: {

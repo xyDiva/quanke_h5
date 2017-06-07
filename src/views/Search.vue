@@ -17,32 +17,29 @@
         <i class="ico back"></i>
       </router-link>
     </header>
-    <div class="page-loadmore-wrapper" ref="wrapper" v-if="list.length">
-      <mt-loadmore :autoFill="false" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange"
-                   :bottom-all-loaded="allLoaded" ref="loadmore">
-        <div class="pro-item" v-if="list.length" v-for="item in list">
-          <router-link :to="'/item/'+item.id">
-            <div class="left"><img v-if="item.pic" :src="item.pic"></div>
-            <div class="right">
-              <div class="col title">{{item.title}}</div>
-              <div class="col">
-                <div class="price"><i>&yen;</i>{{item.priceA}}<i>.{{item.priceB}}</i></div>
-                <div class="tags">
-                  <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon" v-if="item.coupon">{{item.coupon}}元券</span>
-                </div>
-              </div>
-              <div class="col">
-                <span class="original-price">原价：<del>{{item.price}}</del></span>
-                <span class="sold">已售：{{item.biz30day}}</span>
+    <div class="page-loadmore-wrapper" ref="wrapper"
+         v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10" v-if="list.length">
+      <div class="pro-item" v-if="list.length" v-for="item in list">
+        <router-link :to="'/item/'+item.id">
+          <div class="left"><img v-if="item.pic" :src="item.pic"></div>
+          <div class="right">
+            <div class="col title">{{item.title}}</div>
+            <div class="col">
+              <div class="price"><i>&yen;</i>{{item.priceA}}<i>.{{item.priceB}}</i></div>
+              <div class="tags">
+                <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon" v-if="item.coupon">{{item.coupon}}元券</span>
               </div>
             </div>
-          </router-link>
-        </div>
-        <div slot="bottom" class="mint-loadmore-bottom">
-          <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
-          <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-        </div>
-      </mt-loadmore>
+            <div class="col">
+              <span class="original-price">原价：<del>{{item.price}}</del></span>
+              <span class="sold">已售：{{item.biz30day}}</span>
+            </div>
+          </div>
+        </router-link>
+      </div>
+      <div slot="bottom" class="mint-loadmore-bottom">
+        <span v-show="loading"><mt-spinner type="snake"></mt-spinner></span>
+      </div>
     </div>
     <div class="no-data" v-if="nodata">
       <img src="../assets/images/error.png">
@@ -52,13 +49,13 @@
 
 <script>
   import Vue from 'vue'
-  import {Toast, Swipe, SwipeItem, Loadmore, Spinner} from 'mint-ui'
+  import {Toast, Swipe, SwipeItem, InfiniteScroll, Spinner} from 'mint-ui'
   import api from '../assets/scripts/api'
   import footer from '../components/Footer'
 
   Vue.component(Swipe.name, Swipe);
   Vue.component(SwipeItem.name, SwipeItem);
-  Vue.component(Loadmore.name, Loadmore);
+  Vue.use(InfiniteScroll);
   Vue.component(Spinner.name, Spinner);
 
   export default {
@@ -73,6 +70,7 @@
 
         allLoaded: false,
         bottomStatus: '',
+        loading: false,
 
         nodata: false
       }
@@ -82,6 +80,8 @@
       if (meta.clear) {
         this.clear('init');
       }
+
+      this.loading = false;
 
       this.cid = this.$route.params.cid;
       this.headerVisible = !this.cid;
@@ -104,6 +104,7 @@
       document.body.scrollTop = this.$route.meta.stay ? this.$store.state.searchScrollTop : 0;
     },
     deactivated(){
+      this.loading = true;
       window.removeEventListener('scroll', this.scrollFn);
     },
     methods: {
@@ -157,7 +158,7 @@
         this.$com.setTitle(title);
       },
       search(){
-          console.log('search')
+        console.log('search')
         this.clear();
         this.getList();
       },
@@ -168,6 +169,7 @@
           start: this.start,
           limit: 10
         };
+        this.loading = true;
         api.goods.query(params).then((r) => {
           if (r.success) {
             this.nodata = !r.list.length;
@@ -185,21 +187,21 @@
               this.$router.push('/login');
             }, 2000);
           }
+          this.loading = false;
         });
       },
       handleBottomChange(status) {
         this.bottomStatus = status;
       },
-      loadBottom() {
-        setTimeout(() => {
-          if (this.list.length < this.total) {
-            this.getList();
-          }
-          else {
-            this.allLoaded = true;
-          }
-          this.$refs.loadmore.onBottomLoaded();
-        }, 1500);
+      loadMore(){
+        if (this.allLoaded)
+          return;
+        if (this.list.length < this.total) {
+          this.getList();
+        }
+        else {
+          this.allLoaded = true;
+        }
       },
       scrollFn(){
         let scrollTop = document.body.scrollTop;

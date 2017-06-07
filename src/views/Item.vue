@@ -328,6 +328,9 @@
           if (!r.value) {
             this.noCoupon = true;
             this.popupVisible = true;
+            setTimeout(() => {
+              this.$router.push('/index');
+            }, 1000);
           }
           else {
             this.item = this.$com.convertGoods([r.value])[0];
@@ -349,6 +352,9 @@
         }
         else {
           Toast(r.message);
+          setTimeout(() => {
+            this.$router.push('/index');
+          }, 1000);
         }
       }).catch((error) => {
         Toast({

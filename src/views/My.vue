@@ -154,15 +154,7 @@
         else {
           if (idx == 1) {
             let href = '';
-            if (api.mode == 0) {
-              href = 'http://localhost/quanke/sign-in.html';
-            }
-            else if (api.mode == 1) {
-              href = 'http://qktest.notepasses.com/quanke/sign-in.html';
-            }
-            else if (api.mode == 2) {
-              href = 'http://qk.notepasses.com/quanke/sign-in.html';
-            }
+            href = api.host + '/quanke/sign-in.html';
             document.getElementById('qdLink').href = href;
           }
           else if (idx == 2) {
