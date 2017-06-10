@@ -1,18 +1,51 @@
+<template>
+  <footer>
+    <router-link to="/index" class="a-index" :class="{active:tab=='index'}">首页</router-link>
+    <router-link to="/seckill" class="a-seckill" :class="{active:tab=='seckill'}">秒杀</router-link>
+    <router-link to="/discovery" class="a-discovery" :class="{active:tab=='discovery'}">发现</router-link>
+    <router-link to="/order" class="a-order" :class="{active:tab=='order'}" v-if="user.id">晒单返利</router-link>
+    <a href="javascript:;" class="a-order" :class="{active:tab=='order'}" v-else @click="auth">晒单返利</a>
+    <router-link to="/my" class="a-my" :class="{active:tab=='my'}">我的券客</router-link>
+  </footer>
+</template>
+
+<script>
+  import {Toast} from 'mint-ui'
+  export default {
+    props: {
+      tab: ''
+    },
+    computed: {
+      user(){
+        return this.$store.getters.user || {}
+      }
+    },
+    methods: {
+      auth(){
+        if (!this.user.id) {
+          Toast('请登录');
+          return false;
+        }
+      }
+    }
+  }
+</script>
+
 <style lang="scss" rel="stylesheet/scss" scoped>
   footer {
     position: fixed;
     width: 100%;
-    line-height: 0.98rem;
+    height: 0.98rem;
     bottom: 0;
     background-color: white;
 
     display: flex;
     a {
       flex: 1;
-      padding-left: 6%;
+      padding-top: 0.6rem;
       font-size: 0.24rem;
-      background-position: 34% center;
-      background-size: 0.4rem;
+      background-position: center 0.15rem;
+      background-size: 0.35rem;
       background-repeat: no-repeat;
       text-align: center;
       color: #979797;
@@ -21,6 +54,12 @@
       }
       &.a-seckill {
         background-image: url("../assets/images/ico-seckill.png");
+      }
+      &.a-discovery {
+        background-image: url("../assets/images/ico-discovery.png");
+      }
+      &.a-order {
+        background-image: url("../assets/images/ico-order.png");
       }
       &.a-my {
         background-image: url("../assets/images/ico-my.png");
@@ -33,6 +72,12 @@
         &.a-seckill {
           background-image: url("../assets/images/ico-seckill-active.png");
         }
+        &.a-discovery {
+          background-image: url("../assets/images/ico-discovery-active.png");
+        }
+        &.a-order {
+          background-image: url("../assets/images/ico-order-active.png");
+        }
         &.a-my {
           background-image: url("../assets/images/ico-my-active.png");
         }
@@ -40,22 +85,3 @@
     }
   }
 </style>
-
-<template>
-  <footer>
-    <router-link to="/index" class="a-index" :class="{active:tab=='index'}">首页</router-link>
-    <router-link to="/seckill" class="a-seckill" :class="{active:tab=='seckill'}">秒杀</router-link>
-    <router-link to="/my" class="a-my" :class="{active:tab=='my'}">我的</router-link>
-  </footer>
-</template>
-
-<script>
-  export default {
-    props:{
-      tab:''
-    },
-    mounted(){
-      
-    }
-  }
-</script>

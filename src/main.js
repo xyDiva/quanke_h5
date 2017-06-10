@@ -15,7 +15,7 @@ Vue.use(VueResource);
 /* global resources */
 require('./assets/scripts/rem');
 const store = require('./assets/scripts/store');
-const common = ('./assets/scripts/common');
+const common = require('./assets/scripts/common');
 
 Vue.prototype.$com = common; // 全局挂载
 
@@ -26,6 +26,8 @@ import Bind from './views/Bind'
 import Index from './views/Index'
 import Item from './views/Item'
 import Seckill from './views/Seckill'
+import Discovery from './views/Discovery'
+import Channel from './views/Channel'
 import My from './views/My'
 import MyEdit from './views/MyEdit'
 import Income from './views/Income'
@@ -50,6 +52,8 @@ const routes = [
   {path: '/index', component: Index, meta: {keep: true, title: '券客商城'}},
   {path: '/item/:id', component: Item, meta: {title: '券客商城'}},
   {path: '/seckill', component: Seckill, meta: {keep: true, title: '秒杀中心'}},
+  {path: '/discovery', component: Discovery, meta: {title: '发现'}},
+  {path: '/discovery/:id', component: Channel, meta: {keep: true, title: '发现'}},
   {path: '/my', component: My, meta: {title: '个人中心'}},
   {path: '/my/edit', component: MyEdit, meta: {title: '修改资料'}},
   {path: '/message', component: Message, meta: {title: '通知中心'}},
@@ -61,12 +65,10 @@ const routes = [
   {path: '/invite', component: Invite, meta: {title: '邀请好友'}},
   {path: '/order', component: Order, meta: {title: '返利结果'}},
   {path: '/order/add', component: OrderAdd, meta: {title: '晒单返利'}},
-
   {path: '/about', component: About, meta: {title: '关于我们'}},
   {path: '/contact', component: Contact, meta: {title: '联系客服'}},
   {path: '/mall', component: Mall, meta: {title: '积分商城'}},
   {path: '/search', component: Search, meta: {keep: true, title: '搜索'}},
-  {path: '/search/:cid', component: Search, meta: {keep: true, title: '搜索'}},
   {path: '/share', component: Share, meta: {title: '分享'}}
 ];
 

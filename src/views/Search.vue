@@ -1,104 +1,95 @@
-<style lang='scss' rel="stylesheet/scss" scoped>
-  .page-search {
-
-  }
-</style>
-
 <template>
   <div class="page-search">
-    <header v-if="headerVisible">
+    <header>
       <div class="search">
         <form action="#" onsubmit="return false;">
           <input type="search" id="searchIpt" placeholder="输入需要寻找的商品..." v-model="name">
-          <button @click="search"></button>
+          <button class="btn-search" @click="search" v-show="!name"></button>
+          <button class="btn-reset" @click="reset" v-show="name"></button>
         </form>
       </div>
       <router-link class="left" to="/index">
         <i class="ico back"></i>
       </router-link>
     </header>
-    <div class="page-loadmore-wrapper" ref="wrapper"
-         v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10" v-if="list.length">
-      <div class="pro-item" v-if="list.length" v-for="item in list">
-        <router-link :to="'/item/'+item.id">
-          <div class="left"><img v-if="item.pic" :src="item.pic"></div>
-          <div class="right">
-            <div class="col title">{{item.title}}</div>
-            <div class="col">
-              <div class="price"><i>&yen;</i>{{item.priceA}}<i>.{{item.priceB}}</i></div>
-              <div class="tags">
-                <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon" v-if="item.coupon">{{item.coupon}}元券</span>
+    <div class="page-loadmore-wrapper" ref="wrapper" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading"
+         infinite-scroll-distance="10" v-if="list.length">
+      <mt-loadmore :autoFill="false" :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
+        <div class="pro-item" v-if="list.length" v-for="item in list">
+          <router-link :to="'/item/'+item.id">
+            <div class="left"><img v-if="item.pic" :src="item.pic"></div>
+            <div class="right">
+              <div class="col title">{{item.title}}</div>
+              <div class="col fs0">
+                <span class="original-price"><del>原价：{{item.price}}</del></span>
+                <span class="sold">已售：{{item.biz30day}}</span>
+              </div>
+              <div class="col tags fs0">
+                <span class="tag" v-for="tag in item.tags">{{tag}}</span>
+              </div>
+              <div class="flex flex-x-between bottom">
+                <div class="price"><span>券后价</span><i>&yen;</i>{{item.priceA}}<i>.{{item.priceB}}</i></div>
+                <div class="coupon" v-if="item.coupon">立减 {{item.coupon}} 元</div>
               </div>
             </div>
-            <div class="col">
-              <span class="original-price">原价：<del>{{item.price}}</del></span>
-              <span class="sold">已售：{{item.biz30day}}</span>
+          </router-link>
+        </div>
+      </mt-loadmore>
+    </div>
+    <div class="no-data" v-if="nodata">什么都没有找到T.T</div>
+    <div class="no-data" v-if="!nodata&&allLoaded">没有更多搜索结果</div>
+    <!--别人正在看-->
+    <div class="recommend-title"><span>别人正在看</span></div>
+    <div class="recommend-list flex flex-wrap">
+      <div class="pro-item-2" v-for="item in recommendList">
+        <router-link :to="'/item/'+item.id">
+          <div class="img"><img v-if="item.pic" :src="item.pic"></div>
+          <div class="content">
+            <div class="title">{{item.title}}</div>
+            <div class="flex flex-x-between bottom">
+              <div class="price"><span>券后价</span><i>&yen;</i>{{item.priceA}}<i>.{{item.priceB}}</i></div>
+              <div class="coupon" v-if="item.coupon">立减 {{item.coupon}} 元</div>
             </div>
           </div>
         </router-link>
       </div>
-      <div slot="bottom" class="mint-loadmore-bottom">
-        <span v-show="loading"><mt-spinner type="snake"></mt-spinner></span>
-      </div>
-    </div>
-    <div class="no-data" v-if="nodata">
-      <img src="../assets/images/error.png">
     </div>
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
-  import {Toast, Swipe, SwipeItem, InfiniteScroll, Spinner} from 'mint-ui'
+  import {Toast, InfiniteScroll, Spinner,Loadmore} from 'mint-ui'
   import api from '../assets/scripts/api'
-  import footer from '../components/Footer'
 
-  Vue.component(Swipe.name, Swipe);
-  Vue.component(SwipeItem.name, SwipeItem);
   Vue.use(InfiniteScroll);
   Vue.component(Spinner.name, Spinner);
+  Vue.component(Loadmore.name, Loadmore);
 
   export default {
     data(){
       return {
-        headerVisible: true,
-        cid: null,
         name: '',
 
         list: [],
         start: 0,
-
+        total:0,
         allLoaded: false,
-        bottomStatus: '',
         loading: false,
+        nodata: false,
+        topStatus: '',
 
-        nodata: false
+        recommendList: []
       }
     },
     activated(){
-      const meta = this.$route.meta;
-      if (meta.clear) {
-        this.clear('init');
+
+      const $searchIpt = document.getElementById('searchIpt');
+      if ($searchIpt) {
+        $searchIpt.focus();
       }
 
       this.loading = false;
-
-      this.cid = this.$route.params.cid;
-      this.headerVisible = !this.cid;
-      this.setTitle();
-
-      if (this.cid && !meta.stay) {
-        this.clear('init');
-        this.getList();
-      }
-      else {
-        const $searchIpt = document.getElementById('searchIpt');
-        if ($searchIpt) {
-          $searchIpt.focus();
-        }
-      }
-
-      // scroll event
       window.addEventListener('scroll', this.scrollFn);
 
       document.body.scrollTop = this.$route.meta.stay ? this.$store.state.searchScrollTop : 0;
@@ -107,70 +98,32 @@
       this.loading = true;
       window.removeEventListener('scroll', this.scrollFn);
     },
+    mounted(){
+      this.getRecommendList();
+    },
     methods: {
-      clear(action){
-        if (action == 'init') {
-          this.name = '';
-        }
+      clear(){
         this.list = [];
         this.start = 0;
         this.allLoaded = false;
-        this.bottomStatus = '';
+        this.topStatus = '';
         this.nodata = false;
       },
-      setTitle(){
-        let title = '';
-        switch (Number(this.cid)) {
-          case 1:
-            title = '女装';
-            break;
-          case 2:
-            title = '男装';
-            break;
-          case 3:
-            title = '母婴';
-            break;
-          case 4:
-            title = '百货';
-            break;
-          case 5:
-            title = '文体';
-            break;
-          case 6:
-            title = '内衣';
-            break;
-          case 7:
-            title = '美妆';
-            break;
-          case 8:
-            title = '家居';
-            break;
-          case 9:
-            title = '配饰';
-            break;
-          case 10:
-            title = '其他';
-            break;
-          default:
-            title = '搜索';
-            break;
-        }
-        this.$com.setTitle(title);
+      reset (){
+        this.name = '';
       },
       search(){
-        console.log('search')
         this.clear();
         this.getList();
       },
       getList(){
         let params = {
-          categoryId: this.cid,
           name: this.name,
           start: this.start,
           limit: 10
         };
-        this.loading = true;
         api.goods.query(params).then((r) => {
+          this.loading = false;
           if (r.success) {
             this.nodata = !r.list.length;
             this.start += r.list.length;
@@ -187,13 +140,17 @@
               this.$router.push('/login');
             }, 2000);
           }
-          this.loading = false;
         });
       },
-      handleBottomChange(status) {
-        this.bottomStatus = status;
+      loadTop() {
+        this.search();
+        this.$refs.loadmore.onTopLoaded();
+      },
+      handleTopChange(status) {
+        this.topStatus = status;
       },
       loadMore(){
+        this.loading = true;
         if (this.allLoaded)
           return;
         if (this.list.length < this.total) {
@@ -207,9 +164,57 @@
         let scrollTop = document.body.scrollTop;
         this.$store.dispatch('setSearchScrollTop', scrollTop);
       },
-    },
-    components: {
-      'my-footer': footer
+      getRecommendList(){
+        api.goods.queryRecommend().then((r) => {
+          if (r.success) {
+            this.recommendList = this.$com.convertGoods(r.list || []);
+          }
+          else {
+            Toast({
+              message: r.message,
+              duration: 1500
+            });
+          }
+        });
+      }
     }
   }
 </script>
+
+<style lang='scss' rel="stylesheet/scss" scoped>
+  .page-search {
+    .recommend-title {
+      position: relative;
+      margin: 0.5rem 0;
+      color: #979797;
+      font-size: 0.2rem;
+      text-align: center;
+      span {
+        position: relative;
+        display: inline-block;
+        padding: 0 0.25rem;
+        background-color: #f9f9f9;
+      }
+      &:before {
+        content: '';
+        position: absolute;
+        width: 88%;
+        left: 6%;
+        top: 0.13rem;
+        border-bottom: #979797 1px solid;
+      }
+    }
+    .recommend-list {
+      .title {
+        height: 0.54rem;
+        font-size: 0.24rem;
+        color: black;
+
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+    }
+  }
+</style>

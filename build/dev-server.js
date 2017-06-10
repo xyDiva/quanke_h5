@@ -72,6 +72,13 @@ proxyTable = {
     pathRewrite: {
       '^/withdraw': '/withdraw'
     }
+  },
+  '/channel': {
+    target: target,
+    changeOrigin: true,
+    pathRewrite: {
+      '^/channel': '/channel'
+    }
   }
 };
 

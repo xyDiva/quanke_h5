@@ -151,6 +151,8 @@
   import {Toast} from 'mint-ui'
   import api from '../assets/scripts/api'
 
+  import html2canvas from 'html2canvas'
+
   export default {
     data(){
       return {
@@ -181,6 +183,12 @@
         title: '券客：先领券-再淘宝 精选海量淘宝优惠券',
         link: link + '?reurl=' + encodeURIComponent(link + '#/share?userid=' + this.userId),
         desc: '专业买手推荐海量淘宝、天猫等百万家信誉商家最新折扣、优惠券'
+      });
+
+      // html2canvas init
+      html2canvas(document.body).then(function(canvas) {
+        let screenshot = canvas.toDataURL("image/jpeg");
+        console.log(screenshot)
       });
     },
     filters: {

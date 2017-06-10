@@ -143,6 +143,13 @@ api.goods = {
     }, (r) => {
       reject(r.body);
     });
+  }),
+  queryRecommend: () => new Promise((resolve, reject) => {
+    Vue.http.get(HOST_URL + 'goods/recommend').then((r) => {
+      resolve(r.body);
+    }, (r) => {
+      reject(r.body);
+    });
   })
 };
 
@@ -228,6 +235,17 @@ api.withdraw = {
       reject(r.body);
     });
   }),
+};
+
+// channel 发现
+api.channel = {
+  query: () => new Promise((resolve, reject) => {
+    Vue.http.get(HOST_URL + 'channel/query').then((r) => {
+      resolve(r.body);
+    }, (r) => {
+      reject(r.body);
+    });
+  })
 };
 
 module.exports = api;

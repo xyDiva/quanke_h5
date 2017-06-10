@@ -21,6 +21,10 @@ body {
   background-color: #f9f9f9;
 }
 
+ul, li {
+  list-style: none;
+}
+
 p, ul, h1, h2 {
   margin: 0;
   padding: 0;
@@ -160,6 +164,69 @@ html, body, #app {
   height: 100%;
 }
 
+/* 项目全局样式--common
+   ========================================================================== */
+
+.rel {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.flex {
+  display: -webkit-flex;
+  display: flex;
+}
+
+.flex-item {
+  -webkit-flex: 1;
+  flex: 1;
+}
+
+.flex-y {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-x-center {
+  justify-content: center;
+}
+
+.flex-x-between {
+  justify-content: space-between;
+}
+
+.flex-x-around {
+  justify-content: space-around;
+}
+
+.flex-y-center {
+  align-items: center;
+}
+
+.fs0 {
+  font-size: 0;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* 项目全局样式--header
    ========================================================================== */
 header {
@@ -178,7 +245,7 @@ header {
     flex: 1;
     position: relative;
     height: 0.6rem;
-    margin: 0.14rem 1rem;
+    margin: 0.14rem 0.88rem;
     input {
       display: block;
       width: 100%;
@@ -190,6 +257,9 @@ header {
       &::-webkit-input-placeholder {
         color: #979797;
       }
+      &::-webkit-search-cancel-button {
+        display: none;
+      }
     }
     button {
       position: absolute;
@@ -197,7 +267,12 @@ header {
       height: 0.6rem;
       right: 0;
       top: 0;
-      background: url("./assets/images/ico-search.png") center / 0.36rem no-repeat;
+      &.btn-search {
+        background: url("./assets/images/ico-search.png") center / 55% no-repeat;
+      }
+      &.btn-reset {
+        background: url("./assets/images/ico-reset.png") center / 55% no-repeat;
+      }
     }
   }
   a {
@@ -262,6 +337,7 @@ header {
   position: relative;
   margin-top: 0.05rem;
   font-size: 0.28rem;
+  background-color: white;
   a {
     display: flex;
     width: 100%;
@@ -270,70 +346,157 @@ header {
     }
   }
   .left {
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 2.8rem;
+    height: 2.8rem;
     background: palegoldenrod;
   }
   .right {
     flex: 1;
     -webkit-flex: 1;
-    padding: 0.25rem 0.45rem 0 0.35rem;
-  }
-  .col:nth-child(2) {
-    display: flex;
-    justify-content: space-between;
-    margin: 0.2rem 0;
+    padding-right: 0.3rem;
+    padding-left: 0.25rem;
   }
   .title {
+    margin-top: 0.3rem;
+    margin-bottom: 0.5rem;
     color: black;
-    font-size: 0.26rem;
-  }
-  .price {
-    color: #ea5513;
-    font-size: 0.36rem;
-    i {
-      font-size: 0.24rem;
-      vertical-align: baseline;
-    }
-  }
-  .tags {
-    padding-top: 0.05rem;
-    .tag {
-      display: inline-block;
-      width: 0.64rem;
-      line-height: 0.3rem;
-      margin-left: 0.05rem;
-      background-color: #ea5513;
-      border-radius: 4px;
-      color: white;
-      font-size: 0.18rem;
-      text-align: center;
-      vertical-align: text-top;
-      &.coupon {
-        width: 0.8rem;
-        background: transparent url("./assets/images/bg-coupon.png") center / cover no-repeat;
-        color: #ea5513;
-        border-radius: 0;
-      }
-    }
+    font-size: 0.24rem;
   }
   .original-price {
-    margin-right: 0.5rem;
-    font-size: 0.24rem;
+    margin-right: 0.2rem;
+    font-size: 0.18rem;
     color: #979797;
   }
   .sold {
-    font-size: 0.24rem;
+    font-size: 0.18rem;
     color: #979797;
+  }
+  .tags {
+    margin: 0.3rem 0 0.2rem;
+    .tag {
+      display: inline-block;
+      width: 0.8rem;
+      line-height: 0.3rem;
+      margin-right: 0.08rem;
+      border: #979797 1px solid;
+      border-radius: 0.08rem;
+      color: #979797;
+      font-size: 0.18rem;
+      text-align: center;
+      vertical-align: text-top;
+    }
+  }
+  .bottom {
+    height: 0.54rem;
+  }
+  .price {
+    padding-top: 0.1rem;
+    color: #ea5513;
+    font-size: 0.36rem;
+    span {
+      padding-right: 0.1rem;
+      font-size: 0.18rem;
+      color: #979797;
+    }
+    i {
+      font-size: 0.2rem;
+      vertical-align: baseline;
+    }
+  }
+  .coupon {
+    width: 1.44rem;
+    height: 0.54rem;
+    line-height: 0.54rem;
+    background: #ec5513;
+    border-radius: 0.05rem;
+    color: white;
+    font-size: 0.2rem;
+    text-align: center;
+  }
+}
+
+/* 项目全局样式--pro-item-2--产品列表样式2 搜索页的推荐列表和发现列表
+   ========================================================================== */
+.pro-item-2 {
+  position: relative;
+  width: 50%;
+  padding: 0.1rem;
+  background-color: white;
+  a {
+    width: 100%;
+  }
+  .img {
+    width: 100%;
+    height: 3.55rem;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
+  }
+  .content {
+    padding-left: 0.2rem;
+    padding-right: 0.3rem;
+  }
+  .desc {
+    max-height: 0.81rem;
+    margin-top: 0.2rem;
+    color: black;
+    font-size: 0.24rem;
+    text-align: justify;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+  .title {
+    margin: 0.2rem 0;
+    font-size: 0.2rem;
+    color: #979797;
+  }
+  .bottom {
+    height: 0.54rem;
+  }
+  .price {
+    padding-top: 0.1rem;
+    color: #ea5513;
+    font-size: 0.36rem;
+    span {
+      padding-right: 0.1rem;
+      font-size: 0.18rem;
+      color: #979797;
+    }
+    i {
+      font-size: 0.2rem;
+      vertical-align: baseline;
+    }
+  }
+  .sold {
+    height: 0.54rem;
+    line-height: 0.54rem;
+    font-size: 0.18rem;
+    color: #979797;
+  }
+  .coupon {
+    width: 1.44rem;
+    height: 0.54rem;
+    line-height: 0.54rem;
+    margin-right: -0.1rem;
+    background: #ec5513;
+    border-radius: 0.05rem;
+    color: white;
+    font-size: 0.2rem;
+    text-align: center;
   }
 }
 
 /* 项目全局样式--no-data
    ========================================================================== */
 .no-data {
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   text-align: center;
-  font-size: 0.28rem;
+  font-size: 0.24rem;
+  color: #979797;
 }
 
 /* 项目全局样式--item
@@ -416,3 +579,12 @@ footer {
     }
   }
 }
+.mint-loadmore-top, .mint-loadmore-bottom {
+  font-size: 0;
+
+}
+.mint-loadmore-text {
+  font-size: 0.24rem;
+}
+
+

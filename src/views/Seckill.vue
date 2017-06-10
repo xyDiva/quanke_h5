@@ -1,36 +1,30 @@
-<style lang='scss' rel="stylesheet/scss" scoped>
-  .page-seckill {
-
-  }
-</style>
-
 <template>
   <div class="page-seckill">
-    <div class="page-loadmore-wrapper" ref="wrapper"
-         v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10" v-if="list.length">
-      <div class="items">
-        <div class="pro-item" v-for="item in list">
-          <router-link :to="'/item/'+item.id">
-            <div class="left"><img v-if="item.pic" :src="item.pic"></div>
-            <div class="right">
-              <div class="col title">{{item.title}}</div>
-              <div class="col">
-                <div class="price"><i>&yen;</i>{{item.priceA}}<i>.{{item.priceB}}</i></div>
-                <div class="tags">
-                  <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon" v-if="item.coupon">{{item.coupon}}元券</span>
+    <div class="page-loadmore-wrapper" ref="wrapper" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading"
+         infinite-scroll-distance="10" v-if="list.length">
+      <mt-loadmore :autoFill="false" :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
+        <div class="items">
+          <div class="pro-item" v-for="item in list">
+            <router-link :to="'/item/'+item.id">
+              <div class="left"><img v-if="item.pic" :src="item.pic"></div>
+              <div class="right">
+                <div class="col title">{{item.title}}</div>
+                <div class="col fs0">
+                  <span class="original-price"><del>原价：{{item.price}}</del></span>
+                  <span class="sold">已售：{{item.biz30day}}</span>
+                </div>
+                <div class="col tags fs0">
+                  <span class="tag" v-for="tag in item.tags">{{tag}}</span>
+                </div>
+                <div class="flex flex-x-between bottom">
+                  <div class="price"><span>券后价</span><i>&yen;</i>{{item.priceA}}<i>.{{item.priceB}}</i></div>
+                  <div class="coupon" v-if="item.coupon">立减 {{item.coupon}} 元</div>
                 </div>
               </div>
-              <div class="col">
-                <span class="original-price">原价：<del>{{item.price}}</del></span>
-                <span class="sold">已售：{{item.biz30day}}</span>
-              </div>
-            </div>
-          </router-link>
+            </router-link>
+          </div>
         </div>
-      </div>
-      <div slot="bottom" class="mint-loadmore-bottom">
-        <span v-show="loading"><mt-spinner type="snake"></mt-spinner></span>
-      </div>
+      </mt-loadmore>
     </div>
     <div class="no-data" v-if="nodata">暂无记录</div>
     <div class="wrap-footer">
@@ -41,12 +35,13 @@
 
 <script>
   import Vue from 'vue'
-  import {Toast, InfiniteScroll, Spinner} from 'mint-ui'
+  import {Toast, InfiniteScroll, Spinner, Loadmore} from 'mint-ui'
   import api from '../assets/scripts/api'
   import footer from '../components/Footer'
 
   Vue.use(InfiniteScroll);
   Vue.component(Spinner.name, Spinner);
+  Vue.component(Loadmore.name, Loadmore);
 
   export default {
     data(){
@@ -54,12 +49,10 @@
         list: [],
         start: 0,
         total: 0,
-
         allLoaded: false,
-        bottomStatus: '',
         loading: false,
-
-        nodata: false
+        nodata: false,
+        topStatus: ''
       }
     },
     activated(){
@@ -90,8 +83,8 @@
           start: this.start,
           limit: 10
         };
-        this.loading = true;
         api.goods.query(params).then((r) => {
+          this.loading = false;
           if (r.success) {
             this.nodata = !r.list.length;
             this.start += r.list.length;
@@ -101,13 +94,10 @@
           else {
             Toast(r.message);
           }
-          this.loading = false;
         });
       },
-      handleBottomChange(status) {
-        this.bottomStatus = status;
-      },
       loadMore() {
+        this.loading = true;
         if (this.allLoaded)
           return;
         if (this.list.length < this.total) {
@@ -117,9 +107,24 @@
           this.allLoaded = true;
         }
       },
+      loadTop() {
+        this.clear();
+        this.getList();
+        this.$refs.loadmore.onTopLoaded();
+      },
+      handleTopChange(status) {
+        this.topStatus = status;
+      },
       scrollFn(){
         let scrollTop = document.body.scrollTop;
         this.$store.dispatch('setSeckillScrollTop', scrollTop);
+      },
+      clear(){
+        this.list = [];
+        this.start = 0;
+        this.total = 0;
+        this.allLoaded = false;
+        this.topStatus = '';
       }
     },
     components: {

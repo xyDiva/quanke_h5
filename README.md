@@ -34,3 +34,4 @@ cnpm run build
 文中有说通过增加img的内边距扩大接触面积...暂测无效;;;  
 reference:[微信内置浏览器 长按识别二维码 功能的两三个坑与解决方案](http://devework.com/weixin-qrcode-bug2.html)    
 
+7.vue-infinite-scroll无限触发loadmore方法

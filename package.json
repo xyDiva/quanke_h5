@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "clipboard": "^1.6.1",
+    "html2canvas": "^0.5.0-beta4",
     "mint-ui": "^2.2.0",
     "vue": "^2.0.1",
     "vue-resource": "^1.0.3",

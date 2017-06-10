@@ -45,6 +45,9 @@ let common = {
   // 商品列表数据处理
   convertGoods(list){
     list.forEach((item)=>{
+      if(typeof item.sellPrice == 'number') {
+        item.sellPrice += '';
+      }
       let x = item.sellPrice.split('.');
       item.priceA = x[0];
       item.priceB = x[1];

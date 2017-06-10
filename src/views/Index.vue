@@ -1,70 +1,7 @@
-<style lang='scss' rel="stylesheet/scss" scoped>
-  .page-index {
-    .banner {
-      margin-bottom: 0.05rem;
-      img {
-        width: 100%;
-      }
-    }
-    .category {
-      display: flex;
-      flex-wrap: wrap;
-      a {
-        width: 20%;
-        height: 1.5rem;
-        margin-bottom: 0.01rem;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        &:nth-child(1) {
-          background-image: url("../assets/images/ico-women's.png");
-        }
-        &:nth-child(2) {
-          background-image: url("../assets/images/ico-men's.png");
-        }
-        &:nth-child(3) {
-          background-image: url("../assets/images/ico-baby.png");
-        }
-        &:nth-child(4) {
-          background-image: url("../assets/images/ico-dpt.png");
-        }
-        &:nth-child(5) {
-          background-image: url("../assets/images/ico-wt.png");
-        }
-        &:nth-child(6) {
-          background-image: url("../assets/images/ico-underwear.png");
-        }
-        &:nth-child(7) {
-          background-image: url("../assets/images/ico-beauty.png");
-        }
-        &:nth-child(8) {
-          background-image: url("../assets/images/ico-home.png");
-        }
-        &:nth-child(9) {
-          background-image: url("../assets/images/ico-accessory.png");
-        }
-        &:nth-child(10) {
-          background-image: url("../assets/images/ico-others.png");
-        }
-      }
-    }
-    .btn-top {
-      position: fixed;
-      width: 0.75rem;
-      height: 0.75rem;
-      right: 0.4rem;
-      bottom: 1.18rem;
-      background: url("../assets/images/btn-top.png") center / contain no-repeat;
-    }
-  }
-</style>
-
 <template>
   <div class="page-index">
     <header>
-      <router-link class="search" to="/search"><input type="text" placeholder="输入需要寻找的商品...">
-        <button></button>
-      </router-link>
+      <router-link class="search" to="/search"><input type="text" placeholder="输入需要寻找的商品"></router-link>
       <a class="left" href="javascript:;">
         <i class="ico logo"></i>
       </a>
@@ -79,41 +16,47 @@
         </a>
       </mt-swipe-item>
     </mt-swipe>
-    <div class="category">
-      <router-link to="/search/1"></router-link>
-      <router-link to="/search/2"></router-link>
-      <router-link to="/search/3"></router-link>
-      <router-link to="/search/4"></router-link>
-      <router-link to="/search/5"></router-link>
-      <router-link to="/search/6"></router-link>
-      <router-link to="/search/7"></router-link>
-      <router-link to="/search/8"></router-link>
-      <router-link to="/search/9"></router-link>
-      <router-link to="/search/10"></router-link>
+    <div class="nav-bar-wrap">
+      <div id="navBar" class="nav-bar" :class="{fixed:navBarFixed}">
+        <ul>
+          <li :class="{active:!typeId}" @click="switchTab('')">全部</li>
+          <li :class="{active:typeId==1}" @click="switchTab(1)">女装</li>
+          <li :class="{active:typeId==2}" @click="switchTab(2)">男装</li>
+          <li :class="{active:typeId==3}" @click="switchTab(3)">母婴</li>
+          <li :class="{active:typeId==4}" @click="switchTab(4)">百货</li>
+          <li :class="{active:typeId==5}" @click="switchTab(5)">文体</li>
+          <li :class="{active:typeId==6}" @click="switchTab(6)">内衣</li>
+          <li :class="{active:typeId==7}" @click="switchTab(7)">美妆</li>
+          <li :class="{active:typeId==8}" @click="switchTab(8)">家居</li>
+          <li :class="{active:typeId==9}" @click="switchTab(9)">配饰</li>
+          <li :class="{active:typeId==10}" @click="switchTab(10)">其他</li>
+        </ul>
+      </div>
     </div>
-    <div class="page-loadmore-wrapper" ref="wrapper"
-         v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10" v-if="list.length">
-      <div class="pro-item" v-for="item in list">
-        <router-link :to="'/item/'+item.id">
-          <div class="left"><img v-if="item.pic" :src="item.pic"></div>
-          <div class="right">
-            <div class="col title">{{item.title}}</div>
-            <div class="col">
-              <div class="price"><i>&yen;</i>{{item.priceA}}<i>.{{item.priceB}}</i></div>
-              <div class="tags">
-                <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon" v-if="item.coupon">{{item.coupon}}元券</span>
+
+    <div class="page-loadmore-wrapper" ref="wrapper" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading"
+         infinite-scroll-distance="10" v-if="list.length">
+      <mt-loadmore :autoFill="false" :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
+        <div class="pro-item" v-for="item in list">
+          <router-link :to="'/item/'+item.id">
+            <div class="left"><img v-if="item.pic" :src="item.pic"></div>
+            <div class="right">
+              <div class="col title">{{item.title}}</div>
+              <div class="col fs0">
+                <span class="original-price"><del>原价：{{item.price}}</del></span>
+                <span class="sold">已售：{{item.biz30day}}</span>
+              </div>
+              <div class="col tags fs0">
+                <span class="tag" v-for="tag in item.tags">{{tag}}</span>
+              </div>
+              <div class="flex flex-x-between bottom">
+                <div class="price"><span>券后价</span><i>&yen;</i>{{item.priceA}}<i>.{{item.priceB}}</i></div>
+                <div class="coupon" v-if="item.coupon">立减 {{item.coupon}} 元</div>
               </div>
             </div>
-            <div class="col">
-              <span class="original-price">原价：<del>{{item.price}}</del></span>
-              <span class="sold">已售：{{item.biz30day}}</span>
-            </div>
-          </div>
-        </router-link>
-      </div>
-      <div slot="bottom" class="mint-loadmore-bottom">
-        <span v-show="loading"><mt-spinner type="snake"></mt-spinner></span>
-      </div>
+          </router-link>
+        </div>
+      </mt-loadmore>
     </div>
     <div class="no-data" v-if="nodata">暂无记录</div>
     <div class="btn-top" v-if="topBtnVisible" @click="toTop"></div>
@@ -125,7 +68,7 @@
 
 <script>
   import Vue from 'vue'
-  import {Toast, Swipe, SwipeItem, Spinner, InfiniteScroll} from 'mint-ui'
+  import {Toast, Swipe, SwipeItem, Spinner, InfiniteScroll, Loadmore} from 'mint-ui'
   import api from '../assets/scripts/api'
   import footer from '../components/Footer'
 
@@ -133,6 +76,7 @@
   Vue.component(SwipeItem.name, SwipeItem);
   Vue.use(InfiniteScroll);
   Vue.component(Spinner.name, Spinner);
+  Vue.component(Loadmore.name, Loadmore);
 
   export default {
     data(){
@@ -140,33 +84,36 @@
         bannerHeight: document.body.clientWidth / 2,
         bannerList: [],
 
+        navBarOffsetTop: 0,
+        navBarFixed: false,
+
+        typeId: '',
         list: [],
         start: 0,
         total: 0,
-
         allLoaded: false,
-        bottomStatus: '',
         loading: false,
-
         nodata: false,
+        topStatus: '',
 
-        topBtnVisible: false,
-
-        user: this.$store.getters.user
+        topBtnVisible: false
+      }
+    },
+    computed: {
+      user(){
+        return this.$store.getters.user || {}
       }
     },
     activated(){
-      this.loading =false;
-      // scroll event
+      this.loading = false;
       window.addEventListener('scroll', this.scrollFn);
-
       document.body.scrollTop = this.$route.meta.stay ? this.$store.state.indexScrollTop : 0;
 
-      console.log('index activate')
       this.getUser();
     },
     deactivated(){
       this.loading = true;
+      this.navBarFixed = false;
       window.removeEventListener('scroll', this.scrollFn);
     },
     mounted(){
@@ -174,7 +121,6 @@
       api.banner.query().then((r) => {
         if (r.success) {
           let list = r.list || [];
-          this.nodata = !list.length;
           list.forEach((item) => {
             item.url = api.banner.getImg(item.fileName);
           });
@@ -186,10 +132,13 @@
       });
 
       // get goods
-      this.getList();
+      this.switchTab('');
 
       // 微信分享
       this.$com.wxInit();
+
+      // set nav bar offsetTop
+      this.navBarOffsetTop = document.getElementById('navBar').offsetTop;
     },
     methods: {
       getUser(){
@@ -217,18 +166,32 @@
         }
         document.getElementById('qdLink').href = href;
       },
+      clear(){
+        this.list = [];
+        this.start = 0;
+        this.total = 0;
+        this.allLoaded = false;
+        this.topStatus = '';
+      },
+      switchTab(typeId){
+        this.typeId = typeId;
+        this.timestamp = +new Date();
+        this.clear();
+        this.getList();
+      },
       getList(){
-        this.loading = true;
         let params = {
+          categoryId: this.typeId,
           start: this.start,
           limit: 10
         };
         api.goods.query(params).then((r) => {
           this.loading = false;
           if (r.success) {
-            this.start += r.list.length;
             this.total = r.total;
+            this.start += r.list.length;
             this.list = this.list.concat(this.$com.convertGoods(r.list || []));
+            this.nodata = !this.list.length;
           }
           else {
             Toast({
@@ -242,18 +205,9 @@
           }
         });
       },
-      toTop(){
-        document.body.scrollTop = 0;
-      },
-      scrollFn(){
-        let scrollTop = document.body.scrollTop;
-        this.topBtnVisible = scrollTop > 600;
-        this.$store.dispatch('setIndexScrollTop',scrollTop);
-      },
-      handleBottomChange(status) {
-        this.bottomStatus = status;
-      },
+      // 下拉刷新和tab切换会自动触发loadMore
       loadMore(){
+        this.loading = true;
         if (this.allLoaded)
           return;
         if (this.list.length < this.total) {
@@ -261,6 +215,24 @@
         } else {
           this.allLoaded = true;
         }
+      },
+      loadTop() {
+        this.switchTab(this.typeId);
+        this.$refs.loadmore.onTopLoaded();
+      },
+      handleTopChange(status) {
+        this.topStatus = status;
+      },
+      toTop(){
+        document.body.scrollTop = 0;
+      },
+      scrollFn(){
+        let scrollTop = document.body.scrollTop;
+        this.topBtnVisible = scrollTop > 600;
+        this.$store.dispatch('setIndexScrollTop', scrollTop);
+
+        // navbar
+        this.navBarFixed = scrollTop >= this.navBarOffsetTop;
       }
     },
     components: {
@@ -268,3 +240,64 @@
     }
   }
 </script>
+
+<style lang='scss' rel="stylesheet/scss" scoped>
+  .page-index {
+    .banner {
+      margin-bottom: 0.05rem;
+      img {
+        width: 100%;
+      }
+    }
+    .nav-bar-wrap {
+      height: 0.74rem;
+      overflow: hidden;
+    }
+    .nav-bar {
+      width: 100%;
+      height: 0.9rem;
+      line-height: 0.74rem;
+      padding: 0 0.18rem;
+      background-color: white;
+      overflow-x: scroll;
+      -webkit-overflow-scrolling: touch;
+      z-index: 11;
+      &.fixed {
+        height: 0.74rem !important;
+      }
+      ul {
+        width: 9.5rem;
+        height: 100%;
+        li {
+          position: relative;
+          float: left;
+          line-height: 0.74rem;
+          margin: 0 0.18rem;
+          color: #979797;
+          font-size: 0.24rem;
+          &.active {
+            color: #ea5513;
+            &:after {
+              content: '';
+              position: absolute;
+              width: 0.55rem;
+              bottom: 0.14rem;
+              left: 50%;
+              margin-left: -0.27rem;
+              border-bottom: #ea5513 1px solid;
+              z-index: 1;
+            }
+          }
+        }
+      }
+    }
+    .btn-top {
+      position: fixed;
+      width: 0.75rem;
+      height: 0.75rem;
+      right: 0.4rem;
+      bottom: 1.18rem;
+      background: url("../assets/images/btn-top.png") center / contain no-repeat;
+    }
+  }
+</style>

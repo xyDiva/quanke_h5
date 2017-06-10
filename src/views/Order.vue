@@ -1,48 +1,3 @@
-<style lang='scss' rel="stylesheet/scss" scoped>
-  .page-order {
-    .page-loadmore-wrapper {
-      padding-bottom: 1rem;
-    }
-    .order-item {
-      padding: 0.25rem 0.5rem 0.25rem 0.35rem;
-      margin-bottom: 0.05rem;
-      background-color: white;
-      display: flex;
-      color: #979797;
-      font-size: 0.2rem;
-      .screenshot {
-        width: 1.5rem;
-        height: 1.5rem;
-        border: #979797 1px solid;
-        overflow:hidden;
-        img {
-          width:100%;
-        }
-      }
-      .center {
-        flex:1;
-        padding-left: 0.35rem;
-        .time {
-          margin: 0.25rem 0 0.2rem;
-        }
-      }
-      .status {
-        width: 1.15rem;
-        background: center / contain no-repeat;
-        &.s0 {
-          background-image: url("../assets/images/order-s0.png");
-        }
-        &.s1 {
-          background-image: url("../assets/images/order-s1.png");
-        }
-        &.s2 {
-          background-image: url("../assets/images/order-s2.png");
-        }
-      }
-    }
-  }
-</style>
-
 <template>
   <div class="page-order">
     <div class="page-loadmore-wrapper" ref="wrapper" v-if="list.length">
@@ -53,6 +8,7 @@
             <div class="col screenshot"><img v-if="item.imgUrl" :src="item.imgUrl"></div>
             <div class="col center">
               <p class="time">{{item.createTime|convertTime}}</p>
+              <p class="name" v-if="item.userDesc">{{item.userDesc}}</p>
               <p class="reason" v-if="item.refuseRemark">失败原因：{{item.refuseRemark}}</p>
             </div>
             <div class="col status" :class="{s0:item.status==0,s1:item.status==1,s2:item.status==2}"></div>
@@ -162,3 +118,48 @@
     }
   }
 </script>
+
+<style lang='scss' rel="stylesheet/scss" scoped>
+  .page-order {
+    .page-loadmore-wrapper {
+      padding-bottom: 1rem;
+    }
+    .order-item {
+      padding: 0.25rem 0.5rem 0.25rem 0.35rem;
+      margin-bottom: 0.05rem;
+      background-color: white;
+      display: flex;
+      color: #979797;
+      font-size: 0.2rem;
+      .screenshot {
+        width: 1.5rem;
+        height: 1.5rem;
+        border: #979797 1px solid;
+        overflow:hidden;
+        img {
+          width:100%;
+        }
+      }
+      .center {
+        flex:1;
+        padding-left: 0.35rem;
+        .time {
+          margin: 0.25rem 0 0.2rem;
+        }
+      }
+      .status {
+        width: 1.15rem;
+        background: center / contain no-repeat;
+        &.s0 {
+          background-image: url("../assets/images/order-s0.png");
+        }
+        &.s1 {
+          background-image: url("../assets/images/order-s1.png");
+        }
+        &.s2 {
+          background-image: url("../assets/images/order-s2.png");
+        }
+      }
+    }
+  }
+</style>
