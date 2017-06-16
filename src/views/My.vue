@@ -109,39 +109,23 @@
   import footer from '../components/Footer'
 
   export default {
-    data(){
-      return {
-        user: {}
+    computed: {
+      user(){
+        return this.$store.state.user || {};
       }
     },
     mounted(){
-      api.user.getUserInfo().then((r) => {
-        if (r.success && r.value) {
-          this.user = r.value;
-          this.$store.dispatch('setUser', this.user);
-        }
-        else {
-          this.unLoggedHandler(r);
-        }
-      }).catch((r) => {
-        if (r.status == 403) {
-          this.unLoggedHandler();
-        }
-      })
-    },
-    methods: {
-      unLoggedHandler(r){
-        this.user = {};
-        this.$store.dispatch('setUser', {});
+      if (this.user == {} || !this.user) {
         Toast({
-          message: r && r.message || '请登录',
+          message: '请登录',
           duration: 1500
         });
-
         setTimeout(() => {
           this.$router.push('/login');
         }, 2000);
-      },
+      }
+    },
+    methods: {
       checkBeforeRoute(idx){
         if (!this.user.tel) {
           if (idx == 1) {

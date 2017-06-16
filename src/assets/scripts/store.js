@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
 Vue.use(Vuex);
 
@@ -10,10 +10,11 @@ const store = new Vuex.Store({
     indexScrollTop: 0,                    // 记录首页列表位置
     searchScrollTop: 0,                   // 记录查询页列表位置
     seckillScrollTop: 0,                  // 记录秒杀页列表位置
+    channelScrollTop: 0,                  // 记录频道页列表位置
 
     isSelect: false,                      // 选择地址页面
 
-    channel:{}                            // 查看频道列表
+    channel: {}                            // 查看频道列表
   },
   getters: {
     user: state => state.user,
@@ -35,11 +36,13 @@ const store = new Vuex.Store({
     setSeckillScrollTop (state, seckillScrollTop) {
       state.seckillScrollTop = seckillScrollTop;
     },
+    setChannelScrollTop (state, channelScrollTop) {
+      state.channelScrollTop = channelScrollTop;
+    },
     setIsSelect(state, isSelect) {
       state.isSelect = isSelect;
     },
-    setChannel(state,channel) {
-      "use strict";
+    setChannel(state, channel) {
       state.channel = channel;
     }
   },
@@ -58,6 +61,9 @@ const store = new Vuex.Store({
     },
     setSeckillScrollTop (context, seckillScrollTop) {
       context.commit('setSeckillScrollTop', seckillScrollTop);
+    },
+    setChannelScrollTop (context, channelScrollTop) {
+      context.commit('setChannelScrollTop', channelScrollTop);
     },
     setIsSelect (context, isSelect) {
       context.commit('setIsSelect', isSelect);

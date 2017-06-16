@@ -267,11 +267,12 @@ header {
       height: 0.6rem;
       right: 0;
       top: 0;
+      border-radius: 6px;
       &.btn-search {
         background: url("./assets/images/ico-search.png") center / 55% no-repeat;
       }
       &.btn-reset {
-        background: url("./assets/images/ico-reset.png") center / 55% no-repeat;
+        background: white url("./assets/images/ico-reset.png") center / 55% no-repeat;
       }
     }
   }
@@ -357,8 +358,9 @@ header {
     padding-left: 0.25rem;
   }
   .title {
-    margin-top: 0.3rem;
-    margin-bottom: 0.5rem;
+    height: 0.54rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.4rem;
     color: black;
     font-size: 0.24rem;
   }
@@ -386,9 +388,6 @@ header {
       vertical-align: text-top;
     }
   }
-  .bottom {
-    height: 0.54rem;
-  }
   .price {
     padding-top: 0.1rem;
     color: #ea5513;
@@ -403,15 +402,18 @@ header {
       vertical-align: baseline;
     }
   }
-  .coupon {
-    width: 1.44rem;
+  .bottom {
     height: 0.54rem;
-    line-height: 0.54rem;
-    background: #ec5513;
-    border-radius: 0.05rem;
-    color: white;
-    font-size: 0.2rem;
-    text-align: center;
+    .coupon {
+      width: 1.44rem;
+      height: 0.54rem;
+      line-height: 0.54rem;
+      background: #ec5513;
+      border-radius: 0.05rem;
+      color: white;
+      font-size: 0.2rem;
+      text-align: center;
+    }
   }
 }
 
@@ -456,37 +458,37 @@ header {
   }
   .bottom {
     height: 0.54rem;
-  }
-  .price {
-    padding-top: 0.1rem;
-    color: #ea5513;
-    font-size: 0.36rem;
-    span {
-      padding-right: 0.1rem;
+    .price {
+      padding-top: 0.1rem;
+      color: #ea5513;
+      font-size: 0.36rem;
+      span {
+        padding-right: 0.1rem;
+        font-size: 0.18rem;
+        color: #979797;
+      }
+      i {
+        font-size: 0.2rem;
+        vertical-align: baseline;
+      }
+    }
+    .sold {
+      height: 0.54rem;
+      line-height: 0.54rem;
       font-size: 0.18rem;
       color: #979797;
     }
-    i {
+    .coupon {
+      width: 1.44rem;
+      height: 0.54rem;
+      line-height: 0.54rem;
+      margin-right: -0.1rem;
+      background: #ec5513;
+      border-radius: 0.05rem;
+      color: white;
       font-size: 0.2rem;
-      vertical-align: baseline;
+      text-align: center;
     }
-  }
-  .sold {
-    height: 0.54rem;
-    line-height: 0.54rem;
-    font-size: 0.18rem;
-    color: #979797;
-  }
-  .coupon {
-    width: 1.44rem;
-    height: 0.54rem;
-    line-height: 0.54rem;
-    margin-right: -0.1rem;
-    background: #ec5513;
-    border-radius: 0.05rem;
-    color: white;
-    font-size: 0.2rem;
-    text-align: center;
   }
 }
 

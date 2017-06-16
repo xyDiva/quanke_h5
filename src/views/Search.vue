@@ -4,7 +4,7 @@
       <div class="search">
         <form action="#" onsubmit="return false;">
           <input type="search" id="searchIpt" placeholder="输入需要寻找的商品..." v-model="name">
-          <button class="btn-search" @click="search" v-show="!name"></button>
+          <button class="btn-search" @click="search"></button>
           <button class="btn-reset" @click="reset" v-show="name"></button>
         </form>
       </div>
@@ -12,7 +12,7 @@
         <i class="ico back"></i>
       </router-link>
     </header>
-    <div class="page-loadmore-wrapper" ref="wrapper" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading"
+    <div class="page-loadmore-wrapper" ref="wrapper" v-infinite-scroll="loadMore" infinite-scroll-disabled="false"
          infinite-scroll-distance="10" v-if="list.length">
       <mt-loadmore :autoFill="false" :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
         <div class="pro-item" v-if="list.length" v-for="item in list">
@@ -59,7 +59,7 @@
 
 <script>
   import Vue from 'vue'
-  import {Toast, InfiniteScroll, Spinner,Loadmore} from 'mint-ui'
+  import {Toast, InfiniteScroll, Spinner, Loadmore} from 'mint-ui'
   import api from '../assets/scripts/api'
 
   Vue.use(InfiniteScroll);
@@ -73,7 +73,7 @@
 
         list: [],
         start: 0,
-        total:0,
+        total: 0,
         allLoaded: false,
         loading: false,
         nodata: false,
@@ -83,7 +83,6 @@
       }
     },
     activated(){
-
       const $searchIpt = document.getElementById('searchIpt');
       if ($searchIpt) {
         $searchIpt.focus();
@@ -97,6 +96,8 @@
     deactivated(){
       this.loading = true;
       window.removeEventListener('scroll', this.scrollFn);
+
+      this.reset();
     },
     mounted(){
       this.getRecommendList();
@@ -111,6 +112,7 @@
       },
       reset (){
         this.name = '';
+        this.clear();
       },
       search(){
         this.clear();

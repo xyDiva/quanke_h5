@@ -5,11 +5,11 @@ const VueResource = require('vue-resource');
 // import Vue from 'vue'
 // import VueRouter from 'vue-router'
 // import VueResource from 'vue-resource'
-// import { Lazyload } from 'mint-ui'
+import { Lazyload } from 'mint-ui'
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
-// Vue.use(Lazyload);
+Vue.use(Lazyload);
 
 
 /* global resources */
@@ -47,7 +47,7 @@ import Share from './views/Share'
 
 const routes = [
   {path: '/login', component: Login, meta: {title: '登录'}},
-  {path: '/bind', component: Bind, meta: {title: '手机绑定'}},
+  {path: '/bind', component: Bind, meta: {title: '手机绑定'}},git
   {path: '/', redirect: '/index'},
   {path: '/index', component: Index, meta: {keep: true, title: '券客商城'}},
   {path: '/item/:id', component: Item, meta: {title: '券客商城'}},

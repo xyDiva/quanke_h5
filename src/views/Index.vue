@@ -1,7 +1,9 @@
 <template>
   <div class="page-index">
     <header>
-      <router-link class="search" to="/search"><input type="text" placeholder="输入需要寻找的商品"></router-link>
+      <router-link class="search" to="/search"><input type="text" placeholder="输入需要寻找的商品">
+        <button class="btn-search"></button>
+      </router-link>
       <a class="left" href="javascript:;">
         <i class="ico logo"></i>
       </a>
@@ -112,8 +114,8 @@
       this.getUser();
     },
     deactivated(){
-      this.loading = true;
       this.navBarFixed = false;
+      this.loading = true;
       window.removeEventListener('scroll', this.scrollFn);
     },
     mounted(){
@@ -167,7 +169,6 @@
         document.getElementById('qdLink').href = href;
       },
       clear(){
-        this.list = [];
         this.start = 0;
         this.total = 0;
         this.allLoaded = false;
@@ -176,10 +177,13 @@
       switchTab(typeId){
         this.typeId = typeId;
         this.timestamp = +new Date();
+        if (document.body.scrollTop > this.navBarOffsetTop) {
+          document.body.scrollTop = this.navBarOffsetTop;
+        }
         this.clear();
-        this.getList();
+        this.getList(true);
       },
-      getList(){
+      getList(clearList){
         let params = {
           categoryId: this.typeId,
           start: this.start,
@@ -190,7 +194,12 @@
           if (r.success) {
             this.total = r.total;
             this.start += r.list.length;
-            this.list = this.list.concat(this.$com.convertGoods(r.list || []));
+            if (clearList) {
+              this.list = this.$com.convertGoods(r.list || []);
+            }
+            else {
+              this.list = this.list.concat(this.$com.convertGoods(r.list || []));
+            }
             this.nodata = !this.list.length;
           }
           else {
@@ -205,12 +214,13 @@
           }
         });
       },
-      // 下拉刷新和tab切换会自动触发loadMore
       loadMore(){
         this.loading = true;
-        if (this.allLoaded)
+        if (this.allLoaded) {
           return;
+        }
         if (this.list.length < this.total) {
+          // this.loading = true; loading设置放在这里会导致下拉刷新和tab切换无限触发loadMore
           this.getList();
         } else {
           this.allLoaded = true;

@@ -1,5 +1,6 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
+var target = 'http://qktest.notepasses.com';
 
 module.exports = {
   build: {
@@ -21,7 +22,100 @@ module.exports = {
     port: 1201,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/user': {
+        target: target,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/user': '/user'
+        }
+      },
+      '/notify': {
+        target: target,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/notify': '/notify'
+        }
+      },
+      '/goods': {
+        target: target,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/goods': '/goods'
+        }
+      },
+      '/banner': {
+        target: target,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/banner': '/banner'
+        }
+      },
+      '/wx': {
+        target: target,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/wx': '/wx'
+        }
+      },
+      '/address': {
+        target: target,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/address': '/address'
+        }
+      },
+      '/rebate': {
+        target: target,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/rebate': '/rebate'
+        }
+      },
+      '/withdraw': {
+        target: target,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/withdraw': '/withdraw'
+        }
+      },
+      '/channel': {
+        target: target,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/channel': '/channel'
+        }
+      },
+
+      '/upload/base64': {
+        target: 'http://120.26.125.112:8888',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/upload/base64': '/upload/base64/quanke-test'
+        }
+      },
+      '/upload': {
+        target: 'http://120.26.125.112:8888',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/upload': '/upload/quanke-test'
+        }
+      },
+      '/image': {
+        target: 'http://120.26.125.112:8888',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/image': '/image/quanke-test'
+        }
+      },
+      '/cgi-bin':{
+        target: 'https://mp.weixin.qq.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/cgi-bin': '/cgi-bin'
+        }
+      }
+    },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

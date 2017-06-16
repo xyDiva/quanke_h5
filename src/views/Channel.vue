@@ -1,8 +1,8 @@
 <template>
   <div class="page-channel">
-    <div class="banner fs0"><img :src="'banner/pic?fileName='+channel.detailPic" width="100%"></div>
+    <div class="banner fs0"><img :src="channel.url" width="100%"></div>
     <div class="page-loadmore-wrapper flex flex-wrap" ref="wrapper"
-         v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10"
+         v-infinite-scroll="loadMore" infinite-scroll-disabled="false" infinite-scroll-distance="10"
          v-if="list.length">
       <div class="pro-item-2" v-for="item in list">
         <router-link :to="'/item/'+item.id">
@@ -38,42 +38,43 @@
       return {
         list: [],
         start: 0,
-
         allLoaded: false,
         bottomStatus: '',
         loading: false,
-
         nodata: false
       }
     },
     computed: {
       channel(){
-        return this.$store.state.channel || {};
+        let channel = this.$store.state.channel || {};
+        channel.url = api.banner.getImg(channel.detailPic);
+        return channel;
       }
     },
     activated(){
-//      this.loading = false;
-//
-//      // scroll event
-//      window.addEventListener('scroll', this.scrollFn);
-//
-//      document.body.scrollTop = this.$route.meta.stay ? this.$store.state.searchScrollTop : 0;
-    },
-//    deactivated(){
-//      this.loading = true;
-//      window.removeEventListener('scroll', this.scrollFn);
-//    },
-    mounted(){
+      this.clear();
       this.getList();
+      this.loading = false;
+
+      // scroll event
+      window.addEventListener('scroll', this.scrollFn);
+
+      document.body.scrollTop = this.$route.meta.stay ? this.$store.state.channelScrollTop : 0;
+    },
+    deactivated(){
+      this.loading = true;
+      window.removeEventListener('scroll', this.scrollFn);
+    },
+    mounted(){
     },
     methods: {
-//      clear(){
-//        this.list = [];
-//        this.start = 0;
-//        this.allLoaded = false;
-//        this.bottomStatus = '';
-//        this.nodata = false;
-//      },
+      clear(){
+        this.list = [];
+        this.start = 0;
+        this.allLoaded = false;
+        this.bottomStatus = '';
+        this.nodata = false;
+      },
 //      search(){
 //        this.clear();
 //        this.getList();
@@ -84,8 +85,8 @@
           start: this.start,
           limit: 10
         };
-        this.loading = true;
         api.goods.query(params).then((r) => {
+          this.loading = false;
           if (r.success) {
             this.nodata = !r.list.length;
             this.start += r.list.length;
@@ -102,13 +103,13 @@
               this.$router.push('/login');
             }, 2000);
           }
-          this.loading = false;
         });
       },
       handleBottomChange(status) {
         this.bottomStatus = status;
       },
       loadMore(){
+        this.loading = true;
         if (this.allLoaded)
           return;
         if (this.list.length < this.total) {
@@ -118,10 +119,10 @@
           this.allLoaded = true;
         }
       },
-//      scrollFn(){
-//        let scrollTop = document.body.scrollTop;
-//        this.$store.dispatch('setSearchScrollTop', scrollTop);
-//      }
+      scrollFn(){
+        let scrollTop = document.body.scrollTop;
+        this.$store.dispatch('setChannelScrollTop', scrollTop);
+      }
     }
   }
 </script>
@@ -131,7 +132,7 @@
     .pro-item-2 {
       .title {
         overflow: hidden;
-        text-overflow:ellipsis;
+        text-overflow: ellipsis;
         white-space: nowrap;
       }
     }

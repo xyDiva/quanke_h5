@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import {Promise} from 'es6-promise'
+import Vue from "vue";
+import {Promise} from "es6-promise";
 
 let mode = null; // 0 dev 1 test 2 pro
 let HOST_URL = window.location.protocol + '//' + window.location.host + '/';
@@ -180,7 +180,10 @@ api.wx = {
     }, (r) => {
       reject(r.body);
     });
-  })
+  }),
+  image: (id) => {
+    return HOST_URL + 'cgi-bin/showqrcode?ticket=' + id;
+  }
 };
 
 // 省市区列表
@@ -246,6 +249,27 @@ api.channel = {
       reject(r.body);
     });
   })
+};
+
+// 通用upload
+api.file = {
+  upload: (file) => new Promise((resolve, reject) => {
+    Vue.http.post(HOST_URL + 'upload', file).then((r) => {
+      resolve(r.body);
+    }, (r) => {
+      reject(r.body);
+    });
+  }),
+  uploadBase64: (base64url) => new Promise((resolve, reject) => {
+    Vue.http.post(HOST_URL + 'upload/base64', base64url).then((r) => {
+      resolve(r.body);
+    }, (r) => {
+      reject(r.body);
+    });
+  }),
+  image: (id) => {
+    return HOST_URL + 'image/' + id;
+  }
 };
 
 module.exports = api;

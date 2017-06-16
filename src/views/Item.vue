@@ -1,199 +1,3 @@
-<style lang='scss' rel="stylesheet/scss" scoped>
-  .page-item {
-    padding-bottom: 1rem;
-    .banner {
-      height: 6.24rem;
-      margin-bottom: 0.05rem;
-      img {
-        width: 100%;
-      }
-    }
-    .dl {
-      position: relative;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      height: 1rem;
-      background-color: white;
-      z-index: 9;
-      span {
-        font-size: 0;
-        line-height: 0;
-        &:nth-child(1) {
-          img {
-            height: 0.35rem;
-          }
-        }
-      }
-    }
-    .pro-item {
-      position: relative;
-      padding: 0.25rem 0.3rem;
-      .col:nth-child(3) {
-        display: flex;
-        justify-content: space-between;
-      }
-      .guide {
-        margin: 0.65rem 0 0.32rem;
-      }
-      .flex {
-        display: flex;
-        font-size: 0.24rem;
-        color: #979797;
-        .key {
-          width: 1.25rem;
-        }
-        .value {
-          flex: 1;
-        }
-      }
-      h1 {
-        color: black;
-        margin-right: 0.8rem;
-        font-size: 0.36rem;
-        textarea {
-          width: 100%;
-        }
-      }
-      .copy {
-        position: absolute;
-        width: 1rem;
-        padding: 0.6rem 0 0.2rem;
-        right: 0;
-        top: 0;
-        font-size: 0.18rem;
-        text-align: center;
-        background: url("../assets/images/ico-link.png") center 0.15rem / 0.4rem no-repeat;
-      }
-    }
-    .first-page {
-      position: relative;
-      background-color: white;
-    }
-    .tip {
-      line-height: 0.6rem;
-      text-align: center;
-      font-size: 0.24rem;
-    }
-    .item-imgs {
-      margin-top: 0.2rem;
-      img {
-        width: 100%;
-      }
-    }
-    .wrap-bottom {
-      position: fixed;
-      width: 100%;
-      height: 0.98rem;
-      bottom: 0;
-      background-color: #ea5513;
-
-      display: flex;
-    }
-    .btn-order {
-      flex: 1;
-      height: 0.98rem;
-      color: white;
-      font-size: 0.24rem;
-      background-color: #ea5513;
-    }
-    .btn-back {
-      width: 1rem;
-      height: 0.98rem;
-      border-right: white 1px dashed;
-      background: url(../assets/images/ico-index-white.png) center / 0.4rem no-repeat;
-    }
-    .btn-back-no-coupon {
-      position: fixed;
-      width: 100%;
-      height: 0.98rem;
-      bottom: 0;
-      left: 0;
-      color: white;
-      font-size: 0.24rem;
-      background: #ea5513;
-      z-index: 9;
-    }
-    .popup {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-color: rgba(0, 0, 0, 0.6);
-      .box {
-        position: relative;
-        width: 5.5rem;
-        margin: 3rem auto 0;
-        padding: 0.15rem;
-        background-color: #ea5514;
-        border-radius: 0.1rem;
-        .close {
-          position: absolute;
-          width: 0.52rem;
-          height: 0.52rem;
-          right: 0.2rem;
-          top: 0.22rem;
-          background: url(../assets/images/ico-close.png) center / contain no-repeat;
-        }
-        .content {
-          width: 100%;
-          padding: 0.45rem 0.28rem;
-          margin: 0.8rem 0 0.2rem;
-          background-color: white;
-          font-size: 0.24rem;
-          line-height: 0.35rem;
-          color: #333;
-        }
-        p {
-          line-height: 0.4rem;
-          padding-left: 0.29rem;
-          font-size: 0.24rem;
-          color: white;
-        }
-      }
-      &.popup-tao-code {
-        .tip-copy {
-          position: absolute;
-          left: 0.15rem;
-          top: 0;
-        }
-        .copy {
-          width: 100%;
-          border: white 1px solid;
-        }
-        p {
-          margin-top: 0.32rem;
-        }
-      }
-      &.popup-no-coupon {
-        .box {
-          padding: 0;
-        }
-        p {
-          font-size: 0.18rem;
-          margin-top: 1.3rem;
-        }
-        .qrcode {
-          position: absolute;
-          width: 1.9rem;
-          right: 0.4rem;
-          top: 3.4rem;
-          z-index: 9;
-          img {
-            width: 100%
-          }
-        }
-      }
-    }
-    image[lazy=loading] {
-      width: 40px;
-      height: 300px;
-      margin: auto;
-    }
-  }
-</style>
-
 <template>
   <div class="page-item">
     <!-- 下载 -->
@@ -219,14 +23,14 @@
             <h1>{{item.title}}</h1>
             <button class="copy" :data-clipboard-text="item.goodsUrl">复制</button>
           </div>
-          <div class="col">
+          <div class="col flex flex-x-between">
             <div class="price"><i>&yen;</i>{{item.priceA || 0}}<i>.{{item.priceB || 00}}</i></div>
             <div class="tags">
               <span class="tag" v-for="tag in item.tags">{{tag}}</span><span class="tag coupon"
                                                                              v-if="item.coupon">{{item.coupon}}元券</span>
             </div>
           </div>
-          <div class="col">
+          <div class="col flex flex-x-between">
             <span class="original-price">原价：<del>{{item.price || 0.00}}</del></span>
             <span class="sold">已售：{{item.biz30day || 0}}</span>
           </div>
@@ -258,14 +62,6 @@
     <div class="popup popup-no-coupon" v-if="popupVisible&&noCoupon">
       <div class="box">
         <img src="../assets/images/no-coupon.png">
-        <!--  <div class="content">
-          客官您来晚了！<br>
-          券已经被领完了！<br>
-          下载券客APP，<br>
-          再也不会错过优惠！
-        </div>
-        <p>关注券客商城<br>第一时间获得最新优惠信息</p>
-        <div class="qrcode"><img src="../assets/images/qrcode-gzh.png"></div> -->
       </div>
     </div>
 
@@ -402,3 +198,226 @@
     }
   }
 </script>
+
+<style lang='scss' rel="stylesheet/scss" scoped>
+  .page-item {
+    padding-bottom: 1rem;
+    .banner {
+      height: 6.24rem;
+      margin-bottom: 0.05rem;
+      img {
+        width: 100%;
+      }
+    }
+    .dl {
+      position: relative;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 1rem;
+      background-color: white;
+      z-index: 9;
+      span {
+        font-size: 0;
+        line-height: 0;
+        &:nth-child(1) {
+          img {
+            height: 0.35rem;
+          }
+        }
+      }
+    }
+    .pro-item {
+      position: relative;
+      padding: 0.25rem 0.3rem;
+      .col:nth-child(2) {
+        margin: 0.2rem 0;
+      }
+      .guide {
+        margin: 0.65rem 0 0.32rem;
+      }
+      .flex {
+        display: flex;
+        font-size: 0.24rem;
+        color: #979797;
+        .key {
+          width: 1.25rem;
+        }
+        .value {
+          flex: 1;
+        }
+      }
+      h1 {
+        color: black;
+        margin-right: 0.8rem;
+        font-size: 0.36rem;
+        textarea {
+          width: 100%;
+        }
+      }
+      .copy {
+        position: absolute;
+        width: 1rem;
+        padding: 0.6rem 0 0.2rem;
+        right: 0;
+        top: 0;
+        font-size: 0.18rem;
+        text-align: center;
+        background: url("../assets/images/ico-link.png") center 0.15rem / 0.4rem no-repeat;
+      }
+      .price {
+        padding-top: 0;
+      }
+      .tags {
+        margin: 0.1rem 0 0;
+        .tag {
+          width: .64rem;
+          line-height: .3rem;
+          margin-left: .05rem;
+          margin-right: 0;
+          background-color: #ea5513;
+          border: none;
+          border-radius: 4px;
+          color: #fff;
+          font-size: .18rem;
+          text-align: center;
+          &.coupon {
+            width: .8rem;
+            background: transparent url(../assets/images/bg-coupon.png) 50%/cover no-repeat;
+            color: #ea5513;
+            border-radius: 0;
+          }
+        }
+      }
+      .coupon {
+        height: 0.32rem;
+        background-color: white;
+      }
+    }
+    .first-page {
+      position: relative;
+      background-color: white;
+    }
+    .tip {
+      line-height: 0.6rem;
+      text-align: center;
+      font-size: 0.24rem;
+    }
+    .item-imgs {
+      margin-top: 0.2rem;
+      img {
+        width: 100%;
+      }
+    }
+    .wrap-bottom {
+      position: fixed;
+      width: 100%;
+      height: 0.98rem;
+      bottom: 0;
+      background-color: #ea5513;
+
+      display: flex;
+    }
+    .btn-order {
+      flex: 1;
+      height: 0.98rem;
+      color: white;
+      font-size: 0.24rem;
+      background-color: #ea5513;
+    }
+    .btn-back {
+      width: 1rem;
+      height: 0.98rem;
+      border-right: white 1px dashed;
+      background: url(../assets/images/ico-index-white.png) center / 0.4rem no-repeat;
+    }
+    .btn-back-no-coupon {
+      position: fixed;
+      width: 100%;
+      height: 0.98rem;
+      bottom: 0;
+      left: 0;
+      color: white;
+      font-size: 0.24rem;
+      background: #ea5513;
+      z-index: 9;
+    }
+    .popup {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      .box {
+        position: relative;
+        width: 5.5rem;
+        margin: 3rem auto 0;
+        padding: 0.15rem;
+        background-color: #ea5514;
+        border-radius: 0.1rem;
+        .close {
+          position: absolute;
+          width: 0.52rem;
+          height: 0.52rem;
+          right: 0.2rem;
+          top: 0.22rem;
+          background: url(../assets/images/ico-close.png) center / contain no-repeat;
+        }
+        .content {
+          width: 100%;
+          padding: 0.45rem 0.28rem;
+          margin: 0.8rem 0 0.2rem;
+          background-color: white;
+          font-size: 0.24rem;
+          line-height: 0.35rem;
+          color: #333;
+        }
+        p {
+          line-height: 0.4rem;
+          padding-left: 0.29rem;
+          font-size: 0.24rem;
+          color: white;
+        }
+      }
+      &.popup-tao-code {
+        .tip-copy {
+          position: absolute;
+          left: 0.15rem;
+          top: 0;
+        }
+        .copy {
+          width: 100%;
+          border: white 1px solid;
+        }
+        p {
+          margin-top: 0.32rem;
+        }
+      }
+      &.popup-no-coupon {
+        .box {
+          padding: 0;
+        }
+        p {
+          font-size: 0.18rem;
+          margin-top: 1.3rem;
+        }
+        .qrcode {
+          position: absolute;
+          width: 1.9rem;
+          right: 0.4rem;
+          top: 3.4rem;
+          z-index: 9;
+          img {
+            width: 100%
+          }
+        }
+      }
+    }
+    image[lazy=loading] {
+      width: 40px;
+      height: 300px;
+      margin: auto;
+    }
+  }
+</style>
