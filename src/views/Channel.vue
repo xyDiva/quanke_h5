@@ -1,47 +1,51 @@
 <template>
   <div class="page-channel">
     <div class="banner fs0"><img :src="channel.url" width="100%"></div>
-    <div class="page-loadmore-wrapper flex flex-wrap" ref="wrapper"
-         v-infinite-scroll="loadMore" infinite-scroll-disabled="false" infinite-scroll-distance="10"
-         v-if="list.length">
-      <div class="pro-item-2" v-for="item in list">
-        <router-link :to="'/item/'+item.id">
-          <div class="img"><img v-if="item.pic" :src="item.pic"></div>
-          <div class="content">
-            <div class="desc">{{item.desc}}</div>
-            <div class="title">{{item.title}}</div>
-            <div class="flex flex-x-between bottom">
-              <div class="sold">{{item.biz30day || 0}}人购买</div>
-              <div class="coupon" v-if="item.coupon">立减 {{item.coupon}} 元</div>
-            </div>
+    <div class="page-loadmore-wrapper" ref="wrapper" v-infinite-scroll="loadMore"
+         infinite-scroll-disabled="loading" infinite-scroll-distance="10" v-if="list.length">
+      <mt-loadmore :autoFill="false" :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
+        <div class="flex flex-wrap">
+          <div class="pro-item-2" v-for="item in list">
+            <router-link :to="'/item/'+item.id">
+              <div class="img"><img v-if="item.pic" :src="item.pic"></div>
+              <div class="content">
+                <div class="desc">{{item.desc}}</div>
+                <div class="title">{{item.title}}</div>
+                <div class="flex flex-x-between bottom">
+                  <div class="sold">{{item.biz30day || 0}}人购买</div>
+                  <div class="coupon" v-if="item.coupon">立减 {{item.coupon}} 元</div>
+                </div>
+              </div>
+            </router-link>
           </div>
-        </router-link>
-      </div>
-      <div slot="bottom" class="mint-loadmore-bottom">
-        <span v-show="loading"><mt-spinner type="snake"></mt-spinner></span>
-      </div>
+        </div>
+      </mt-loadmore>
     </div>
     <div class="no-data" v-if="nodata">暂无记录</div>
+    <div class="btn-top" v-if="topBtnVisible" @click="toTop"></div>
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
-  import {Toast, InfiniteScroll, Spinner} from 'mint-ui'
+  import {Toast, InfiniteScroll, Loadmore} from 'mint-ui'
   import api from '../assets/scripts/api'
 
   Vue.use(InfiniteScroll);
-  Vue.component(Spinner.name, Spinner);
+  Vue.component(Loadmore.name, Loadmore);
 
   export default {
     data(){
       return {
         list: [],
         start: 0,
+        total: 0,
         allLoaded: false,
-        bottomStatus: '',
         loading: false,
-        nodata: false
+        nodata: false,
+        topStatus: '',
+
+        topBtnVisible: false
       }
     },
     computed: {
@@ -71,14 +75,11 @@
       clear(){
         this.list = [];
         this.start = 0;
+        this.total = 0;
         this.allLoaded = false;
-        this.bottomStatus = '';
+        this.topStatus = '';
         this.nodata = false;
       },
-//      search(){
-//        this.clear();
-//        this.getList();
-//      },
       getList(){
         let params = {
           channelId: this.channel.id,
@@ -88,10 +89,10 @@
         api.goods.query(params).then((r) => {
           this.loading = false;
           if (r.success) {
-            this.nodata = !r.list.length;
-            this.start += r.list.length;
             this.total = r.total;
+            this.start += r.list.length;
             this.list = this.list.concat(this.$com.convertGoods(r.list || []));
+            this.nodata = !r.list.length;
           }
           else {
             Toast({
@@ -105,8 +106,13 @@
           }
         });
       },
-      handleBottomChange(status) {
-        this.bottomStatus = status;
+      loadTop() {
+        this.clear();
+        this.getList();
+        this.$refs.loadmore.onTopLoaded();
+      },
+      handleTopChange(status) {
+        this.topStatus = status;
       },
       loadMore(){
         this.loading = true;
@@ -121,7 +127,11 @@
       },
       scrollFn(){
         let scrollTop = document.body.scrollTop;
+        this.topBtnVisible = scrollTop > 600;
         this.$store.dispatch('setChannelScrollTop', scrollTop);
+      },
+      toTop(){
+        document.body.scrollTop = 0;
       }
     }
   }

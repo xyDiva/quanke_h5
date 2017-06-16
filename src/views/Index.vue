@@ -70,14 +70,13 @@
 
 <script>
   import Vue from 'vue'
-  import {Toast, Swipe, SwipeItem, Spinner, InfiniteScroll, Loadmore} from 'mint-ui'
+  import {Toast, Swipe, SwipeItem, InfiniteScroll, Loadmore} from 'mint-ui'
   import api from '../assets/scripts/api'
   import footer from '../components/Footer'
 
   Vue.component(Swipe.name, Swipe);
   Vue.component(SwipeItem.name, SwipeItem);
   Vue.use(InfiniteScroll);
-  Vue.component(Spinner.name, Spinner);
   Vue.component(Loadmore.name, Loadmore);
 
   export default {
@@ -300,14 +299,6 @@
           }
         }
       }
-    }
-    .btn-top {
-      position: fixed;
-      width: 0.75rem;
-      height: 0.75rem;
-      right: 0.4rem;
-      bottom: 1.18rem;
-      background: url("../assets/images/btn-top.png") center / contain no-repeat;
     }
   }
 </style>

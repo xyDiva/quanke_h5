@@ -47,7 +47,7 @@ import Share from './views/Share'
 
 const routes = [
   {path: '/login', component: Login, meta: {title: '登录'}},
-  {path: '/bind', component: Bind, meta: {title: '手机绑定'}},git
+  {path: '/bind', component: Bind, meta: {title: '手机绑定'}},
   {path: '/', redirect: '/index'},
   {path: '/index', component: Index, meta: {keep: true, title: '券客商城'}},
   {path: '/item/:id', component: Item, meta: {title: '券客商城'}},
@@ -98,7 +98,7 @@ router.beforeEach((to, from, next) => {
 
   // item -> index/seckill/search 保持滚动状态
   if (from.path.indexOf('/item') >= 0) {
-    if (to.path == '/index' || to.path == '/seckill' || to.path.indexOf('/search') >= 0) {
+    if (to.path == '/index' || to.path == '/seckill' || to.path == '/search' || to.path.indexOf('/discovery/') >= 0) {
       to.meta.stay = true;
     }
     else {

@@ -548,6 +548,18 @@ footer {
   background-color: white;
 }
 
+/* 返回顶部按钮
+   ========================================================================== */
+.btn-top {
+  position: fixed;
+  width: 0.75rem;
+  height: 0.75rem;
+  right: 0.4rem;
+  bottom: 1.18rem;
+  background: url("./assets/images/btn-top.png") center / contain no-repeat;
+}
+
+
 /* 组件--toast
    ========================================================================== */
 .mint-toast-text {
