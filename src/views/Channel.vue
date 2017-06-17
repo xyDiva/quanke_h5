@@ -56,8 +56,6 @@
       }
     },
     activated(){
-      this.clear();
-      this.getList();
       this.loading = false;
 
       // scroll event
@@ -70,17 +68,18 @@
       window.removeEventListener('scroll', this.scrollFn);
     },
     mounted(){
+      this.clear();
+      this.getList(true);
     },
     methods: {
       clear(){
-        this.list = [];
         this.start = 0;
         this.total = 0;
         this.allLoaded = false;
         this.topStatus = '';
         this.nodata = false;
       },
-      getList(){
+      getList(clearList){
         let params = {
           channelId: this.channel.id,
           start: this.start,
@@ -91,7 +90,12 @@
           if (r.success) {
             this.total = r.total;
             this.start += r.list.length;
-            this.list = this.list.concat(this.$com.convertGoods(r.list || []));
+            if (clearList) {
+              this.list = this.$com.convertGoods(r.list || []);
+            }
+            else {
+              this.list = this.list.concat(this.$com.convertGoods(r.list || []));
+            }
             this.nodata = !r.list.length;
           }
           else {
@@ -108,7 +112,7 @@
       },
       loadTop() {
         this.clear();
-        this.getList();
+        this.getList(true);
         this.$refs.loadmore.onTopLoaded();
       },
       handleTopChange(status) {

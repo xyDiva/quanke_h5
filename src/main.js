@@ -98,6 +98,7 @@ router.beforeEach((to, from, next) => {
 
   // item -> index/seckill/search 保持滚动状态
   if (from.path.indexOf('/item') >= 0) {
+    console.log(to.path)
     if (to.path == '/index' || to.path == '/seckill' || to.path == '/search' || to.path.indexOf('/discovery/') >= 0) {
       to.meta.stay = true;
     }

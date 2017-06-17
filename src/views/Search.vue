@@ -104,7 +104,6 @@
     },
     methods: {
       clear(){
-        this.list = [];
         this.start = 0;
         this.allLoaded = false;
         this.topStatus = '';
@@ -112,13 +111,14 @@
       },
       reset (){
         this.name = '';
+        this.list = [];
         this.clear();
       },
       search(){
         this.clear();
-        this.getList();
+        this.getList(true);
       },
-      getList(){
+      getList(clearList){
         let params = {
           name: this.name,
           start: this.start,
@@ -130,7 +130,12 @@
             this.nodata = !r.list.length;
             this.start += r.list.length;
             this.total = r.total;
-            this.list = this.list.concat(this.$com.convertGoods(r.list || []));
+            if (clearList) {
+              this.list = this.$com.convertGoods(r.list || []);
+            }
+            else {
+              this.list = this.list.concat(this.$com.convertGoods(r.list || []));
+            }
           }
           else {
             Toast({

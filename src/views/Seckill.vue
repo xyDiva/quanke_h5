@@ -77,7 +77,7 @@
       });
     },
     methods: {
-      getList(){
+      getList(clearList){
         let params = {
           isSeckill: true,
           start: this.start,
@@ -89,7 +89,12 @@
             this.nodata = !r.list.length;
             this.start += r.list.length;
             this.total = r.total;
-            this.list = this.list.concat(this.$com.convertGoods(r.list || []));
+            if (clearList) {
+              this.list = this.$com.convertGoods(r.list || []);
+            }
+            else {
+              this.list = this.list.concat(this.$com.convertGoods(r.list || []));
+            }
           }
           else {
             Toast(r.message);
@@ -109,7 +114,7 @@
       },
       loadTop() {
         this.clear();
-        this.getList();
+        this.getList(true);
         this.$refs.loadmore.onTopLoaded();
       },
       handleTopChange(status) {
@@ -120,7 +125,6 @@
         this.$store.dispatch('setSeckillScrollTop', scrollTop);
       },
       clear(){
-        this.list = [];
         this.start = 0;
         this.total = 0;
         this.allLoaded = false;
