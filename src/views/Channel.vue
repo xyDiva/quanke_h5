@@ -2,22 +2,22 @@
   <div class="page-channel">
     <div class="banner fs0"><img :src="channel.url" width="100%"></div>
     <div class="page-loadmore-wrapper" ref="wrapper" v-infinite-scroll="loadMore"
-         infinite-scroll-disabled="loading" infinite-scroll-distance="10" v-if="list.length">
+         infinite-scroll-disabled="loading" infinite-scroll-distance="10" infinite-scroll-immediate-check="false"
+         v-if="list.length">
       <mt-loadmore :autoFill="false" :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
-        <div class="flex flex-wrap">
-          <div class="pro-item-2" v-for="item in list">
-            <router-link :to="'/item/'+item.id">
-              <div class="img"><img v-if="item.pic" :src="item.pic"></div>
-              <div class="content">
-                <div class="desc">{{item.desc}}</div>
-                <div class="title">{{item.title}}</div>
-                <div class="flex flex-x-between bottom">
-                  <div class="sold">{{item.biz30day || 0}}人购买</div>
-                  <div class="coupon" v-if="item.coupon">立减 {{item.coupon}} 元</div>
-                </div>
+        <div class="pro-item-3" v-for="item in list">
+          <router-link :to="'/item/'+item.id">
+            <div class="desc">{{item.desc}}</div>
+            <div class="title">{{item.title}}</div>
+            <div class="img"><img v-if="item.pic" :src="item.pic"></div>
+            <div class="flex flex-x-between bottom">
+              <div class="left flex">
+                <div class="coupon" v-if="item.coupon">立减 {{item.coupon}} 元</div>
+                <div class="price">券后：{{item.sellPrice}}元</div>
               </div>
-            </router-link>
-          </div>
+              <div class="sold">{{item.biz30day || 0}}人购买</div>
+            </div>
+          </router-link>
         </div>
       </mt-loadmore>
     </div>
@@ -56,20 +56,21 @@
       }
     },
     activated(){
-      this.loading = false;
-
-      // scroll event
       window.addEventListener('scroll', this.scrollFn);
-
-      document.body.scrollTop = this.$route.meta.stay ? this.$store.state.channelScrollTop : 0;
+      if (this.$route.meta.stay) {
+        document.body.scrollTop = this.$store.state.channelScrollTop;
+      }
+      else {
+        this.clear();
+        this.list = [];
+        this.getList(true);
+        document.body.scrollTop = 0;
+      }
+      this.loading = false;
     },
     deactivated(){
       this.loading = true;
       window.removeEventListener('scroll', this.scrollFn);
-    },
-    mounted(){
-      this.clear();
-      this.getList(true);
     },
     methods: {
       clear(){
@@ -119,10 +120,10 @@
         this.topStatus = status;
       },
       loadMore(){
-        this.loading = true;
         if (this.allLoaded)
           return;
         if (this.list.length < this.total) {
+          this.loading = true;
           this.getList();
         }
         else {

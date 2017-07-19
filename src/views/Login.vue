@@ -111,18 +111,26 @@
         }
 
         // 接口
-        api.user.login(this.tel, this.code).then((r) => {
-          if (r.success) {
-            Toast({
-              message: '登录成功',
-              duration: 1500
+        api.user.login(this.tel, this.code).then((r1) => {
+          if (r1.success) {
+
+            api.user.getUserInfo().then((r2) => {
+              if (r2.success && r2.value) {
+                this.$store.dispatch('setUser', r2.value);
+                Toast('登录成功');
+                setTimeout(() => {
+                  this.$router.push('my');
+                }, 2000);
+              }
+              else {
+                Toast(r2.message);
+                return false;
+              }
             });
-            setTimeout(() => {
-              this.$router.push('/my');
-            }, 2000);
+
           }
           else {
-            Toast(r.message);
+            Toast(r1.message);
           }
         }, (r) => {
           Toast('failed');

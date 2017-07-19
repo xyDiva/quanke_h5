@@ -2,13 +2,10 @@
   <div class="page-index">
     <header>
       <router-link class="search" to="/search"><input type="text" placeholder="输入需要寻找的商品">
-        <button class="btn-search"></button>
+        <button class="btn-search">搜索</button>
       </router-link>
       <a class="left" href="javascript:;">
         <i class="ico logo"></i>
-      </a>
-      <a class="right" id='qdLink'>
-        <i class="ico sign"></i>
       </a>
     </header>
     <mt-swipe :auto="4000" class="banner" :style="{height:bannerHeight+'px'}">
@@ -35,7 +32,6 @@
         </ul>
       </div>
     </div>
-
     <div class="page-loadmore-wrapper" ref="wrapper" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading"
          infinite-scroll-distance="10" v-if="list.length">
       <mt-loadmore :autoFill="false" :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
@@ -65,6 +61,38 @@
     <div class="wrap-footer">
       <my-footer tab="index"></my-footer>
     </div>
+
+    <!--新用户弹出层-->
+    <div class="popup popup-for-new flex flex-y-center" v-if="showPopupForNew">
+      <div class="main">
+        <p class="large">券客送你一笔淘宝花掉的存款</p>
+        <p class="money">{{deposit}}</p>
+        <p class="small">已存入钱包，赚取每日收益</p>
+        <router-link to="income">
+          <button class="btn-get">立即领取利息</button>
+        </router-link>
+      </div>
+    </div>
+
+    <!--第一次登陆弹出层-->
+    <div class="popup popup-daily flex flex-y-center" v-if="showPopupDaily">
+      <div class="main">
+        <div class="info">
+          <p class="text">今日收益已存入</p>
+          <p class="money">{{dailyInterest}}</p>
+        </div>
+        <div class="pro fs0">
+          <router-link :to="'/item/'+dailyGoods.id">
+            <div class="img"><img v-if="dailyGoods.pic" :src="dailyGoods.pic" width="100%"></div>
+            <p class="title">{{dailyGoods.title}}</p>
+            <p class="price">券后价：<span>{{dailyGoods.sellPrice}}</span>原价：{{dailyGoods.price}}</p>
+            <button class="coupon">立减{{dailyGoods.coupon}}元</button>
+          </router-link>
+        </div>
+        <div class="close" @click="showPopupDaily=false"></div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -97,7 +125,16 @@
         nodata: false,
         topStatus: '',
 
-        topBtnVisible: false
+        topBtnVisible: false,
+
+        showPopupDaily: false,
+        showPopupForNew: false,
+
+        dailyGoods: {},
+        dailyInterest: 0,
+        deposit: 0,
+
+        openid: '',
       }
     },
     computed: {
@@ -114,6 +151,8 @@
     },
     deactivated(){
       this.navBarFixed = false;
+      this.showPopupDaily = false;
+      this.showPopupForNew = false;
       this.loading = true;
       window.removeEventListener('scroll', this.scrollFn);
     },
@@ -138,6 +177,32 @@
       // 微信分享
       this.$com.wxInit();
 
+      // 每日收益
+
+      // 测试环境设置openid
+      const openid = this.$com.getCookie('openid');
+      this.$com.setCookie('deviceToken', openid, '', '/');
+      this.openid = this.$com.getCookie('deviceToken');
+
+      api.user.touch().then((r) => {
+        r.list.forEach((item) => {
+          if (item.type === 'deposit') { // 新用户
+            this.deposit = item.data;
+          }
+          if (item.type === 'goods') {
+            this.dailyGoods = this.$com.convertGoods([item.data])[0];
+          }
+          if (item.type === 'daily-interest') {
+            this.dailyInterest = item.data;
+          }
+        });
+
+        this.$store.dispatch('setNewUser', !!this.deposit);
+        this.showPopupForNew = !!this.deposit;
+        this.showPopupDaily = !this.deposit && this.dailyGoods.id;
+
+      });
+
       // set nav bar offsetTop
       this.navBarOffsetTop = document.getElementById('navBar').offsetTop;
     },
@@ -151,21 +216,7 @@
             this.user = {};
           }
           this.$store.dispatch('setUser', this.user);
-          this.setQDLink();
         })
-      },
-      setQDLink(){
-        let href = '';
-        if (!this.user.id) {
-          href = '#/login';
-        }
-        else if (!this.user.tel) {
-          href = '#/bind';
-        }
-        else {
-          href = api.host + '/quanke/sign-in.html';
-        }
-        document.getElementById('qdLink').href = href;
       },
       clear(){
         this.start = 0;
@@ -297,6 +348,118 @@
               z-index: 1;
             }
           }
+        }
+      }
+    }
+
+    .popup {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1;
+    }
+    .popup-daily {
+      .main {
+        position: relative;
+        width: 6rem;
+        height: 8rem;
+        margin: 0 auto;
+        background: url("../assets/images/index/earnings.png") center / contain no-repeat;
+        text-align: center;
+        .info {
+          height: 3.4rem;
+          padding-top: 0.8rem;
+          color: #f8e71c;
+          p {
+            line-height: 100%;
+          }
+          .text {
+            margin-bottom: 0.4rem;
+            font-size: 0.24rem;
+          }
+          .money {
+            font-size: 0.64rem;
+          }
+        }
+        .pro {
+          .img {
+            width: 2rem;
+            height: 2rem;
+            margin: 0 auto;
+            overflow: hidden;
+            background-color: #979797;
+          }
+          .title {
+            width: 80%;
+            margin: 0.36rem auto 0.28rem;
+            font-size: 0.2rem;
+            color: #979797;
+            text-align: center;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          .price {
+            font-size: 0.2rem;
+            color: #979797;
+            span {
+              padding-right: 0.1rem;
+              font-size: 0.36rem;
+              color: #ea5514;
+            }
+          }
+          .coupon {
+            width: 2.5rem;
+            height: 0.54rem;
+            margin-top: 0.4rem;
+            border-radius: 0.27rem;
+            background-color: #ea5514;
+            font-size: 0.18rem;
+            color: white;
+          }
+        }
+        .close {
+          position: absolute;
+          width: 0.52rem;
+          height: 0.52rem;
+          top: -0.67rem;
+          right: 0.3rem;
+          background: url("../assets/images/index/close.png") center / contain no-repeat;
+        }
+      }
+    }
+    .popup-for-new {
+      .main {
+        width: 6rem;
+        height: 5rem;
+        padding-top: 0.9rem;
+        margin: 0 auto;
+        text-align: center;
+        color: #F8E71C;
+        background-color: #ea5514;
+        border-radius: 0.2rem;
+        .large {
+          font-size: 0.24rem;
+        }
+        .money {
+          margin: 0.56rem 0;
+          font-size: 0.64rem;
+        }
+        .small {
+          font-size: 0.18rem;
+        }
+        .btn-get {
+          width: 2.5rem;
+          height: 0.54rem;
+          margin-top: 0.64rem;
+          font-size: 0.18rem;
+          color: #ea5514;
+          border-radius: 0.27rem;
+          background-color: #F8E71C;
         }
       }
     }

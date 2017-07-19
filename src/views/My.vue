@@ -78,16 +78,16 @@
     </div>
 
     <div class="item">
-      <router-link to="/income">我的收益<span>即时可提</span></router-link>
+      <router-link to="/income">我的钱包<span>即时可提</span></router-link>
     </div>
     <div class="item" @click="checkBeforeRoute(1)">
       <a href="javascript:;" id="qdLink">每日签到</a>
     </div>
     <div class="item" @click="checkBeforeRoute(2)">
-      <router-link to="/invite">推荐好友<span>送1000积分</span></router-link>
+      <router-link to="/invite">推荐好友<span>送积分</span></router-link>
     </div>
     <div class="item" @click="checkBeforeRoute(3)">
-      <router-link to="/order">晒单返利<span>返利还赚钱</span></router-link>
+      <router-link to="/order">消费存入<span>返利还赚钱</span></router-link>
     </div>
     <div class="item">
       <router-link to="/contact">联系客服</router-link>
@@ -138,7 +138,7 @@
         else {
           if (idx == 1) {
             let href = '';
-            href = api.host + '/quanke/sign-in.html';
+            href = api.host + 'quanke/sign-in.html';
             document.getElementById('qdLink').href = href;
           }
           else if (idx == 2) {

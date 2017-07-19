@@ -100,7 +100,15 @@ api.user = {
     }, (r) => {
       reject(r.body);
     });
-  })
+  }),
+  // 每日收益、每日推荐商品
+  touch: (params) => new Promise((resolve, reject) => {
+    Vue.http.post(HOST_URL + 'user/touch',params).then((r) => {
+      resolve(r.body);
+    }, (r) => {
+      reject(r.body);
+    });
+  }),
 };
 
 // notify
@@ -221,7 +229,7 @@ api.rebate = {
     });
   }),
   save: (params) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'rebate/save', params).then((r) => {
+    Vue.http.post(HOST_URL + 'rebate/save/new', params).then((r) => {
       resolve(r.body);
     }, (r) => {
       reject(r.body);
@@ -244,6 +252,31 @@ api.withdraw = {
 api.channel = {
   query: () => new Promise((resolve, reject) => {
     Vue.http.get(HOST_URL + 'channel/query').then((r) => {
+      resolve(r.body);
+    }, (r) => {
+      reject(r.body);
+    });
+  })
+};
+
+// money controller
+api.money = {
+  summery: () => new Promise((resolve, reject) => {
+    Vue.http.get(HOST_URL + 'authed/money/summary').then((r) => {
+      resolve(r.body);
+    }, (r) => {
+      reject(r.body);
+    });
+  }),
+  queryLogs: (type, params) => new Promise((resolve, reject) => {
+    let url = '';
+    if (type === 'deposit') {
+      url = HOST_URL + 'authed/deposit/log';
+    }
+    else if (type === 'money') {
+      url = HOST_URL + 'authed/account/log';
+    }
+    Vue.http.get(url, {params: params}).then((r) => {
       resolve(r.body);
     }, (r) => {
       reject(r.body);

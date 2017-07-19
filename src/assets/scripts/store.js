@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    newUser: false,
     user: {},                             // 用户信息
     msg: {},                              // 查看信息详情
     indexScrollTop: 0,                    // 记录首页列表位置
@@ -14,13 +15,19 @@ const store = new Vuex.Store({
 
     isSelect: false,                      // 选择地址页面
 
-    channel: {}                            // 查看频道列表
+    channel: {},                           // 查看频道列表
+    orderResult: {}
   },
   getters: {
+    newUser: state => state.newUser,
     user: state => state.user,
-    isSelect: state => state.isSelect
+    isSelect: state => state.isSelect,
+    orderResult: state => state.orderResult
   },
   mutations: {
+    setNewUser(state, newUser){
+      state.newUser = newUser;
+    },
     setUser(state, user){
       state.user = user;
     },
@@ -44,9 +51,15 @@ const store = new Vuex.Store({
     },
     setChannel(state, channel) {
       state.channel = channel;
+    },
+    setOrderResult(state, order){
+      state.orderResult = order;
     }
   },
   actions: {
+    setNewUser(context, newUser){
+      context.commit('setNewUser', newUser);
+    },
     setUser(context, user){
       context.commit('setUser', user);
     },
@@ -70,6 +83,9 @@ const store = new Vuex.Store({
     },
     setChannel(context, channel) {
       context.commit('setChannel', channel);
+    },
+    setOrderResult(context, order) {
+      context.commit('setOrderResult', order);
     }
   }
 });

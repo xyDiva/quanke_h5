@@ -1,6 +1,6 @@
 <template>
   <div class="page-share">
-    <div>
+    <div class="main" v-if="!mainHide">
       <p class="p1">我是{{user.nickName}}</p>
       <p class="p2">公元2017年，我夜观淘宝</p>
       <p class="p3">发现了这么个<span>神器</span></p>
@@ -39,7 +39,8 @@
         qrUrl: '',
         width: document.body.clientWidth / 4.2,
 
-        imgUrl: ''
+        imgUrl: '',
+        mainHide: false
       }
     },
     mounted(){
@@ -82,6 +83,14 @@
           api.file.uploadBase64(base64url.split('data:image/jpeg;base64,')[1]).then((r) => {
             if (r.success) {
               this.imgUrl = api.file.image(r.value);
+
+              let $img = new Image();
+              $img.src = this.imgUrl;
+              $img.onload = () => {
+                this.mainHide = true;
+                $img.remove();
+              };
+
             }
           })
         });
@@ -231,10 +240,13 @@
   }
 
   .img-wrap {
-    position: fixed;
+    position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
+    font-size: 0;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 </style>

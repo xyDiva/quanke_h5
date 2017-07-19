@@ -1,105 +1,106 @@
-<style lang='scss' rel="stylesheet/scss" scoped>
-  .page-income {
-    .info {
-      height: 2.6rem;
-      background-color: #ea5514;
-      text-align: center;
-      color: white;
-      font-size: 0.2rem;
-      p {
-        line-height: 100%;
-      }
-      .balance {
-        padding: 0.45rem 0 0.2rem;
-        font-size: 0.72rem;
-      }
-      .income {
-        margin-top: 0.45rem;
-      }
-    }
-    .list {
-      padding-bottom: 1rem;
-      li {
-        display: flex;
-        justify-content: space-between;
-        line-height: 0.88rem;
-        padding: 0 0.35rem;
-        margin-top: 0.05rem;
-        font-size: 0.24rem;
-        color: #979797;
-        background-color: white;
-        .col {
-          flex: 1;
-        }
-        .col:nth-child(2) {
-          font-size: 0.2rem;
-          text-align:center;
-        };
-        .col:nth-child(3) {
-          text-align:right;
-        };
-      }
-    }
-    .btn-withdraw {
-      position: fixed;
-      width: 100%;
-      height: 0.88rem;
-      bottom: 0;
-      left: 0;
-      background-color: #ea5514;
-      color: white;
-      font-size: 0.28rem;
-    }
-  }
-</style>
-
 <template>
   <div class="page-income">
     <div class="info">
-      <p class="balance">{{user.balance}}</p>
-      <p>总计余额（元）</p>
-      <p class="income">昨日收益（元）：{{user.incomeYesterday||0}}元</p>
+      <ul class="flex flex-x-around">
+        <li>
+          <small>年化收益(%)</small>
+          <p>{{o.interestRate}}</p>
+        </li>
+        <li>
+          <small>今日收益(元)</small>
+          <p>{{o.interestTody}}</p>
+        </li>
+      </ul>
     </div>
 
-    <ul class="list" v-if="list.length">
-      <li v-for="item in list">
-        <div class="col">{{item.type|convertType}}</div>
-        <div class="col">{{item.createTime|convertTime}}</div>
-        <div class="col">{{item.amount|convertAmount}}</div>
+    <ul class="items flex flex-wrap">
+      <li>
+        <router-link to="income/deposit" class="flex flex-y-center">
+          <div class="left"><img src="../assets/images/purse/icon_total.png"></div>
+          <div class="right">
+            <small>消费总存款</small>
+            <p>{{o.deposit}}</p>
+          </div>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="income/deposit" class="flex flex-y-center">
+          <div class="left"><img src="../assets/images/purse/icon_count.png"></div>
+          <div class="right">
+            <small>存款笔数</small>
+            <p>{{o.depositCount}}</p>
+          </div>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="income/money" class="flex flex-y-center">
+          <div class="left"><img src="../assets/images/purse/icon_earnings.png"></div>
+          <div class="right">
+            <small>累积收益</small>
+            <p>{{o.totalInterest}}</p>
+          </div>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="income/money" class="flex flex-y-center">
+          <div class="left"><img src="../assets/images/purse/icon_balance.png"></div>
+          <div class="right">
+            <small>可用余额(元)</small>
+            <p>{{o.balance}}</p>
+          </div>
+        </router-link>
       </li>
     </ul>
-    <div class="no-data" v-else>暂无记录</div>
+    <div class="tip">您的每笔消费都会获得相应金额的券币存入钱包中赢取收益</div>
 
-    <router-link to="/withdraw">
-      <button class="btn-withdraw">申请提现</button>
-    </router-link>
+    <div>
+      <my-footer tab="purse"></my-footer>
+    </div>
+
+    <div class="guide" v-if="showGuide">
+      <div class="guide1" v-if="showGuide1" @click="showGuide1=false;showGuide2=true;"></div>
+      <div class="guide2" v-if="showGuide2" @click="showGuide2=false;"></div>
+    </div>
+
   </div>
 </template>
 
 <script>
   import {Toast} from 'mint-ui'
   import api from '../assets/scripts/api'
+  import footer from '../components/Footer'
 
   export default {
     data(){
       return {
-        user: this.$store.state.user,
-        list:[]
+        o: {},
+        showGuide:false,
+        showGuide1: true,
+        showGuide2: false
+      }
+    },
+    computed: {
+      user(){
+        return this.$store.getters.user
+      },
+      newUser(){
+        return this.$store.getters.newUser
       }
     },
     mounted(){
-      api.user.getAccountLog().then((r) => {
-        if (r.success) {
-          this.list = r.list||[];
-        }
-        else {
-          Toast(r.message);
-        }
-      }, (r) => {
-        Toast('failed');
+      if (this.newUser) {
+        this.showGuide = true;
+      }
+
+      api.money.summery().then((r) => {
+        r.interestRate = (r.interestRate * 100).toFixed(2);
+        r.deposit = r.deposit.toFixed(2);
+        r.balance = r.balance.toFixed(2);
+        r.totalInterest = r.totalInterest.toFixed(3);
+        this.o = r;
       })
     },
-    filters:{
+    filters: {
       convertType(type){
         let t = '';
         switch (Number(type)) {
@@ -117,17 +118,17 @@
       },
       convertTime(timestamp){
         let d = new Date(timestamp),
-            year = d.getFullYear(),
-            month = d.getMonth() + 1,
-            day = d.getDate(),
-            hour = d.getHours(),
-            minute = d.getMinutes(),
-            second = d.getSeconds();
+          year = d.getFullYear(),
+          month = d.getMonth() + 1,
+          day = d.getDate(),
+          hour = d.getHours(),
+          minute = d.getMinutes(),
+          second = d.getSeconds();
 
-        if(minute < 10) {
+        if (minute < 10) {
           minute = '0' + minute;
         }
-        if(second < 10) {
+        if (second < 10) {
           second = '0' + second;
         }
 
@@ -136,6 +137,88 @@
       convertAmount(amount){
         return amount > 0 ? '+' + amount + '' : amount;
       }
+    },
+    components: {
+      'my-footer': footer
     }
   }
 </script>
+
+<style lang='scss' rel="stylesheet/scss" scoped>
+  .page-income {
+    .info {
+      position: relative;
+      padding: 1.5rem .7rem 1rem;
+      background-color: #ea5514;
+      color: white;
+      ul li {
+        text-align: right;
+        font-size: 0;
+        small {
+          font-size: 0.18rem;
+        }
+        p {
+          line-height: 100%;
+          margin-top: 0.4rem;
+          font-size: 0.64rem;
+        }
+      }
+    }
+    .items {
+      margin-top: 0.1rem;
+      background-color: white;
+      li {
+        display: flex;
+        flex-wrap: wrap;
+        width: 50%;
+        height: 2rem;
+        color: #979797;
+        font-size: 0;
+        a {
+          width: 100%;
+          color: #979797;
+        }
+        .left {
+          width: 1.75rem;
+          text-align: center;
+        }
+        .right {
+          small {
+            font-size: 0.18rem;
+          }
+          p {
+            margin-top: 0.25rem;
+            font-size: 0.36rem;
+          }
+        }
+      }
+    }
+    .tip {
+      padding: 0.3rem 0;
+      text-align: center;
+      font-size: 0.18rem;
+      color: #EA5514;
+    }
+
+    .guide {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      .guide1, .guide2 {
+        width: 100%;
+        height: 100%;
+        background-position: top center;
+        background-size: 100%;
+        background-repeat: no-repeat;
+      }
+      .guide1 {
+        background-image: url("../assets/images/purse/guide-01.png");
+      }
+      .guide2 {
+        background-image: url("../assets/images/purse/guide-02.png");
+      }
+    }
+  }
+</style>

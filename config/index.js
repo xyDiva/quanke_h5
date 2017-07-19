@@ -1,6 +1,6 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
-var target = 'http://qktest.notepasses.com';
+var target = 'http://tk.word1k.com';
 
 module.exports = {
   build: {
@@ -84,6 +84,13 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {
           '^/channel': '/channel'
+        }
+      },
+      '/authed': {
+        target: target,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/authed': '/authed'
         }
       },
 

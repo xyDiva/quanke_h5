@@ -3,8 +3,8 @@
     <router-link to="/index" class="a-index" :class="{active:tab=='index'}">首页</router-link>
     <router-link to="/seckill" class="a-seckill" :class="{active:tab=='seckill'}">秒杀</router-link>
     <router-link to="/discovery" class="a-discovery" :class="{active:tab=='discovery'}">发现</router-link>
-    <router-link to="/order" class="a-order" :class="{active:tab=='order'}" v-if="user.id">晒单返利</router-link>
-    <a href="javascript:;" class="a-order" :class="{active:tab=='order'}" v-else @click="auth">晒单返利</a>
+    <router-link to="/income" class="a-purse" :class="{active:tab=='purse'}" v-if="user.id">我的钱包</router-link>
+    <a href="javascript:;" class="a-purse" :class="{active:tab=='purse'}" v-else @click="auth">我的钱包</a>
     <router-link to="/my" class="a-my" :class="{active:tab=='my'}">我的券客</router-link>
   </footer>
 </template>
@@ -58,8 +58,8 @@
       &.a-discovery {
         background-image: url("../assets/images/ico-discovery.png");
       }
-      &.a-order {
-        background-image: url("../assets/images/ico-order.png");
+      &.a-purse {
+        background-image: url("../assets/images/wallet.png");
       }
       &.a-my {
         background-image: url("../assets/images/ico-my.png");
@@ -75,8 +75,8 @@
         &.a-discovery {
           background-image: url("../assets/images/ico-discovery-active.png");
         }
-        &.a-order {
-          background-image: url("../assets/images/ico-order-active.png");
+        &.a-purse {
+          background-image: url("../assets/images/wallet_press.png");
         }
         &.a-my {
           background-image: url("../assets/images/ico-my-active.png");

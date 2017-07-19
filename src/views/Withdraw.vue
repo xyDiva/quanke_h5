@@ -28,14 +28,14 @@
     <div class="item"><input type="text" v-model="o.alipay" placeholder="支付宝账号"></div>
     <div class="item"><input type="text" v-model="o.name" placeholder="真实姓名"></div>
     <div class="item">可提金额&nbsp;{{user.balance}}元</div>
-    <div class="item"><input type="number" v-model="o.amount" placeholder="提现金额（大于5元）"></div>
+    <div class="item"><input type="number" v-model="o.amount" placeholder="提现金额限制（大于1元）"></div>
     <div class="tip">
       <p>重要提醒:</p>
       <br>
       <p>请确认输入信息的正确！！</p>
-      <p>券客会在审核后三个工作日内转账至您输入的支付宝账户中。</p>
-      <p>最少提现金额大于5元。</p>
-      <p>如有问题请及时联系客服。</p>
+      <p>券客会在审核后1个工作日内转账至您输入的支付宝账户中；</p>
+      <p>最低提现金额请大于1元；</p>
+      <p>如需帮助请及时联系客服。</p>
     </div>
     <button class="btn-withdraw" @click="withdraw">确认提现</button>
   </div>
@@ -48,21 +48,25 @@
   export default {
     data(){
       return {
-        user:this.$store.state.user,
-        o:{
-          alipay:'',
-          name:'',
-          tel:'',
-          amount:null
+        o: {
+          alipay: '',
+          name: '',
+          tel: '',
+          amount: null
         }
       }
     },
+    computed: {
+      user(){
+        return this.$store.getters.user || {}
+      }
+    },
     mounted(){
-      
+
     },
     methods: {
       withdraw(){
-        if(!this.o.alipay) {
+        if (!this.o.alipay) {
           Toast('请输入支付宝账号');
           return false;
         }
@@ -78,8 +82,8 @@
           Toast('提现金额不能大于可提金额');
           return false;
         }
-        else if (this.amount < 5) {
-          Toast('提现金额必须大于5元');
+        else if (this.amount < 1) {
+          Toast('提现金额必须大于1元');
           return false;
         }
         else {
@@ -97,7 +101,7 @@
               Toast(r.message);
             }
           });
-        } 
+        }
       }
     }
   }

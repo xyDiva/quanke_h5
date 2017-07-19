@@ -30,7 +30,7 @@ p, ul, h1, h2 {
   padding: 0;
 }
 
-div, section, textarea {
+div, section, textarea, ul, li {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
@@ -269,7 +269,11 @@ header {
       top: 0;
       border-radius: 6px;
       &.btn-search {
-        background: url("./assets/images/ico-search.png") center / 55% no-repeat;
+        right: -0.7rem;
+        font-size: 0.24rem;
+        color: white;
+        background: none;
+        //background: url("./assets/images/ico-search.png") center / 55% no-repeat;
       }
       &.btn-reset {
         background: white url("./assets/images/ico-reset.png") center / 55% no-repeat;
@@ -417,7 +421,7 @@ header {
   }
 }
 
-/* 项目全局样式--pro-item-2--产品列表样式2 搜索页的推荐列表和发现列表
+/* 项目全局样式--pro-item-2--产品列表样式2 搜索页的推荐列表
    ========================================================================== */
 .pro-item-2 {
   position: relative;
@@ -492,6 +496,68 @@ header {
   }
 }
 
+/* 项目全局样式--pro-item-3--产品列表样式3 发现列表
+   ========================================================================== */
+.pro-item-3 {
+  position: relative;
+  padding: 0.3rem 0.2rem 0;
+  margin-top: 0.15rem;
+  background-color: white;
+  a {
+    width: 100%;
+  }
+  .desc {
+    color: black;
+    font-size: 0.24rem;
+    text-align: justify;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .title {
+    margin: 0.25rem 0;
+    font-size: 0.2rem;
+    color: #979797;
+  }
+  .img {
+    width: 100%;
+    height: 7.1rem;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
+  }
+  .bottom {
+    padding: 0.2rem 0.3rem;
+    .left {
+      .coupon {
+        width: 1.44rem;
+        height: 0.54rem;
+        line-height: 0.54rem;
+        margin-right: 0.3rem;
+        background: #ec5513;
+        border-radius: 0.05rem;
+        color: white;
+        font-size: 0.2rem;
+        text-align: center;
+      }
+      .price {
+        line-height: 0.54rem;
+        color: #979797;
+        font-size: 0.2rem;
+      }
+    }
+    .sold {
+      height: 0.54rem;
+      line-height: 0.54rem;
+      font-size: 0.18rem;
+      color: #979797;
+    }
+  }
+}
+
 /* 项目全局样式--no-data
    ========================================================================== */
 .no-data {
@@ -559,7 +625,6 @@ footer {
   background: url("./assets/images/btn-top.png") center / contain no-repeat;
 }
 
-
 /* 组件--toast
    ========================================================================== */
 .mint-toast-text {
@@ -593,10 +658,12 @@ footer {
     }
   }
 }
+
 .mint-loadmore-top, .mint-loadmore-bottom {
   font-size: 0;
 
 }
+
 .mint-loadmore-text {
   font-size: 0.24rem;
 }

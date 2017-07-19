@@ -32,14 +32,6 @@
       unLoggedHandler(r){
         this.user = {};
         this.$store.dispatch('setUser', {});
-//        Toast({
-//          message: r && r.message || '请登录',
-//          duration: 1500
-//        });
-
-//        setTimeout(() => {
-//          this.$router.push('/login');
-//        }, 2000);
       }
     }
   }
