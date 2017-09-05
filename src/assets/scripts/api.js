@@ -1,6 +1,9 @@
 import Vue from "vue";
 import {Promise} from "es6-promise";
 
+import axios from 'axios'
+import {Toast} from 'mint-ui'
+
 let mode = null; // 0 dev 1 test 2 pro
 let HOST_URL = window.location.protocol + '//' + window.location.host + '/';
 if (location.host == 'qk.notepasses.com') {
@@ -18,177 +21,98 @@ let api = {};
 api.host = HOST_URL;
 api.mode = mode;
 
+axios.defaults.baseURL = api.host;
+
+//添加请求拦截器
+axios.interceptors.request.use(function (config) {
+  //在发送请求之前做某事
+  return config;
+}, function (error) {
+  //请求错误时做些事
+  return Promise.reject(error);
+});
+
+//添加响应拦截器
+axios.interceptors.response.use(function (response) {
+  //对响应数据做些事
+  return response.data;
+}, function (error) {
+  //请求错误时做些事
+
+  const res = error.response;
+  let errorText = '';
+  switch (res.status) {
+    case 404:
+      errorText = 'API "' + res.data.path + '" ' + res.statusText;
+      break;
+  }
+  Toast(errorText);
+
+  return Promise.reject(error);
+});
+
+
 // user
 api.user = {
-  // 获取验证码 todo 微信登录不再使用这个接口
-  getCode: tel => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'user/sendMessage?tel=' + tel).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  // 获取验证码 todo 微信登录不需要使用这个接口
+  getCode: tel => axios.get('user/sendMessage', {params: {tel: tel}}),
+
   // 登录/自动注册 todo 微信登录不再使用这个接口
-  login: (tel, code) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'user/login?tel=' + tel + '&verifyCode=' + code).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  login: (tel, code) => axios.get('user/login', {params: {tel: tel, verifyCode: code}}),
+
   // 登出 todo 微信登录不再使用这个接口
-  logout: () => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'user/logout').then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  logout: () => axios.get('user/logout'),
 
   // 获取用户信息
-  getUserInfo: () => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'user/my').then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r);
-    });
-  }),
+  getUserInfo: () => axios.get('user/my'),
+
   // 编辑用户信息
-  editUserInfo: (user) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'user/edit', user).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  editUserInfo: user => axios.post('user/edit', user),
+
   // 获取用户信息--分享
-  getUserInfoForShare: (userId) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'user/shareInfo?userId=' + userId).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  getUserInfoForShare: userId => axios.get('user/shareInfo', {params: {userId: userId}}),
+
   // 获取验证码
-  getCodeForBind: tel => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'user/sendMessageForBound?tel=' + tel).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  getCodeForBind: tel => axios.get('user/sendMessageForBound', {params: {tel: tel}}),
+
   // 绑定手机号
-  bindTel: (params) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'user/boundTel', {params: params}).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  bindTel: (params) => axios.get('user/boundTel', {params: params}),
+
   // 绑定邀请码
-  bindInviteCode: (code) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'user/boundRecommendCode?recomCode=' + code).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  bindInviteCode: (code) => axios.get('user/boundRecommendCode', {params: {recomCode: code}}),
+
   // 获取用户账户流水
-  getAccountLog: () => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'user/accountLog').then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  getAccountLog: () => axios.get('user/accountLog'),
+
   // 每日收益、每日推荐商品
-  touch: (params) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'user/touch',params).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  touch: params => axios.post('user/touch', params),
 };
 
 // notify
 api.notify = {
-  query: () => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'notify/query/notified').then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
-  save: (id) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'user/notify/read?notifyId=' + id).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  })
+  query: () => axios.get('notify/query/notified'),
+  save: id => axios.get('user/notify/read', {params: {notifyId: id}})
 };
 
 // goods
 api.goods = {
-  query: (params) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'goods/query', params).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
-  getById: (id) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'goods/' + id).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
-  getGoodImgs: (id) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'goods/detail/' + id).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
-  queryRecommend: () => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'goods/recommend').then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  })
+  query: (params) => axios.post('goods/query', params),
+  getById: (id) => axios.get('goods/' + id),
+  getGoodImgs: (id) => axios.get('goods/detail/' + id),
+  queryRecommend: () => axios.get('goods/recommend')
 };
 
 // banner
 api.banner = {
-  query: () => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'banner/query').then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
-  getImg: (fileName) => HOST_URL + 'banner/pic?fileName=' + fileName,
-  upload: (formdata) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'banner/upload', formdata).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  })
+  query: () => axios.get('banner/query'),
+
+  getImg: (fileName) => api.host + 'banner/pic?fileName=' + fileName,
+  upload: (formdata) => axios.post('banner/upload', formdata)
 };
 
 // wx
 api.wx = {
-  getWXParams: (url) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'wx/wxEncodeconfig?url=' + url).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  getWXParams: url => axios.get('wx/wxEncodeconfig', {params: {url: url}}),
   image: (id) => {
     return HOST_URL + 'cgi-bin/showqrcode?ticket=' + id;
   }
@@ -196,79 +120,31 @@ api.wx = {
 
 // 省市区列表
 api.address = {
-  listDistrict: (parentId) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'address/listDistrict?parentId=' + parentId).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
-  save: (params) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'address/save', params).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
-  getAddress: (userId) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'address/getByUserId?userId=' + userId).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  })
+  listDistrict: parentId => axios.get('address/listDistrict', {params: {parentId: parentId}}),
+  save: params => axios.post('address/save', params),
+  getAddress: userId => axios.get('address/getByUserId', {params: {userId: userId}})
 };
 
 // 晒单返利
 api.rebate = {
-  query: (params) => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'rebate', {params: params}).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
-  save: (params) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'rebate/save/new', params).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  })
+  query: params => axios.get('rebate', {params: params}),
+  save: params => axios.post('rebate/save/new', params)
 };
 
 // 提现
 api.withdraw = {
-  save: (params) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'withdraw/save', params).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  save: params => axios.post('withdraw/save', params),
 };
 
 // channel 发现
 api.channel = {
-  query: () => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'channel/query').then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  })
+  query: () => axios.get('channel/query')
 };
 
 // money controller
 api.money = {
-  summery: () => new Promise((resolve, reject) => {
-    Vue.http.get(HOST_URL + 'authed/money/summary').then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
-  queryLogs: (type, params) => new Promise((resolve, reject) => {
+  summery: () => axios.get('authed/money/summary'),
+  queryLogs: (type, params) => (() => {
     let url = '';
     if (type === 'deposit') {
       url = HOST_URL + 'authed/deposit/log';
@@ -276,30 +152,14 @@ api.money = {
     else if (type === 'money') {
       url = HOST_URL + 'authed/account/log';
     }
-    Vue.http.get(url, {params: params}).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  })
+    return axios.get(url, {params: params})
+  })()
 };
 
 // 通用upload
 api.file = {
-  upload: (file) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'upload', file).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
-  uploadBase64: (base64url) => new Promise((resolve, reject) => {
-    Vue.http.post(HOST_URL + 'upload/base64', base64url).then((r) => {
-      resolve(r.body);
-    }, (r) => {
-      reject(r.body);
-    });
-  }),
+  upload: (file) => axios.post('upload', file),
+  uploadBase64: base64url => axios.post('upload/base64', base64url),
   image: (id) => {
     return HOST_URL + 'image/' + id;
   }

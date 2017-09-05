@@ -1,33 +1,3 @@
-<style lang='scss' rel="stylesheet/scss" scoped>
-  .page-my-edit {
-    .item {
-      .q-radio {
-        input {
-          display:none;
-        }
-        i {
-          vertical-align: middle;
-        }
-        .ico {
-          display: inline-block;
-          width: 0.3rem;
-          height: 0.3rem;
-          margin-right: 0.05rem;
-          border-radius: 50%;
-          border: #979797 1px solid;
-        }
-        .radio:checked+.ico {
-          background-color: #ea5514;
-          border-color: white;
-        }
-      }
-    }
-    .btn-update {
-      margin-top: 0.5rem;
-    }
-  }
-</style>
-
 <template>
   <div class="page-my-edit">
     <div class="item">
@@ -80,7 +50,7 @@
   export default {
     computed: {
       user() {
-        return this.$store.state.user
+        return this.$store.getters.user
       }
     },
     methods: {
@@ -103,3 +73,33 @@
     }
   }
 </script>
+
+<style lang='scss' rel="stylesheet/scss" scoped>
+  .page-my-edit {
+  .item {
+  .q-radio {
+  input {
+    display:none;
+  }
+  i {
+    vertical-align: middle;
+  }
+  .ico {
+    display: inline-block;
+    width: 0.3rem;
+    height: 0.3rem;
+    margin-right: 0.05rem;
+    border-radius: 50%;
+    border: #979797 1px solid;
+  }
+  .radio:checked+.ico {
+    background-color: #ea5514;
+    border-color: white;
+  }
+  }
+  }
+  .btn-update {
+    margin-top: 0.5rem;
+  }
+  }
+</style>

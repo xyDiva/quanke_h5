@@ -1,67 +1,3 @@
-<style lang='scss' rel="stylesheet/scss" scoped>
-  .page-my {
-    .info {
-      position: relative;
-      height: 2.58rem;
-      background-color: #ea5513;
-      text-align: center;
-      color: white;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .info-msg {
-        position: absolute;
-        width: 0.35rem;
-        height: 0.27rem;
-        left: 0.4rem;
-        top: 0.4rem;
-        background: url(../assets/images/message.png) center / contain no-repeat;
-        .point {
-          position: absolute;
-          width: 0.2rem;
-          height: 0.2rem;
-          line-height: 0.2rem;
-          top: -0.1rem;
-          left: 0.17rem;
-          margin-left: 0.08rem;
-          border-radius: 50%;
-          background-color: #d0021b;
-          text-align: center;
-          font-size: 0.12rem;
-          color: white;
-        }
-      }
-      .info-setting {
-        position: absolute;
-        width: 0.35rem;
-        height: 0.34rem;
-        right: 0.4rem;
-        top: 0.4rem;
-        background: url(../assets/images/setting.png) center / contain no-repeat;
-      }
-      .avatar {
-        width: 1rem;
-        height: 1rem;
-        margin: 0.8rem auto 0.1rem;
-        border-radius: 50%;
-        img {
-          width: 100%;
-        }
-      }
-      .name {
-        font-size: 0.24rem;
-        color: white;
-      }
-    }
-    .btn-logout {
-      display: none;
-      margin-top: 0.15rem;
-    }
-  }
-</style>
-
 <template>
   <div class="page-my">
     <div class="info">
@@ -111,7 +47,7 @@
   export default {
     computed: {
       user(){
-        return this.$store.state.user || {};
+        return this.$store.getters.user || {};
       }
     },
     mounted(){
@@ -173,3 +109,67 @@
     }
   }
 </script>
+
+<style lang='scss' rel="stylesheet/scss" scoped>
+  .page-my {
+  .info {
+    position: relative;
+    height: 2.58rem;
+    background-color: #ea5513;
+    text-align: center;
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+  .info-msg {
+    position: absolute;
+    width: 0.35rem;
+    height: 0.27rem;
+    left: 0.4rem;
+    top: 0.4rem;
+    background: url(../assets/images/message.png) center / contain no-repeat;
+  .point {
+    position: absolute;
+    width: 0.2rem;
+    height: 0.2rem;
+    line-height: 0.2rem;
+    top: -0.1rem;
+    left: 0.17rem;
+    margin-left: 0.08rem;
+    border-radius: 50%;
+    background-color: #d0021b;
+    text-align: center;
+    font-size: 0.12rem;
+    color: white;
+  }
+  }
+  .info-setting {
+    position: absolute;
+    width: 0.35rem;
+    height: 0.34rem;
+    right: 0.4rem;
+    top: 0.4rem;
+    background: url(../assets/images/setting.png) center / contain no-repeat;
+  }
+  .avatar {
+    width: 1rem;
+    height: 1rem;
+    margin: 0.8rem auto 0.1rem;
+    border-radius: 50%;
+  img {
+    width: 100%;
+  }
+  }
+  .name {
+    font-size: 0.24rem;
+    color: white;
+  }
+  }
+  .btn-logout {
+    display: none;
+    margin-top: 0.15rem;
+  }
+  }
+</style>

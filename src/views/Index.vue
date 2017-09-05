@@ -2,7 +2,7 @@
   <div class="page-index">
     <header>
       <router-link class="search" to="/search"><input type="text" placeholder="输入需要寻找的商品">
-        <button class="btn-search">搜索</button>
+        <button class="btn-search" id="searchBtn">搜索</button>
       </router-link>
       <a class="left" href="javascript:;">
         <i class="ico logo"></i>
@@ -108,7 +108,7 @@
   Vue.component(Loadmore.name, Loadmore);
 
   export default {
-    data(){
+    data() {
       return {
         bannerHeight: document.body.clientWidth / 2,
         bannerList: [],
@@ -138,25 +138,25 @@
       }
     },
     computed: {
-      user(){
+      user() {
         return this.$store.getters.user || {}
       }
     },
-    activated(){
+    activated() {
       this.loading = false;
       window.addEventListener('scroll', this.scrollFn);
       document.body.scrollTop = this.$route.meta.stay ? this.$store.state.indexScrollTop : 0;
 
       this.getUser();
     },
-    deactivated(){
+    deactivated() {
       this.navBarFixed = false;
       this.showPopupDaily = false;
       this.showPopupForNew = false;
       this.loading = true;
       window.removeEventListener('scroll', this.scrollFn);
     },
-    mounted(){
+    mounted() {
       // get banner
       api.banner.query().then((r) => {
         if (r.success) {
@@ -207,7 +207,7 @@
       this.navBarOffsetTop = document.getElementById('navBar').offsetTop;
     },
     methods: {
-      getUser(){
+      getUser() {
         api.user.getUserInfo().then((r) => {
           if (r.success) {
             this.user = r.value;
@@ -218,13 +218,13 @@
           this.$store.dispatch('setUser', this.user);
         })
       },
-      clear(){
+      clear() {
         this.start = 0;
         this.total = 0;
         this.allLoaded = false;
         this.topStatus = '';
       },
-      switchTab(typeId){
+      switchTab(typeId) {
         this.typeId = typeId;
         this.timestamp = +new Date();
         if (document.body.scrollTop > this.navBarOffsetTop) {
@@ -233,7 +233,7 @@
         this.clear();
         this.getList(true);
       },
-      getList(clearList){
+      getList(clearList) {
         let params = {
           categoryId: this.typeId,
           start: this.start,
@@ -264,7 +264,7 @@
           }
         });
       },
-      loadMore(){
+      loadMore() {
         this.loading = true;
         if (this.allLoaded) {
           return;
@@ -283,10 +283,10 @@
       handleTopChange(status) {
         this.topStatus = status;
       },
-      toTop(){
+      toTop() {
         document.body.scrollTop = 0;
       },
-      scrollFn(){
+      scrollFn() {
         let scrollTop = document.body.scrollTop;
         this.topBtnVisible = scrollTop > 600;
         this.$store.dispatch('setIndexScrollTop', scrollTop);
@@ -303,165 +303,198 @@
 
 <style lang='scss' rel="stylesheet/scss" scoped>
   .page-index {
-    .banner {
-      margin-bottom: 0.05rem;
-      img {
-        width: 100%;
-      }
-    }
-    .nav-bar-wrap {
-      height: 0.74rem;
-      overflow: hidden;
-    }
-    .nav-bar {
-      width: 100%;
-      height: 0.9rem;
-      line-height: 0.74rem;
-      padding: 0 0.18rem;
-      background-color: white;
-      overflow-x: scroll;
-      -webkit-overflow-scrolling: touch;
-      z-index: 11;
-      &.fixed {
-        height: 0.74rem !important;
-      }
-      ul {
-        width: 9.5rem;
-        height: 100%;
-        li {
-          position: relative;
-          float: left;
-          line-height: 0.74rem;
-          margin: 0 0.18rem;
-          color: #979797;
-          font-size: 0.24rem;
-          &.active {
-            color: #ea5513;
-            &:after {
-              content: '';
-              position: absolute;
-              width: 0.55rem;
-              bottom: 0.14rem;
-              left: 50%;
-              margin-left: -0.27rem;
-              border-bottom: #ea5513 1px solid;
-              z-index: 1;
-            }
-          }
-        }
-      }
-    }
 
-    .popup {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-color: rgba(0, 0, 0, 0.7);
-      z-index: 1;
-    }
-    .popup-daily {
-      .main {
-        position: relative;
-        width: 6rem;
-        height: 8rem;
-        margin: 0 auto;
-        background: url("../assets/images/index/earnings.png") center / contain no-repeat;
-        text-align: center;
-        .info {
-          height: 3.4rem;
-          padding-top: 0.8rem;
-          color: #f8e71c;
-          p {
-            line-height: 100%;
-          }
-          .text {
-            margin-bottom: 0.4rem;
-            font-size: 0.24rem;
-          }
-          .money {
-            font-size: 0.64rem;
-          }
-        }
-        .pro {
-          .img {
-            width: 2rem;
-            height: 2rem;
-            margin: 0 auto;
-            overflow: hidden;
-            background-color: #979797;
-          }
-          .title {
-            width: 80%;
-            margin: 0.36rem auto 0.28rem;
-            font-size: 0.2rem;
-            color: #979797;
-            text-align: center;
+  .banner {
+    margin-bottom: 0.05rem;
 
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-          .price {
-            font-size: 0.2rem;
-            color: #979797;
-            span {
-              padding-right: 0.1rem;
-              font-size: 0.36rem;
-              color: #ea5514;
-            }
-          }
-          .coupon {
-            width: 2.5rem;
-            height: 0.54rem;
-            margin-top: 0.4rem;
-            border-radius: 0.27rem;
-            background-color: #ea5514;
-            font-size: 0.18rem;
-            color: white;
-          }
-        }
-        .close {
-          position: absolute;
-          width: 0.52rem;
-          height: 0.52rem;
-          top: -0.67rem;
-          right: 0.3rem;
-          background: url("../assets/images/index/close.png") center / contain no-repeat;
-        }
-      }
-    }
-    .popup-for-new {
-      .main {
-        width: 6rem;
-        height: 5rem;
-        padding-top: 0.9rem;
-        margin: 0 auto;
-        text-align: center;
-        color: #F8E71C;
-        background-color: #ea5514;
-        border-radius: 0.2rem;
-        .large {
-          font-size: 0.24rem;
-        }
-        .money {
-          margin: 0.56rem 0;
-          font-size: 0.64rem;
-        }
-        .small {
-          font-size: 0.18rem;
-        }
-        .btn-get {
-          width: 2.5rem;
-          height: 0.54rem;
-          margin-top: 0.64rem;
-          font-size: 0.18rem;
-          color: #ea5514;
-          border-radius: 0.27rem;
-          background-color: #F8E71C;
-        }
-      }
-    }
+  img {
+    width: 100%;
+  }
+
+  }
+  .nav-bar-wrap {
+    height: 0.74rem;
+    overflow: hidden;
+  }
+
+  .nav-bar {
+    width: 100%;
+    height: 0.9rem;
+    line-height: 0.74rem;
+    padding: 0 0.18rem;
+    background-color: white;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    z-index: 11;
+
+  &
+  .fixed {
+    height: 0.74rem !important;
+  }
+
+  ul {
+    width: 9.5rem;
+    height: 100%;
+
+  li {
+    position: relative;
+    float: left;
+    line-height: 0.74rem;
+    margin: 0 0.18rem;
+    color: #979797;
+    font-size: 0.24rem;
+
+  &
+  .active {
+    color: #ea5513;
+
+  &
+  :after {
+    content: '';
+    position: absolute;
+    width: 0.55rem;
+    bottom: 0.14rem;
+    left: 50%;
+    margin-left: -0.27rem;
+    border-bottom: #ea5513 1px solid;
+    z-index: 1;
+  }
+
+  }
+  }
+  }
+  }
+
+  .popup {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+  }
+
+  .popup-daily {
+
+  .main {
+    position: relative;
+    width: 6rem;
+    height: 8rem;
+    margin: 0 auto;
+    background: url("../assets/images/index/earnings.png") center / contain no-repeat;
+    text-align: center;
+
+  .info {
+    height: 3.4rem;
+    padding-top: 0.8rem;
+    color: #f8e71c;
+
+  p {
+    line-height: 100%;
+  }
+
+  .text {
+    margin-bottom: 0.4rem;
+    font-size: 0.24rem;
+  }
+
+  .money {
+    font-size: 0.64rem;
+  }
+
+  }
+  .pro {
+
+  .img {
+    width: 2rem;
+    height: 2rem;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: #979797;
+  }
+
+  .title {
+    width: 80%;
+    margin: 0.36rem auto 0.28rem;
+    font-size: 0.2rem;
+    color: #979797;
+    text-align: center;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .price {
+    font-size: 0.2rem;
+    color: #979797;
+
+  span {
+    padding-right: 0.1rem;
+    font-size: 0.36rem;
+    color: #ea5514;
+  }
+
+  }
+  .coupon {
+    width: 2.5rem;
+    height: 0.54rem;
+    margin-top: 0.4rem;
+    border-radius: 0.27rem;
+    background-color: #ea5514;
+    font-size: 0.18rem;
+    color: white;
+  }
+
+  }
+  .close {
+    position: absolute;
+    width: 0.52rem;
+    height: 0.52rem;
+    top: -0.67rem;
+    right: 0.3rem;
+    background: url("../assets/images/index/close.png") center / contain no-repeat;
+  }
+
+  }
+  }
+  .popup-for-new {
+
+  .main {
+    width: 6rem;
+    height: 5rem;
+    padding-top: 0.9rem;
+    margin: 0 auto;
+    text-align: center;
+    color: #F8E71C;
+    background-color: #ea5514;
+    border-radius: 0.2rem;
+
+  .large {
+    font-size: 0.24rem;
+  }
+
+  .money {
+    margin: 0.56rem 0;
+    font-size: 0.64rem;
+  }
+
+  .small {
+    font-size: 0.18rem;
+  }
+
+  .btn-get {
+    width: 2.5rem;
+    height: 0.54rem;
+    margin-top: 0.64rem;
+    font-size: 0.18rem;
+    color: #ea5514;
+    border-radius: 0.27rem;
+    background-color: #F8E71C;
+  }
+
+  }
+  }
   }
 </style>
